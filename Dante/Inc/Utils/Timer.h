@@ -1,9 +1,9 @@
 #pragma once
 #include <chrono>
-
+#include "Utils/Singleton.h"
 namespace Dante::Utils
 {
-	class Timer
+	class Timer : public Singleton<Timer>
 	{
 	public:
 		Timer();

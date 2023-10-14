@@ -5,6 +5,7 @@ namespace Dante::Utils
 {
 	Timer::Timer()
 	{
+		last = std::chrono::steady_clock::now();
 	}
 
 	float Timer::Peek()

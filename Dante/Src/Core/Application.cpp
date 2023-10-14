@@ -5,18 +5,16 @@ namespace Dante::Core
 {
 	void Application::Init()
 	{
+		timer = std::make_unique<Utils::Timer>();
 	}
 
 	void Application::Run()
 	{
-		timer = std::make_unique<Utils::Timer>();
-
 		while (true)
 		{
-			auto dt = timer->Mark();
-
-			Render();
+			auto dt = Utils::Timer::Instance().Mark();
 			std::cout << dt << std::endl;
+			Render();
 		}
 	}
 	void Application::Render()

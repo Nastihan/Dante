@@ -24,7 +24,7 @@
     <ClCompile Include="Src\Core\Application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Timer.cpp">
+    <ClCompile Include="Src\Utils\Timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -36,6 +36,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Inc\Utils\Timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\Utils\Singleton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
