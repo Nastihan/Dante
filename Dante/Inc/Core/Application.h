@@ -1,4 +1,5 @@
 #pragma once
+#include "Utils/Timer.h"
 
 namespace Dante::Core
 {
@@ -11,5 +12,7 @@ namespace Dante::Core
 		void Run();
 	private:
 		void Render();
+
+		std::unique_ptr<Utils::Timer> timer;
 	};
 }

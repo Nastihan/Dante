@@ -9,11 +9,14 @@ namespace Dante::Core
 
 	void Application::Run()
 	{
+		timer = std::make_unique<Utils::Timer>();
+
 		while (true)
 		{
-			std::cout << "hello" << std::endl;
+			auto dt = timer->Mark();
 
 			Render();
+			std::cout << dt << std::endl;
 		}
 	}
 	void Application::Render()
