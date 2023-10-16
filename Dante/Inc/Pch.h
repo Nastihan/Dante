@@ -5,3 +5,7 @@
 #include <assert.h>
 #include <exception>
 #include <format>
+#include <wtypes.h>
+#include <string>
+
+#include "Utils/NastihanUtil.h"

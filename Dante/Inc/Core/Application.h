@@ -1,9 +1,10 @@
 #pragma once
+#include "Utils/Singleton.h"
 #include "Utils/Timer.h"
 
 namespace Dante::Core
 {
-	class Application
+	class Application : public Utils::Singleton<Application>
 	{
 	public:
 		Application() = default;
