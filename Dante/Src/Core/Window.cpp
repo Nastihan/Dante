@@ -1,5 +1,6 @@
 #include "Pch.h"
 #include "Core//Window.h"
+#include "Utils/NastihanUtil.h"
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -8,12 +9,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		case WM_DESTROY:
 		{
 			::PostQuitMessage(0);
-		}break;
+			return 0;
+		}
 
 		default:
 		{
 			return ::DefWindowProc(hWnd, msg, wParam, lParam);
-		}break;
+		}
 	}
 }
 
@@ -28,26 +30,42 @@ namespace Dante::Core
 	{
 		HINSTANCE hInst = GetModuleHandle(NULL);
 
-		WNDCLASSEX wClass{};
+		WNDCLASS wc;
+		wc.style = CS_HREDRAW | CS_VREDRAW;
+		wc.lpfnWndProc = WndProc;
+		wc.cbClsExtra = 0;
+		wc.cbWndExtra = 0;
+		wc.hInstance = hInst;
+		wc.hIcon = LoadIcon(0, IDI_APPLICATION);
+		wc.hCursor = LoadCursor(0, IDC_ARROW);
+		wc.hbrBackground = (HBRUSH)GetStockObject(NULL_BRUSH);
+		wc.lpszMenuName = 0;
+		wc.lpszClassName = L"MainWnd";
 
-		wClass.cbSize = sizeof(wClass);
-		wClass.style = CS_HREDRAW | CS_VREDRAW;
-		wClass.lpfnWndProc = WndProc;
-		wClass.hInstance = hInst;
-		wClass.cbClsExtra = 0;
-		wClass.cbWndExtra = 0;
-		wClass.hIcon = LoadIcon(0, IDI_APPLICATION);
-		wClass.hCursor = LoadCursor(0, IDC_ARROW);
-		wClass.hbrBackground = (HBRUSH)GetStockObject(NULL_BRUSH);
-		wClass.lpszMenuName = 0;
-		wClass.lpszClassName = LPCWSTR(name.c_str());
-
-		if (RegisterClassExW(&wClass) > 0)
+		if (RegisterClass(&wc) < 0)
 		{
 			throw std::runtime_error(
 				"failed to register wnd class"
 			);
 		}
+
+		RECT r = { 0, 0, LONG(width), LONG(height) };
+		AdjustWindowRect(&r, WS_OVERLAPPEDWINDOW, false);
+		int WIDTH = r.right - r.left;
+		int HEIGHT = r.bottom - r.top;
+
+		hWnd = ::CreateWindow(L"MainWnd", Utils::ToWide(name).c_str(),
+			WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, WIDTH, HEIGHT, 0, 0, hInst, 0);
+
+		if (hWnd == nullptr)
+		{
+			throw std::runtime_error(
+				"failed to create the wnd"
+			);
+		}
+
+		::ShowWindow(hWnd, SW_SHOW);
+		::UpdateWindow(hWnd);
 
 	}
 }

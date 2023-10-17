@@ -1,5 +1,4 @@
 #pragma once
-#include "Pch.h"
 
 namespace Dante::Core
 {
@@ -10,6 +9,8 @@ namespace Dante::Core
 		void Init();
 
 	private:
+		HWND hWnd;
+
 		UINT width;
 		UINT height;
 		std::string name;
