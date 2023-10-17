@@ -7,6 +7,7 @@ namespace Dante::Core
 	public:
 		Window(UINT width, UINT height, std::string name);
 		void Init();
+		static std::optional<int> ProcessMessages() noexcept;
 
 	private:
 		HWND hWnd;

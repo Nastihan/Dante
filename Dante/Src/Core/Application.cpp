@@ -11,10 +11,15 @@ namespace Dante::Core
 		window->Init();
 	}
 
-	void Application::Run()
+	int Application::Run()
 	{
 		while (true)
 		{
+			if (const auto ecode = Window::ProcessMessages())
+			{
+				return *ecode;
+			}
+
 			auto dt = Utils::Timer::Instance().Mark();
 			std::cout << dt << std::endl;
 			Render();

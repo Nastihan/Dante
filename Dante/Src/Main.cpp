@@ -7,7 +7,7 @@ int main(int agrc, char* argv[])
 	{
 		auto app = std::make_unique<Dante::Core::Application>();
 		Dante::Core::Application::Instance().Init();
-		Dante::Core::Application::Instance().Run();
+		return Dante::Core::Application::Instance().Run();
 	}
 
 	catch (const Dante::Utils::NastihanException& e)

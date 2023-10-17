@@ -11,7 +11,7 @@ namespace Dante::Core
 		Application() = default;
 		~Application() = default;
 		void Init();
-		void Run();
+		int Run();
 	private:
 		void Render();
 
