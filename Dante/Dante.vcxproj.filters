@@ -53,5 +53,8 @@
     <ClInclude Include="Inc\Utils\Exception.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ThirdParty\d3dx12.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

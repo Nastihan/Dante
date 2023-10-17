@@ -38,7 +38,7 @@ namespace Dante::Core
 		wc.hInstance = hInst;
 		wc.hIcon = LoadIcon(0, IDI_APPLICATION);
 		wc.hCursor = LoadCursor(0, IDC_ARROW);
-		wc.hbrBackground = (HBRUSH)GetStockObject(NULL_BRUSH);
+		wc.hbrBackground = (HBRUSH)(COLOR_WINDOWFRAME);
 		wc.lpszMenuName = 0;
 		wc.lpszClassName = L"MainWnd";
 
