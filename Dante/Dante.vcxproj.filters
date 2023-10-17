@@ -50,5 +50,8 @@
     <ClInclude Include="Inc\Utils\NastihanUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Inc\Utils\Exception.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

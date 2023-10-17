@@ -6,12 +6,12 @@ namespace Dante::Core
 	class Window
 	{
 	public:
-		Window(UINT height, UINT width, std::string name);
+		Window(UINT width, UINT height, std::string name);
 		void Init();
 
 	private:
-		UINT height;
 		UINT width;
+		UINT height;
 		std::string name;
 	};
 }

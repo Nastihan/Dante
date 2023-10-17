@@ -6,6 +6,9 @@ namespace Dante::Core
 	void Application::Init()
 	{
 		timer = std::make_unique<Utils::Timer>();
+
+		window = std::make_unique<Core::Window>(1600, 900, "Window");
+		window->Init();
 	}
 
 	void Application::Run()

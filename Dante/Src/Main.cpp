@@ -9,10 +9,21 @@ int main(int agrc, char* argv[])
 		Dante::Core::Application::Instance().Init();
 		Dante::Core::Application::Instance().Run();
 	}
+
+	catch (const Dante::Utils::NastihanException& e)
+	{
+		MessageBox(nullptr, e.ToString().c_str(), L"NastihanException : HR Failed", MB_OK);
+	}
 	catch (std::exception& e)
 	{
-		std::cerr << e.what() << '\n';
+		//std::cerr << e.what() << '\n';
+		MessageBoxA(nullptr, e.what(), "StandardException", MB_ICONERROR | MB_SETFOREGROUND);
 	}
-	return 0;
+	catch (...)
+	{
+		MessageBox(nullptr, L"No details", L"Unknown Exception", MB_OK | MB_ICONEXCLAMATION);
+
+	}
+	return -1;
 }
 

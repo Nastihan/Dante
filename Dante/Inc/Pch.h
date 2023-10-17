@@ -7,5 +7,9 @@
 #include <format>
 #include <wtypes.h>
 #include <string>
+#include <comdef.h>
+
+
 
 #include "Utils/NastihanUtil.h"
+#include <Utils/Exception.h>

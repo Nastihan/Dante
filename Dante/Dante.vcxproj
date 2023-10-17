@@ -156,6 +156,7 @@
     <ClInclude Include="Inc\Core\Application.h" />
     <ClInclude Include="Inc\Core\Window.h" />
     <ClInclude Include="Inc\Pch.h" />
+    <ClInclude Include="Inc\Utils\Exception.h" />
     <ClInclude Include="Inc\Utils\NastihanUtil.h" />
     <ClInclude Include="Inc\Utils\Singleton.h" />
     <ClInclude Include="Inc\Utils\Timer.h" />
