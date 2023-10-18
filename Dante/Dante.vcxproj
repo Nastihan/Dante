@@ -157,6 +157,7 @@
   <ItemGroup>
     <ClInclude Include="Inc\Core\Application.h" />
     <ClInclude Include="Inc\Core\Window.h" />
+    <ClInclude Include="Inc\Rendering\Renderer.h" />
     <ClInclude Include="Inc\Pch.h" />
     <ClInclude Include="Inc\Utils\Exception.h" />
     <ClInclude Include="Inc\Utils\NastihanUtil.h" />

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <iostream>
-#include <Windows.h>
 #include <assert.h>
 #include <exception>
 #include <format>
@@ -10,12 +9,26 @@
 #include <comdef.h>
 #include <optional>
 
+// WIN32
+#define NOMINMAX
+#define WINDOWS_LEAN_AND_MEAN
+#include <Windows.h>
 
-//#include "Utils/NastihanUtil.h"
-#include <Utils/Exception.h>
-
+// DX
 #include <d3d12.h>
 #include <dxgi1_6.h>
-#include <wrl.h>
+#include <dxgidebug.h>
 #include <DirectXMath.h>
+#include <wrl.h>
+
 #include "../ThirdParty/d3dx12.h"
+
+#include <Utils/Exception.h>
+
+
+// Macros
+#define DISABLE_COPY_AND_MOVE(Class) \
+Class(const Class&) = delete; \
+Class(Class&&) = delete; \
+Class& operator=(const Class&) = delete; \
+Class& operator=(Class&&) = delete;
