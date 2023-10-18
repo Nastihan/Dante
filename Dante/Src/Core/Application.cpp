@@ -9,6 +9,9 @@ namespace Dante::Core
 
 		window = std::make_unique<Core::Window>(1600, 900, "My Window");
 		window->Init();
+
+		renderer = std::make_unique<Rendering::Renderer>();
+		renderer->Init();
 	}
 
 	int Application::Run()
@@ -27,5 +30,6 @@ namespace Dante::Core
 	}
 	void Application::Render()
 	{
+		renderer->Render();
 	}
 }
