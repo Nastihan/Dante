@@ -1,5 +1,6 @@
 #pragma once
 #include "Pch.h"
+#include "Rendering/Graphics.h"
 
 namespace Dante::Rendering
 {
@@ -11,6 +12,6 @@ namespace Dante::Rendering
 		void Init();
 		void Render();
 	private:
-
+		std::unique_ptr<Graphics> gfx{};
 	};
 }

@@ -35,7 +35,7 @@ namespace Dante::Utils
 #define Chk(x)                                              \
 {                                                                     \
     HRESULT hr__ = (x);                                               \
-    std::wstring wfn = AnsiToWString(__FILE__);                       \
-    if(FAILED(hr__)) { throw NastihanException(hr__, L#x, wfn, __LINE__); } \
+    std::wstring wfn = Dante::Utils::AnsiToWString(__FILE__);                       \
+    if(FAILED(hr__)) { throw Dante::Utils::NastihanException(hr__, L#x, wfn, __LINE__); } \
 }
 #endif

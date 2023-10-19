@@ -1,6 +1,5 @@
 #include "Pch.h"
 #include "Core//Window.h"
-#include "Utils/NastihanUtil.h"
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {

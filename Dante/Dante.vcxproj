@@ -145,6 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Rendering\Graphics.cpp" />
     <ClCompile Include="Src\Rendering\Renderer.cpp" />
     <ClCompile Include="Src\Core\Window.cpp" />
     <ClCompile Include="Src\Utils\Timer.cpp" />
@@ -158,6 +159,7 @@
   <ItemGroup>
     <ClInclude Include="Inc\Core\Application.h" />
     <ClInclude Include="Inc\Core\Window.h" />
+    <ClInclude Include="Inc\Rendering\Graphics.h" />
     <ClInclude Include="Inc\Rendering\Renderer.h" />
     <ClInclude Include="Inc\Pch.h" />
     <ClInclude Include="Inc\Utils\Exception.h" />

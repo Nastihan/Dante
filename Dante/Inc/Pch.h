@@ -23,7 +23,9 @@
 
 #include "../ThirdParty/d3dx12.h"
 
+
 #include <Utils/Exception.h>
+#include <Utils/NastihanUtil.h>
 
 
 // Macros
@@ -32,3 +34,6 @@ Class(const Class&) = delete; \
 Class(Class&&) = delete; \
 Class& operator=(const Class&) = delete; \
 Class& operator=(Class&&) = delete;
+
+// 
+using Microsoft::WRL::ComPtr;

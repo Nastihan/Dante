@@ -24,7 +24,7 @@ namespace Dante::Core
 			}
 
 			auto dt = Utils::Timer::Instance().Mark();
-			std::cout << dt << std::endl;
+			//std::cout << dt << std::endl;
 			Render();
 		}
 	}
