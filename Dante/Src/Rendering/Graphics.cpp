@@ -12,9 +12,11 @@ namespace Dante::Rendering
 	{
 		SetupDebugLayer();
 		SelectAdapter();
-		Chk(D3D12CreateDevice(nullptr, D3D_FEATURE_LEVEL_12_1, IID_PPV_ARGS(&device)));
+		Chk(D3D12CreateDevice(nullptr, D3D_FEATURE_LEVEL_12_1, ID(device)));
 
-		Chk(device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence)));
+		Chk(device->CreateFence(0, D3D12_FENCE_FLAG_NONE, ID(fence)));
+
+		CreateCommandObjects();
 
 	}
 
@@ -64,5 +66,28 @@ namespace Dante::Rendering
 		adapter->GetDesc(&adapterDesc);
 		std::wcout << std::wstring{ adapterDesc.Description } << std::endl;
 
+	}
+
+	void Graphics::CreateCommandObjects()
+	{
+		D3D12_COMMAND_QUEUE_DESC cmdQueueDesc{};
+		cmdQueueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
+		cmdQueueDesc.NodeMask = 0;
+		cmdQueueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
+		cmdQueueDesc.Priority = D3D12_COMMAND_QUEUE_PRIORITY_NORMAL;
+		Chk(device->CreateCommandQueue(&cmdQueueDesc, ID(cmdQueue)));
+
+		Chk(device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT,
+			ID(cmdListAlloc)));
+
+		Chk(device->CreateCommandList(
+			0,
+			D3D12_COMMAND_LIST_TYPE_DIRECT,
+			cmdListAlloc.Get(),
+			nullptr,
+			ID(cmdList)
+		));
+
+		Chk(cmdList->Close());
 	}
 }

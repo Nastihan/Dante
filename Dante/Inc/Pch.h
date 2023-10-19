@@ -35,5 +35,7 @@ Class(Class&&) = delete; \
 Class& operator=(const Class&) = delete; \
 Class& operator=(Class&&) = delete;
 
+#define ID(pType) __uuidof(**(&pType)), IID_PPV_ARGS_Helper(&pType)
+
 // 
 using Microsoft::WRL::ComPtr;
