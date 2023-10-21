@@ -15,9 +15,11 @@ namespace Dante::Rendering
 		void SetupDebugLayer();
 		void SelectAdapter();
 		void CreateCommandObjects();
+		void CreateSwapChain();
 
 
 	private:
+		Microsoft::WRL::ComPtr<IDXGIFactory7> factory;
 		Microsoft::WRL::ComPtr<ID3D12Device10> device{};
 		Microsoft::WRL::ComPtr<IDXGIAdapter4> adapter{};
 		Microsoft::WRL::ComPtr<IDXGISwapChain4> swapChain{};
@@ -31,6 +33,13 @@ namespace Dante::Rendering
 		UINT RtvDescriptorSize{};
 		UINT DsvDescriptorSize{};
 		UINT CbvSrvUavDescriptorSize{};
+
+		bool msaaEnabled = false;
+
+		// formats
+		DXGI_FORMAT backBufferFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
+
+		static constexpr UINT BACK_BUFFER_COUNT = 3;
 
 
 	};

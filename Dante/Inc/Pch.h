@@ -39,3 +39,5 @@ Class& operator=(Class&&) = delete;
 
 // 
 using Microsoft::WRL::ComPtr;
+
+//

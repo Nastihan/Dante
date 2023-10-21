@@ -82,4 +82,19 @@ namespace Dante::Core
 		}
 		return {};
 	}
+
+	UINT Window::GetWidth()
+	{
+		return width;
+	}
+
+	UINT Window::GetHeight()
+	{
+		return height;
+	}
+
+	HWND Window::GetHWnd()
+	{
+		return hWnd;
+	}
 }

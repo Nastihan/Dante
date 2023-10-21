@@ -1,5 +1,6 @@
 #include "Pch.h"
 #include "Rendering\Graphics.h"
+#include "Core/Window.h"
 
 namespace Dante::Rendering
 {
@@ -12,11 +13,12 @@ namespace Dante::Rendering
 	{
 		SetupDebugLayer();
 		SelectAdapter();
-		Chk(D3D12CreateDevice(nullptr, D3D_FEATURE_LEVEL_12_1, ID(device)));
+		Chk(D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_12_2, ID(device)));
 
 		Chk(device->CreateFence(0, D3D12_FENCE_FLAG_NONE, ID(fence)));
 
 		CreateCommandObjects();
+		CreateSwapChain();
 
 	}
 
@@ -32,7 +34,6 @@ namespace Dante::Rendering
 
 	void Graphics::SelectAdapter()
 	{
-		ComPtr<IDXGIFactory7> factory;
 		D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_12_1;
 		UINT createFactoryFlags = 0;
 
@@ -89,5 +90,58 @@ namespace Dante::Rendering
 		));
 
 		Chk(cmdList->Close());
+	}
+
+	void Graphics::CreateSwapChain()
+	{
+		D3D12_FEATURE_DATA_MULTISAMPLE_QUALITY_LEVELS msQualityLevels;
+		msQualityLevels.Format = backBufferFormat;
+		msQualityLevels.SampleCount = 4;
+		msQualityLevels.Flags = D3D12_MULTISAMPLE_QUALITY_LEVELS_FLAG_NONE;
+		msQualityLevels.NumQualityLevels = 0;
+		Chk(device->CheckFeatureSupport(
+			D3D12_FEATURE_MULTISAMPLE_QUALITY_LEVELS,
+			&msQualityLevels,
+			sizeof(msQualityLevels)));
+
+		bool tearing = false;
+		if (SUCCEEDED (factory->CheckFeatureSupport(DXGI_FEATURE_PRESENT_ALLOW_TEARING, &tearing, sizeof(tearing))))
+		{
+			tearing = true;
+		}
+
+		UINT msaaQuality = msQualityLevels.NumQualityLevels;
+		assert(msaaQuality > 0 && "Unexpected MSAA quality level.");
+
+		DXGI_SWAP_CHAIN_DESC1 swapChainDesc =
+		{
+			.Width = Core::Window::Instance().GetWidth(),
+			.Height = Core::Window::Instance().GetHeight(),
+			.Format = backBufferFormat,
+			.Stereo = false,
+			.SampleDesc
+				{
+				.Count = msaaEnabled ? 4U : 1U,
+				.Quality = msaaEnabled ? (msaaQuality - 1U) : 0U
+				},
+			.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT,
+			.BufferCount = BACK_BUFFER_COUNT,
+			.Scaling = DXGI_SCALING_STRETCH,
+			.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD,
+			.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED,
+			.Flags = tearing ? DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING : 0U,
+
+		};
+
+		Microsoft::WRL::ComPtr<IDXGISwapChain1> swapChain1;
+		Chk(factory->CreateSwapChainForHwnd(
+			cmdQueue.Get(),
+			Core::Window::Instance().GetHWnd(),
+			&swapChainDesc,
+			nullptr,
+			nullptr,
+			&swapChain1
+		));
+		Chk(swapChain1.As(&swapChain));
 	}
 }
