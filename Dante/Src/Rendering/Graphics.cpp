@@ -9,17 +9,21 @@ namespace Dante::Rendering
 		InitDirect3D();
 	}
 
+	void Graphics::OnResize()
+	{
+		assert(device);
+		assert(swapChain);
+		assert(mainCmdListAlloc);
+	}
+
 	void Graphics::InitDirect3D()
 	{
 		SetupDebugLayer();
 		SelectAdapter();
 		Chk(D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_12_2, ID(device)));
-
-		Chk(device->CreateFence(0, D3D12_FENCE_FLAG_NONE, ID(fence)));
-
 		CreateCommandObjects();
 		CreateSwapChain();
-
+		CreateRtvDescriptorHeap();
 	}
 
 	void Graphics::SetupDebugLayer()
@@ -29,12 +33,13 @@ namespace Dante::Rendering
 		D3D12GetDebugInterface(IID_PPV_ARGS(&debugController));
 		debugController->EnableDebugLayer();
 		debugController->SetEnableGPUBasedValidation(true);
+
 #endif
 	}
 
 	void Graphics::SelectAdapter()
 	{
-		D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_12_1;
+		D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_12_2;
 		UINT createFactoryFlags = 0;
 
 #ifdef _DEBUG
@@ -45,7 +50,7 @@ namespace Dante::Rendering
 		size_t maxVideoMemory{};
 		ComPtr<IDXGIAdapter1> adapter1;
 		ComPtr<IDXGIAdapter4> adapter4;
-		for (UINT i = 0; SUCCEEDED(factory->EnumAdapters1(i, adapter1.GetAddressOf())); i++)
+		for (UINT i = 0; factory->EnumAdapters1(i, adapter1.ReleaseAndGetAddressOf()) != DXGI_ERROR_NOT_FOUND; i++)
 		{
 			DXGI_ADAPTER_DESC1 adapterDesc{};
 			adapter1->GetDesc1(&adapterDesc);
@@ -66,7 +71,6 @@ namespace Dante::Rendering
 		DXGI_ADAPTER_DESC adapterDesc{};
 		adapter->GetDesc(&adapterDesc);
 		std::wcout << std::wstring{ adapterDesc.Description } << std::endl;
-
 	}
 
 	void Graphics::CreateCommandObjects()
@@ -79,15 +83,17 @@ namespace Dante::Rendering
 		Chk(device->CreateCommandQueue(&cmdQueueDesc, ID(cmdQueue)));
 
 		Chk(device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT,
-			ID(cmdListAlloc)));
+			ID(mainCmdListAlloc)));
 
 		Chk(device->CreateCommandList(
 			0,
 			D3D12_COMMAND_LIST_TYPE_DIRECT,
-			cmdListAlloc.Get(),
+			mainCmdListAlloc.Get(),
 			nullptr,
 			ID(cmdList)
 		));
+
+		Chk(device->CreateFence(0, D3D12_FENCE_FLAG_NONE, ID(fence)));
 
 		Chk(cmdList->Close());
 	}
@@ -143,5 +149,34 @@ namespace Dante::Rendering
 			&swapChain1
 		));
 		Chk(swapChain1.As(&swapChain));
+
+		currBackBufferIndex = swapChain->GetCurrentBackBufferIndex();
+	}
+
+	void Graphics::CreateRtvDescriptorHeap()
+	{
+		D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc{};
+		rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
+		rtvHeapDesc.NodeMask = 0;
+		rtvHeapDesc.NumDescriptors = BACK_BUFFER_COUNT;
+		rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+
+		Chk(device->CreateDescriptorHeap(&rtvHeapDesc, ID(rtvHeap)));
+	}
+
+	void Graphics::FlushCmdQueue()
+	{
+		fenceVal++;
+
+		Chk(cmdQueue->Signal(fence.Get(), fenceVal));
+
+		if (fence->GetCompletedValue() < fenceVal)
+		{
+			HANDLE eventHandle = CreateEventEx(nullptr, nullptr, false, EVENT_ALL_ACCESS);
+
+			Chk(fence->SetEventOnCompletion(fenceVal, eventHandle));
+			WaitForSingleObject(eventHandle, INFINITE);
+			CloseHandle(eventHandle);
+		}
 	}
 }
