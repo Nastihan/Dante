@@ -5,6 +5,8 @@ namespace Dante::Rendering
 	class Graphics
 	{
 	public:
+		friend class Renderer;
+
 		Graphics() = default;
 		DISABLE_COPY_AND_MOVE(Graphics)
 		//~Graphics() { if(device) FlushCmdQueue(); };
@@ -23,6 +25,9 @@ namespace Dante::Rendering
 		void CreateRtvDescriptorHeap();
 
 		void FlushCmdQueue();
+
+		ID3D12Resource* CurrentBackBuffer();
+		D3D12_CPU_DESCRIPTOR_HANDLE CurrentBackBufferView();
 
 
 	private:

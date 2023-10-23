@@ -42,7 +42,6 @@ namespace Dante::Rendering
 			rtvHandle.Offset(1, rtvDescriptorSize);
 		}
 
-
 		FlushCmdQueue();
 
 		screenViewport.TopLeftX = 0;
@@ -227,5 +226,19 @@ namespace Dante::Rendering
 			WaitForSingleObject(eventHandle, INFINITE);
 			CloseHandle(eventHandle);
 		}
+	}
+
+	ID3D12Resource* Graphics::CurrentBackBuffer()
+	{
+		return backBuffers.at(currBackBufferIndex).Get();
+	}
+
+	D3D12_CPU_DESCRIPTOR_HANDLE Graphics::CurrentBackBufferView()
+	{
+		return CD3DX12_CPU_DESCRIPTOR_HANDLE{
+			rtvHeap->GetCPUDescriptorHandleForHeapStart(),
+			int(currBackBufferIndex),
+			rtvDescriptorSize
+		};
 	}
 }

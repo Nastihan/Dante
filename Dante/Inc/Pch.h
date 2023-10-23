@@ -21,6 +21,7 @@
 #include <dxgidebug.h>
 #include <DirectXMath.h>
 #include <wrl.h>
+#include <DirectXColors.h>
 
 #include "../ThirdParty/d3dx12.h"
 
