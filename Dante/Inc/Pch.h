@@ -8,6 +8,7 @@
 #include <string>
 #include <comdef.h>
 #include <optional>
+#include <array>
 
 // WIN32
 #define NOMINMAX

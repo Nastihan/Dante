@@ -16,6 +16,7 @@ namespace Dante::Rendering
 		void InitDirect3D();
 		void SetupDebugLayer();
 		void SelectAdapter();
+		void CreateDevice();
 		void CreateCommandObjects();
 		void CreateSwapChain();
 		
@@ -25,6 +26,10 @@ namespace Dante::Rendering
 
 
 	private:
+		static constexpr UINT BACK_BUFFER_COUNT = 3;
+		bool msaaEnabled = false;
+		DXGI_FORMAT backBufferFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
+
 		// Graphics device
 		Microsoft::WRL::ComPtr<IDXGIFactory7> factory;
 		Microsoft::WRL::ComPtr<ID3D12Device10> device{};
@@ -38,22 +43,19 @@ namespace Dante::Rendering
 		Microsoft::WRL::ComPtr<ID3D12Fence1> fence{};
 		UINT64 fenceVal{ 0 };
 
+		// Back buffers
+		std::array<Microsoft::WRL::ComPtr<ID3D12Resource>, BACK_BUFFER_COUNT> backBuffers;
+		UINT currBackBufferIndex{};
+
 		// DescriptorHeaps
 		Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvHeap;
+		UINT rtvDescriptorSize{};
+		UINT dsvDescriptorSize{};
+		UINT cbvSrvUavDescriptorSize{};
 
-		// DescriptorHeaps sizes
-		UINT RtvDescriptorSize{};
-		UINT DsvDescriptorSize{};
-		UINT CbvSrvUavDescriptorSize{};
-
-		bool msaaEnabled = false;
-
-		// formats
-		DXGI_FORMAT backBufferFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
-
-		static constexpr UINT BACK_BUFFER_COUNT = 3;
-
-		UINT currBackBufferIndex{};
+		// Viewport and Scissor rect
+		D3D12_VIEWPORT screenViewport;
+		D3D12_RECT scissorRect;
 
 
 	};

@@ -14,16 +14,57 @@ namespace Dante::Rendering
 		assert(device);
 		assert(swapChain);
 		assert(mainCmdListAlloc);
+
+		FlushCmdQueue();
+
+		//Chk(cmdList->Reset(mainCmdListAlloc.Get(), nullptr));
+
+		for (auto& b : backBuffers)
+		{
+			b.Reset();
+		}
+
+		Chk(swapChain->ResizeBuffers(
+			BACK_BUFFER_COUNT,
+			Core::Window::Instance().GetWidth(),
+			Core::Window::Instance().GetHeight(),
+			backBufferFormat,
+			DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH
+		));
+
+		currBackBufferIndex = 0;
+
+		CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvHeap->GetCPUDescriptorHandleForHeapStart());
+		for (UINT i = 0; i < BACK_BUFFER_COUNT; i++)
+		{
+			Chk(swapChain->GetBuffer(i, ID(backBuffers.at(i))));
+			device->CreateRenderTargetView(backBuffers.at(i).Get(), nullptr, rtvHandle);
+			rtvHandle.Offset(1, rtvDescriptorSize);
+		}
+
+
+		FlushCmdQueue();
+
+		screenViewport.TopLeftX = 0;
+		screenViewport.TopLeftY = 0;
+		screenViewport.Height = FLOAT(Core::Window::Instance().GetHeight());
+		screenViewport.Width = FLOAT(Core::Window::Instance().GetWidth());
+		screenViewport.MinDepth = 0.0f;
+		screenViewport.MaxDepth = 1.0f;
+
+		scissorRect = { 0, 0, LONG(Core::Window::Instance().GetWidth()), LONG(Core::Window::Instance().GetHeight()) };
+
 	}
 
 	void Graphics::InitDirect3D()
 	{
 		SetupDebugLayer();
 		SelectAdapter();
-		Chk(D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_12_2, ID(device)));
+		CreateDevice();
 		CreateCommandObjects();
 		CreateSwapChain();
 		CreateRtvDescriptorHeap();
+		OnResize();
 	}
 
 	void Graphics::SetupDebugLayer()
@@ -71,6 +112,14 @@ namespace Dante::Rendering
 		DXGI_ADAPTER_DESC adapterDesc{};
 		adapter->GetDesc(&adapterDesc);
 		std::wcout << std::wstring{ adapterDesc.Description } << std::endl;
+	}
+
+	void Graphics::CreateDevice()
+	{
+		Chk(D3D12CreateDevice(adapter.Get(), D3D_FEATURE_LEVEL_12_2, ID(device)));
+		rtvDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+		dsvDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
+		cbvSrvUavDescriptorSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	}
 
 	void Graphics::CreateCommandObjects()
