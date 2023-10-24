@@ -162,6 +162,7 @@
     <ClInclude Include="Inc\Rendering\Graphics.h" />
     <ClInclude Include="Inc\Rendering\Renderer.h" />
     <ClInclude Include="Inc\Pch.h" />
+    <ClInclude Include="Inc\Utils\DXUtil.h" />
     <ClInclude Include="Inc\Utils\Exception.h" />
     <ClInclude Include="Inc\Utils\NastihanUtil.h" />
     <ClInclude Include="Inc\Utils\Singleton.h" />

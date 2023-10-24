@@ -69,6 +69,10 @@ namespace Dante::Rendering
 		D3D12_VIEWPORT screenViewport;
 		D3D12_RECT scissorRect;
 
+	private:
+		std::unordered_map<std::string, Microsoft::WRL::ComPtr<ID3D12PipelineState>> pSOs;
+		std::unordered_map<std::string, Microsoft::WRL::ComPtr<ID3DBlob>> shaders;
+
 
 	};
 

@@ -25,11 +25,17 @@ namespace Dante::Core
 
 			auto dt = Utils::Timer::Instance().Mark();
 			//std::cout << dt << std::endl;
+			Update();
 			Render();
 		}
 	}
 	void Application::Render()
 	{
 		renderer->Render();
+	}
+
+	void Application::Update()
+	{
+		renderer->Update();
 	}
 }

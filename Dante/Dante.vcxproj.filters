@@ -68,5 +68,8 @@
     <ClInclude Include="Inc\Rendering\Graphics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Inc\Utils\DXUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

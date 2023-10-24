@@ -9,6 +9,7 @@
 #include <comdef.h>
 #include <optional>
 #include <array>
+#include <unordered_map>
 
 // WIN32
 #define NOMINMAX

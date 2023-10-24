@@ -10,7 +10,11 @@ namespace Dante::Rendering
 		Renderer() = default;
 		DISABLE_COPY_AND_MOVE(Renderer)
 		void Init();
+		void Update();
 		void Render();
+	private:
+		// TEMP
+		void LoadTriangle();
 	private:
 		std::unique_ptr<Graphics> gfx{};
 	};

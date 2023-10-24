@@ -16,6 +16,7 @@ namespace Dante::Core
 		int Run();
 	private:
 		void Render();
+		void Update();
 
 	private:
 		std::unique_ptr<Window> window;
