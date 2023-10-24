@@ -5,29 +5,36 @@ namespace Dante::Rendering
 	class Graphics
 	{
 	public:
-		friend class Renderer;
-
 		Graphics() = default;
 		DISABLE_COPY_AND_MOVE(Graphics)
 		//~Graphics() { if(device) FlushCmdQueue(); };
 		void Init();
-
 	private:
 		void OnResize();
-
 		void InitDirect3D();
 		void SetupDebugLayer();
 		void SelectAdapter();
 		void CreateDevice();
 		void CreateCommandObjects();
 		void CreateSwapChain();
-		
 		void CreateRtvDescriptorHeap();
-
+	public:
+		void Present();
 		void FlushCmdQueue();
+
+	public:
+		ID3D12CommandAllocator* GetCmdAllocator();
+		ID3D12GraphicsCommandList* GetCmdList();
+		ID3D12CommandQueue* GetCmdQueue();
 
 		ID3D12Resource* CurrentBackBuffer();
 		D3D12_CPU_DESCRIPTOR_HANDLE CurrentBackBufferView();
+
+		D3D12_VIEWPORT GetViewport();
+		D3D12_RECT GetScissorRect();
+
+
+		
 
 
 	private:

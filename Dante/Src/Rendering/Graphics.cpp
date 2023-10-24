@@ -212,6 +212,12 @@ namespace Dante::Rendering
 		Chk(device->CreateDescriptorHeap(&rtvHeapDesc, ID(rtvHeap)));
 	}
 
+	void Graphics::Present()
+	{
+		Chk(swapChain->Present(0, 0));
+		currBackBufferIndex = (currBackBufferIndex + 1) % BACK_BUFFER_COUNT;
+	}
+
 	void Graphics::FlushCmdQueue()
 	{
 		fenceVal++;
@@ -228,6 +234,25 @@ namespace Dante::Rendering
 		}
 	}
 
+
+	//////////////////////// Getters
+	ID3D12CommandAllocator* Graphics::GetCmdAllocator()
+	{
+		return mainCmdListAlloc.Get();
+	}
+
+	ID3D12GraphicsCommandList* Graphics::GetCmdList()
+	{
+		return cmdList.Get();
+	}
+
+	ID3D12CommandQueue* Graphics::GetCmdQueue()
+	{
+		return cmdQueue.Get();
+	}
+
+	
+
 	ID3D12Resource* Graphics::CurrentBackBuffer()
 	{
 		return backBuffers.at(currBackBufferIndex).Get();
@@ -241,4 +266,15 @@ namespace Dante::Rendering
 			rtvDescriptorSize
 		};
 	}
+
+	D3D12_VIEWPORT Graphics::GetViewport()
+	{
+		return screenViewport;
+	}
+
+	D3D12_RECT Graphics::GetScissorRect()
+	{
+		return scissorRect;
+	}
+
 }
