@@ -7,7 +7,7 @@ namespace Dante::Core
 	{
 		timer = std::make_unique<Utils::Timer>();
 
-		window = std::make_unique<Core::Window>(1600, 900, "My Window");
+		window = std::make_unique<Core::Window>(1376, 774, "My Window");
 		window->Init();
 
 		renderer = std::make_unique<Rendering::Renderer>();
