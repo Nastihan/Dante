@@ -282,17 +282,61 @@ namespace Dante::Rendering
 		}
 	}
 
-	void Graphics::BuildPSOs()
-	{
-		
-	}
-
 	void Graphics::BuildRootSigs()
 	{
+		CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSigDesc{};
+		rootSigDesc.Init_1_1(0, nullptr, 0, nullptr,
+			D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
+
+		ComPtr<ID3DBlob> serializedRootSig{};
+		ComPtr<ID3DBlob> errorBlob{};
+
+		HRESULT hr = D3D12SerializeVersionedRootSignature(&rootSigDesc, serializedRootSig.GetAddressOf(), errorBlob.GetAddressOf());
+		if (errorBlob != nullptr)
+		{
+			::OutputDebugStringA((char*)errorBlob->GetBufferPointer());
+		}
+		Chk(hr);
+
+		Chk(device->CreateRootSignature(
+			0, serializedRootSig->GetBufferPointer(),
+			serializedRootSig->GetBufferSize(),
+			ID(rootSignatures["defaultRS"])
+		));
+
 	}
 
 	void Graphics::BuildShaders()
 	{
+
+	}
+
+	void Graphics::BuildPSOs()
+	{
+		inputLayout =
+		{
+			{"POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
+			{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
+		};
+
+		D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc{};
+		psoDesc.InputLayout = { inputLayout.data(), (UINT)inputLayout.size() };
+		psoDesc.pRootSignature = rootSignatures["defaultRS"].Get();
+		psoDesc.VS = CD3DX12_SHADER_BYTECODE(shaders["defaultVS"].Get());
+		psoDesc.PS = CD3DX12_SHADER_BYTECODE(shaders["defaultPS"].Get());
+		psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+		psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+		psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
+		psoDesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+		psoDesc.SampleMask = UINT_MAX;
+		psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+		psoDesc.NumRenderTargets = 1;
+		psoDesc.RTVFormats[0] = backBufferFormat;
+		psoDesc.SampleDesc.Count = msaaEnabled ? 4 : 1;
+		psoDesc.SampleDesc.Quality = msaaEnabled ? (msaaQuality - 1) : 0;
+		psoDesc.DSVFormat = depthStencilFormat;
+
+		Chk(device->CreateGraphicsPipelineState(&psoDesc, ID(pSOs["defaultPSO"])));
 	}
 
 	//////////////////////// Getters
@@ -326,6 +370,7 @@ namespace Dante::Rendering
 		return scissorRect;
 	}
 
+	//////////////////// Utils
 	ID3D12Resource* Graphics::CurrentBackBuffer()
 	{
 		return backBuffers.at(currBackBufferIndex).Get();

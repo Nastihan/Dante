@@ -78,9 +78,12 @@ namespace Dante::Rendering
 		D3D12_RECT scissorRect;
 
 	private:
-		std::unordered_map<std::string, Microsoft::WRL::ComPtr<ID3D12RootSignature>> rootSigs;
+		std::unordered_map<std::string, Microsoft::WRL::ComPtr<ID3D12RootSignature>> rootSignatures;
 		std::unordered_map<std::string, Microsoft::WRL::ComPtr<ID3D12PipelineState>> pSOs;
 		std::unordered_map<std::string, Microsoft::WRL::ComPtr<ID3DBlob>> shaders;
+
+		std::vector<D3D12_INPUT_ELEMENT_DESC> inputLayout;
+
 
 
 	};
