@@ -17,8 +17,8 @@ namespace Dante::Utils
 	{
 		std::string name;
 
-		std::pair<ComPtr<ID3D12Resource>, ComPtr<ID3D12Resource>> vertexBuffer{};
-		std::pair<ComPtr<ID3D12Resource>, ComPtr<ID3D12Resource>> indexBuffer{};
+		std::pair<ComPtr<ID3D12Resource>, ComPtr<ID3D12Resource>> vertexBuffer;
+		std::pair<ComPtr<ID3D12Resource>, ComPtr<ID3D12Resource>> indexBuffer;
 		
 
 		UINT VertexByteStride = 0;

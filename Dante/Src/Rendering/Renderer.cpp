@@ -13,6 +13,19 @@ namespace Dante::Rendering
 	{
 		gfx = std::make_unique<Graphics>();
 		gfx->Init();
+
+		auto cmdListAlloc = gfx->GetCmdAllocator();
+		auto cmdList = gfx->GetCmdList();
+		auto cmdQueue = gfx->GetCmdQueue();
+		Chk(cmdListAlloc->Reset());
+		Chk(cmdList->Reset(cmdListAlloc, nullptr));
+
+		LoadTriangle();
+
+		Chk(cmdList->Close());
+		ID3D12CommandList* cmdLists[] = { cmdList };
+		cmdQueue->ExecuteCommandLists((UINT)std::size(cmdLists), cmdLists);
+		gfx->FlushCmdQueue();
 	}
 
 	void Renderer::Update()
@@ -67,12 +80,22 @@ namespace Dante::Rendering
 			{ { -0.5f, -0.25f, 0.0f }, { 0.0f, 1.0f, 0.0f } },
 		};
 
-		const std::vector<WORD> indices =
+		const std::vector<USHORT> indices =
 		{
 			0, 1, 2
 		};
+		
+		triangle = std::make_unique<Utils::MeshGeometry>();
 
-		//Utils::
+		triangle->vertexBuffer = Utils::DXUtil::CreateDefaultBuffer(gfx->GetDevice(),
+			gfx->GetCmdList(), vertices.data(), vertices.size() * sizeof(Vertex));
+		triangle->indexBuffer = Utils::DXUtil::CreateDefaultBuffer(gfx->GetDevice(),
+			gfx->GetCmdList(), indices.data(), indices.size() * sizeof(USHORT));
+
+		triangle->VertexByteStride = sizeof(Vertex);
+		triangle->VertexBufferByteSize = (UINT)vertices.size() * sizeof(Vertex);
+		triangle->IndexBufferByteSize = (UINT)indices.size() * sizeof(USHORT);
+
 
 
 	}

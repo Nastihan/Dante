@@ -24,12 +24,14 @@ namespace Dante::Rendering
 			b.Reset();
 		}
 
+		DXGI_SWAP_CHAIN_DESC swapChainDesc{};
+		swapChain->GetDesc(&swapChainDesc);
 		Chk(swapChain->ResizeBuffers(
 			BACK_BUFFER_COUNT,
 			Core::Window::Instance().GetWidth(),
 			Core::Window::Instance().GetHeight(),
 			backBufferFormat,
-			DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH
+			swapChainDesc.Flags
 		));
 
 		currBackBufferIndex = 0;
@@ -158,10 +160,11 @@ namespace Dante::Rendering
 			&msQualityLevels,
 			sizeof(msQualityLevels)));
 
-		bool tearing = false;
-		if (SUCCEEDED (factory->CheckFeatureSupport(DXGI_FEATURE_PRESENT_ALLOW_TEARING, &tearing, sizeof(tearing))))
+		
+		BOOL tearing = FALSE;
+		if (SUCCEEDED(factory->CheckFeatureSupport(DXGI_FEATURE_PRESENT_ALLOW_TEARING, &tearing, sizeof(tearing))))
 		{
-			tearing = true;
+			tearing = TRUE;
 		}
 
 		UINT msaaQuality = msQualityLevels.NumQualityLevels;
@@ -234,8 +237,12 @@ namespace Dante::Rendering
 		}
 	}
 
-
 	//////////////////////// Getters
+	ID3D12Device* Graphics::GetDevice()
+	{
+		return device.Get();
+	}
+
 	ID3D12CommandAllocator* Graphics::GetCmdAllocator()
 	{
 		return mainCmdListAlloc.Get();
@@ -251,6 +258,15 @@ namespace Dante::Rendering
 		return cmdQueue.Get();
 	}
 
+	D3D12_VIEWPORT Graphics::GetViewport()
+	{
+		return screenViewport;
+	}
+
+	D3D12_RECT Graphics::GetScissorRect()
+	{
+		return scissorRect;
+	}
 	
 
 	ID3D12Resource* Graphics::CurrentBackBuffer()
@@ -267,14 +283,6 @@ namespace Dante::Rendering
 		};
 	}
 
-	D3D12_VIEWPORT Graphics::GetViewport()
-	{
-		return screenViewport;
-	}
-
-	D3D12_RECT Graphics::GetScissorRect()
-	{
-		return scissorRect;
-	}
+	
 
 }

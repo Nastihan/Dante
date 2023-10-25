@@ -1,9 +1,12 @@
 #pragma once
 #include "Pch.h"
 #include "Rendering/Graphics.h"
+#include "Utils/DXUtil.h"
+
 
 namespace Dante::Rendering
 {
+	
 	class Renderer
 	{
 	public:
@@ -17,5 +20,7 @@ namespace Dante::Rendering
 		void LoadTriangle();
 	private:
 		std::unique_ptr<Graphics> gfx{};
+
+		std::unique_ptr<Utils::MeshGeometry> triangle;
 	};
 }

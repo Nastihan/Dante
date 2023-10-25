@@ -13,7 +13,7 @@ namespace  Dante::Utils
             &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
             D3D12_HEAP_FLAG_NONE,
             &CD3DX12_RESOURCE_DESC::Buffer(byteSize),
-            D3D12_RESOURCE_STATE_COPY_DEST,
+            D3D12_RESOURCE_STATE_COMMON,
             nullptr, ID(defaultBuffer)
         ));
 
@@ -30,14 +30,15 @@ namespace  Dante::Utils
         subResourceData.RowPitch = byteSize;
         subResourceData.SlicePitch = byteSize;
 
+        cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(
+            defaultBuffer.Get(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_DEST));
         UpdateSubresources(cmdList, defaultBuffer.Get(), uploadeBuffer.Get(),
             0, 0, 1, &subResourceData);
-
         cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(
             defaultBuffer.Get(), D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_GENERIC_READ));
 
         
-        return { std::move(defaultBuffer), std::move(uploadeBuffer) };
+        return { std::move(defaultBuffer),std::move(uploadeBuffer) };
     }
 
 

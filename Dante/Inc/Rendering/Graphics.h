@@ -23,15 +23,18 @@ namespace Dante::Rendering
 		void FlushCmdQueue();
 
 	public:
+		//////////// Getters
+		ID3D12Device* GetDevice();
 		ID3D12CommandAllocator* GetCmdAllocator();
 		ID3D12GraphicsCommandList* GetCmdList();
 		ID3D12CommandQueue* GetCmdQueue();
+		D3D12_VIEWPORT GetViewport();
+		D3D12_RECT GetScissorRect();
 
 		ID3D12Resource* CurrentBackBuffer();
 		D3D12_CPU_DESCRIPTOR_HANDLE CurrentBackBufferView();
 
-		D3D12_VIEWPORT GetViewport();
-		D3D12_RECT GetScissorRect();
+		
 
 
 		
