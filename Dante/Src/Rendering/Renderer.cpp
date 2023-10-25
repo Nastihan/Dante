@@ -6,7 +6,7 @@ namespace Dante::Rendering
 	struct Vertex
 	{
 		DirectX::XMFLOAT3 Pos;
-		DirectX::XMFLOAT3 Color;
+		DirectX::XMFLOAT4 Color;
 	};
 
 	void Renderer::Init()
@@ -19,6 +19,9 @@ namespace Dante::Rendering
 		auto cmdQueue = gfx->GetCmdQueue();
 		Chk(cmdListAlloc->Reset());
 		Chk(cmdList->Reset(cmdListAlloc, nullptr));
+
+
+		gfx->Load();
 
 		LoadTriangle();
 
@@ -39,7 +42,7 @@ namespace Dante::Rendering
 		auto cmdList = gfx->GetCmdList();
 		auto cmdQueue = gfx->GetCmdQueue();
 		Chk(cmdListAlloc->Reset());
-		Chk(cmdList->Reset(cmdListAlloc, nullptr));
+		Chk(cmdList->Reset(cmdListAlloc, gfx->GetPSO("defaultPSO")));
 
 		cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(gfx->CurrentBackBuffer(),
 			D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
@@ -54,7 +57,12 @@ namespace Dante::Rendering
 		cmdList->OMSetRenderTargets(1, &gfx->CurrentBackBufferView(), true, &gfx->DepthStencilView());
 
 		// draw code
+		cmdList->SetGraphicsRootSignature(gfx->GetRootSig("defaultRS"));
 
+		cmdList->IASetVertexBuffers(0, 1, &triangle->VertexBufferView());
+		cmdList->IASetIndexBuffer(&triangle->IndexBufferView());
+		cmdList->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		cmdList->DrawIndexedInstanced(3, 1, 0, 0, 0);
 
 
 
@@ -77,9 +85,9 @@ namespace Dante::Rendering
 	{
 		const std::vector<Vertex> vertices = 
 		{
-			{ {  0.00f,  0.50f, 0.0f }, { 1.0f, 0.0f, 0.0f } },
-			{ {  0.5f, -0.25f, 0.0f }, { 0.0f, 0.0f, 1.0f } },
-			{ { -0.5f, -0.25f, 0.0f }, { 0.0f, 1.0f, 0.0f } },
+			{ {  0.00f,  0.50f, 0.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
+			{ {  0.5f, -0.5f, 0.0f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
+			{ { -0.5f, -0.5f, 0.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
 		};
 
 		const std::vector<USHORT> indices =

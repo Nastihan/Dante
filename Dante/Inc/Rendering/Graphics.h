@@ -21,6 +21,8 @@ namespace Dante::Rendering
 	public:
 		void Present();
 		void FlushCmdQueue();
+
+		void Load();
 	private:
 		void BuildPSOs();
 		void BuildRootSigs();
@@ -35,6 +37,8 @@ namespace Dante::Rendering
 		ID3D12CommandQueue* GetCmdQueue();
 		D3D12_VIEWPORT GetViewport();
 		D3D12_RECT GetScissorRect();
+		ID3D12PipelineState* GetPSO(std::string name);
+		ID3D12RootSignature* GetRootSig(std::string name);
 		// Utils
 		ID3D12Resource* CurrentBackBuffer();
 		D3D12_CPU_DESCRIPTOR_HANDLE CurrentBackBufferView();

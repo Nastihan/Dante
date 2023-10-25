@@ -25,6 +25,7 @@
 #include <DirectXMath.h>
 #include <wrl.h>
 #include <DirectXColors.h>
+#include <d3dcompiler.h>
 
 #include "../ThirdParty/d3dx12.h"
 

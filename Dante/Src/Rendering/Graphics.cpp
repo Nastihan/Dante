@@ -282,6 +282,13 @@ namespace Dante::Rendering
 		}
 	}
 
+	void Graphics::Load()
+	{
+		BuildRootSigs();
+		BuildShaders();
+		BuildPSOs();
+	}
+
 	void Graphics::BuildRootSigs()
 	{
 		CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSigDesc{};
@@ -308,14 +315,15 @@ namespace Dante::Rendering
 
 	void Graphics::BuildShaders()
 	{
-
+		Chk(D3DReadFileToBlob(L"Shaders\\ShaderBins\\DefaultVS.cso", shaders["defaultVS"].GetAddressOf()));
+		Chk(D3DReadFileToBlob(L"Shaders\\ShaderBins\\DefaultPS.cso", shaders["defaultPS"].GetAddressOf()));
 	}
 
 	void Graphics::BuildPSOs()
 	{
 		inputLayout =
 		{
-			{"POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
+			{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
 			{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
 		};
 
@@ -368,6 +376,16 @@ namespace Dante::Rendering
 	D3D12_RECT Graphics::GetScissorRect()
 	{
 		return scissorRect;
+	}
+
+	ID3D12PipelineState* Graphics::GetPSO(std::string name)
+	{
+		return pSOs[name].Get();
+	}
+
+	ID3D12RootSignature* Graphics::GetRootSig(std::string name)
+	{
+		return rootSignatures[name].Get();
 	}
 
 	//////////////////// Utils
