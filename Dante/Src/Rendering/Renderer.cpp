@@ -63,14 +63,16 @@ namespace Dante::Rendering
 		const std::vector<Vertex> vertices = 
 		{
 			{ {  0.00f,  0.50f, 0.0f }, { 1.0f, 0.0f, 0.0f } },
-			{ {  0.43f, -0.25f, 0.0f }, { 0.0f, 0.0f, 1.0f } },
-			{ { -0.43f, -0.25f, 0.0f }, { 0.0f, 1.0f, 0.0f } },
+			{ {  0.5f, -0.25f, 0.0f }, { 0.0f, 0.0f, 1.0f } },
+			{ { -0.5f, -0.25f, 0.0f }, { 0.0f, 1.0f, 0.0f } },
 		};
 
 		const std::vector<WORD> indices =
 		{
-
+			0, 1, 2
 		};
+
+		//Utils::
 
 
 	}
