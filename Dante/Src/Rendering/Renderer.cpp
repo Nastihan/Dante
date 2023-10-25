@@ -48,8 +48,10 @@ namespace Dante::Rendering
 		cmdList->RSSetScissorRects(1, &gfx->GetScissorRect());
 
 		cmdList->ClearRenderTargetView(gfx->CurrentBackBufferView(), DirectX::Colors::Cyan, 0, nullptr);
+		cmdList->ClearDepthStencilView(gfx->DepthStencilView(), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL,
+			1.0f, 0U, 0U, nullptr);
 
-		cmdList->OMSetRenderTargets(1, &gfx->CurrentBackBufferView(), true, nullptr);
+		cmdList->OMSetRenderTargets(1, &gfx->CurrentBackBufferView(), true, &gfx->DepthStencilView());
 
 		// draw code
 
@@ -95,6 +97,7 @@ namespace Dante::Rendering
 		triangle->VertexByteStride = sizeof(Vertex);
 		triangle->VertexBufferByteSize = (UINT)vertices.size() * sizeof(Vertex);
 		triangle->IndexBufferByteSize = (UINT)indices.size() * sizeof(USHORT);
+
 
 
 

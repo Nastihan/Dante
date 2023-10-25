@@ -4,6 +4,7 @@
 
 namespace Dante::Rendering
 {
+	///////////// Initialization
 	void Graphics::Init()
 	{
 		InitDirect3D();
@@ -16,14 +17,15 @@ namespace Dante::Rendering
 		assert(mainCmdListAlloc);
 
 		FlushCmdQueue();
-
-		//Chk(cmdList->Reset(mainCmdListAlloc.Get(), nullptr));
+		Chk(cmdList->Reset(mainCmdListAlloc.Get(), nullptr));
 
 		for (auto& b : backBuffers)
 		{
 			b.Reset();
 		}
+		depthStencilBuffer.Reset();
 
+		// back buffer stuff
 		DXGI_SWAP_CHAIN_DESC swapChainDesc{};
 		swapChain->GetDesc(&swapChainDesc);
 		Chk(swapChain->ResizeBuffers(
@@ -33,9 +35,7 @@ namespace Dante::Rendering
 			backBufferFormat,
 			swapChainDesc.Flags
 		));
-
 		currBackBufferIndex = 0;
-
 		CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvHeap->GetCPUDescriptorHandleForHeapStart());
 		for (UINT i = 0; i < BACK_BUFFER_COUNT; i++)
 		{
@@ -44,6 +44,43 @@ namespace Dante::Rendering
 			rtvHandle.Offset(1, rtvDescriptorSize);
 		}
 
+		// depth stencil stuff
+		D3D12_RESOURCE_DESC dsDesc{};
+		dsDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
+		dsDesc.Alignment = 0;
+		dsDesc.Width = Core::Window::Instance().GetWidth();
+		dsDesc.Height = Core::Window::Instance().GetHeight();
+		dsDesc.DepthOrArraySize = 1;
+		dsDesc.MipLevels = 1;
+		dsDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
+		dsDesc.SampleDesc.Count = msaaEnabled ? 4 : 1;
+		dsDesc.SampleDesc.Quality = msaaEnabled ? (msaaQuality - 1) : 0;
+		dsDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
+		dsDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
+		Chk(device->CreateCommittedResource(
+			&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+			D3D12_HEAP_FLAG_NONE,
+			&dsDesc,
+			D3D12_RESOURCE_STATE_COMMON,
+			&CD3DX12_CLEAR_VALUE(depthStencilFormat, 1.0f, 0U),
+			ID(depthStencilBuffer)
+		));
+		// ds view
+		D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
+		dsvDesc.Flags = D3D12_DSV_FLAG_NONE;
+		dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
+		dsvDesc.Format = depthStencilFormat;
+		dsvDesc.Texture2D.MipSlice = 0;
+		device->CreateDepthStencilView(depthStencilBuffer.Get(), &dsvDesc, DepthStencilView());
+	
+		cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(
+			depthStencilBuffer.Get(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_DEPTH_WRITE
+		));
+		
+		// execute
+		Chk(cmdList->Close());
+		ID3D12CommandList* cmdLists[] = { cmdList.Get()};
+		cmdQueue->ExecuteCommandLists(1, cmdLists);
 		FlushCmdQueue();
 
 		screenViewport.TopLeftX = 0;
@@ -64,7 +101,7 @@ namespace Dante::Rendering
 		CreateDevice();
 		CreateCommandObjects();
 		CreateSwapChain();
-		CreateRtvDescriptorHeap();
+		CreateRtvAndDsvDescriptorHeap();
 		OnResize();
 	}
 
@@ -167,7 +204,7 @@ namespace Dante::Rendering
 			tearing = TRUE;
 		}
 
-		UINT msaaQuality = msQualityLevels.NumQualityLevels;
+		msaaQuality = msQualityLevels.NumQualityLevels;
 		assert(msaaQuality > 0 && "Unexpected MSAA quality level.");
 
 		DXGI_SWAP_CHAIN_DESC1 swapChainDesc =
@@ -204,7 +241,7 @@ namespace Dante::Rendering
 		currBackBufferIndex = swapChain->GetCurrentBackBufferIndex();
 	}
 
-	void Graphics::CreateRtvDescriptorHeap()
+	void Graphics::CreateRtvAndDsvDescriptorHeap()
 	{
 		D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc{};
 		rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
@@ -213,6 +250,14 @@ namespace Dante::Rendering
 		rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 
 		Chk(device->CreateDescriptorHeap(&rtvHeapDesc, ID(rtvHeap)));
+
+		D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc{};
+		dsvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
+		dsvHeapDesc.NodeMask = 0;
+		dsvHeapDesc.NumDescriptors = 1;
+		dsvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+
+		Chk(device->CreateDescriptorHeap(&dsvHeapDesc, ID(dsvHeap)));
 	}
 
 	void Graphics::Present()
@@ -235,6 +280,19 @@ namespace Dante::Rendering
 			WaitForSingleObject(eventHandle, INFINITE);
 			CloseHandle(eventHandle);
 		}
+	}
+
+	void Graphics::BuildPSOs()
+	{
+		
+	}
+
+	void Graphics::BuildRootSigs()
+	{
+	}
+
+	void Graphics::BuildShaders()
+	{
 	}
 
 	//////////////////////// Getters
@@ -267,7 +325,6 @@ namespace Dante::Rendering
 	{
 		return scissorRect;
 	}
-	
 
 	ID3D12Resource* Graphics::CurrentBackBuffer()
 	{
@@ -281,6 +338,11 @@ namespace Dante::Rendering
 			int(currBackBufferIndex),
 			rtvDescriptorSize
 		};
+	}
+
+	D3D12_CPU_DESCRIPTOR_HANDLE Graphics::DepthStencilView()
+	{
+		return dsvHeap->GetCPUDescriptorHandleForHeapStart();
 	}
 
 	
