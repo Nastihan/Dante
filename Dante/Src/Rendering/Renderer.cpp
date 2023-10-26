@@ -31,6 +31,11 @@ namespace Dante::Rendering
 		gfx->FlushCmdQueue();
 	}
 
+	void Renderer::OnResize()
+	{
+		gfx->OnResize();
+	}
+
 	void Renderer::Update()
 	{
 
@@ -59,7 +64,7 @@ namespace Dante::Rendering
 
 		cmdList->IASetVertexBuffers(0, 1, &triangle->VertexBufferView());
 		cmdList->IASetIndexBuffer(&triangle->IndexBufferView());
-		cmdList->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		cmdList->DrawIndexedInstanced(3, 1, 0, 0, 0);
 
 

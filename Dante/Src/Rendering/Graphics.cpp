@@ -12,6 +12,11 @@ namespace Dante::Rendering
 
 	void Graphics::OnResize()
 	{
+		Resize();
+	}
+
+	void Graphics::Resize()
+	{
 		assert(device);
 		assert(swapChain);
 		assert(mainCmdListAlloc);

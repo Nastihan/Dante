@@ -14,9 +14,13 @@ namespace Dante::Core
 		~Application() = default;
 		void Init();
 		int Run();
+		void OnResize();
+
 	private:
 		void Render();
 		void Update();
+	public:
+		bool RendererInitialized();
 
 	private:
 		std::unique_ptr<Window> window;

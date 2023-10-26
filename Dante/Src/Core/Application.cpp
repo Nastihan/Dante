@@ -1,6 +1,7 @@
 #include "Pch.h"
 #include "Core/Application.h"
 
+
 namespace Dante::Core
 {
 	void Application::Init()
@@ -29,6 +30,12 @@ namespace Dante::Core
 			Render();
 		}
 	}
+
+	void Application::OnResize()
+	{
+		renderer->OnResize();
+	}
+
 	void Application::Render()
 	{
 		renderer->Render();
@@ -37,5 +44,10 @@ namespace Dante::Core
 	void Application::Update()
 	{
 		renderer->Update();
+	}
+
+	bool Application::RendererInitialized()
+	{
+		return  renderer ? 1 : 0;
 	}
 }

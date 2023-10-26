@@ -7,6 +7,7 @@ namespace Dante::Core
 	public:
 		Window(UINT width, UINT height, std::string name);
 		void Init();
+		LRESULT MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 		static std::optional<int> ProcessMessages() noexcept;
 		UINT GetWidth();
 		UINT GetHeight();

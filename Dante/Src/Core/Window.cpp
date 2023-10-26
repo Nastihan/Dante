@@ -1,21 +1,11 @@
 #include "Pch.h"
 #include "Core//Window.h"
+#include "Core/Application.h"
 
-LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+
+LRESULT CALLBACK MainWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	switch (msg)
-	{
-		case WM_DESTROY:
-		{
-			::PostQuitMessage(0);
-			return 0;
-		}
-
-		default:
-		{
-			return ::DefWindowProc(hWnd, msg, wParam, lParam);
-		}
-	}
+	return Dante::Core::Window::Instance().MsgProc(hWnd, msg, wParam, lParam);
 }
 
 namespace Dante::Core
@@ -31,7 +21,7 @@ namespace Dante::Core
 
 		WNDCLASS wc;
 		wc.style = CS_HREDRAW | CS_VREDRAW;
-		wc.lpfnWndProc = WndProc;
+		wc.lpfnWndProc = MainWndProc;
 		wc.cbClsExtra = 0;
 		wc.cbWndExtra = 0;
 		wc.hInstance = hInst;
@@ -67,6 +57,41 @@ namespace Dante::Core
 		::UpdateWindow(hWnd);
 
 	}
+
+	LRESULT Window::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+	{
+		static int dirty = 0;
+		switch (msg)
+		{
+			case WM_SIZE:
+			{
+				if (Core::Application::Instance().RendererInitialized())
+				{
+					width = LOWORD(lParam);
+					height = HIWORD(lParam);
+					Dante::Core::Application::Instance().OnResize();
+				}
+				else
+				{
+					return ::DefWindowProc(hwnd, msg, wParam, lParam);
+				}
+				return 0;
+
+			}
+
+			case WM_DESTROY:
+			{
+				::PostQuitMessage(0);
+				return 0;
+			}
+
+			default:
+			{
+				return ::DefWindowProc(hwnd, msg, wParam, lParam);
+			}
+		}
+	}
+
 	std::optional<int> Window::ProcessMessages() noexcept
 	{
 		MSG msg;

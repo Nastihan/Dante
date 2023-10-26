@@ -13,6 +13,7 @@ namespace Dante::Rendering
 		Renderer() = default;
 		DISABLE_COPY_AND_MOVE(Renderer)
 		void Init();
+		void OnResize();
 		void Update();
 		void Render();
 	private:

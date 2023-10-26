@@ -9,8 +9,9 @@ namespace Dante::Rendering
 		DISABLE_COPY_AND_MOVE(Graphics)
 		~Graphics() { if(device) FlushCmdQueue(); };
 		void Init();
-	private:
 		void OnResize();
+	private:
+		void Resize();
 		void InitDirect3D();
 		void SetupDebugLayer();
 		void SelectAdapter();
