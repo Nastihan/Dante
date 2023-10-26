@@ -21,10 +21,10 @@ namespace Dante::Rendering
 		void EndFrame();
 	private:
 		// TEMP
-		void LoadTriangle();
+		void LoadCube();
 	private:
 		std::unique_ptr<Graphics> gfx{};
-
-		std::unique_ptr<Utils::MeshGeometry> triangle;
+		std::unique_ptr<Utils::MeshGeometry> cube;
+		DirectX::XMMATRIX viewProj;
 	};
 }

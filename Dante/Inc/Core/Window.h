@@ -11,6 +11,7 @@ namespace Dante::Core
 		static std::optional<int> ProcessMessages() noexcept;
 		UINT GetWidth();
 		UINT GetHeight();
+		float GetAR();
 		HWND GetHWnd();
 	private:
 		HWND hWnd;

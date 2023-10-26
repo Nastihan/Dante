@@ -118,6 +118,11 @@ namespace Dante::Core
 		return height;
 	}
 
+	float Window::GetAR()
+	{
+		return static_cast<float>(width) / (height);
+	}
+
 	HWND Window::GetHWnd()
 	{
 		return hWnd;
