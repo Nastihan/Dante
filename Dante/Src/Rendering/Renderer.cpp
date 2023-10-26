@@ -38,11 +38,9 @@ namespace Dante::Rendering
 
 	void Renderer::Render()
 	{
-		auto cmdListAlloc = gfx->GetCmdAllocator();
+		BeginFrame();
+
 		auto cmdList = gfx->GetCmdList();
-		auto cmdQueue = gfx->GetCmdQueue();
-		Chk(cmdListAlloc->Reset());
-		Chk(cmdList->Reset(cmdListAlloc, gfx->GetPSO("defaultPSO")));
 
 		cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(gfx->CurrentBackBuffer(),
 			D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
@@ -70,15 +68,23 @@ namespace Dante::Rendering
 		cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(gfx->CurrentBackBuffer(),
 			D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT ));
 
-		Chk(cmdList->Close());
+		EndFrame();
 
-		ID3D12CommandList* cmdLists[] = {cmdList};
-		cmdQueue->ExecuteCommandLists((UINT)std::size(cmdLists), cmdLists);
-		
+	}
+
+	void Renderer::BeginFrame()
+	{
+		Chk(gfx->GetCmdAllocator()->Reset());
+		Chk(gfx->GetCmdList()->Reset(gfx->GetCmdAllocator(), gfx->GetPSO("defaultPSO")));
+	}
+
+	void Renderer::EndFrame()
+	{
+		Chk(gfx->GetCmdList()->Close());
+		ID3D12CommandList* cmdLists[] = { gfx->GetCmdList() };
+		gfx->GetCmdQueue()->ExecuteCommandLists((UINT)std::size(cmdLists), cmdLists);
 		gfx->Present();
-
 		gfx->FlushCmdQueue();
-
 	}
 
 	void Renderer::LoadTriangle()

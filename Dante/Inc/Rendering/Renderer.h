@@ -16,6 +16,9 @@ namespace Dante::Rendering
 		void Update();
 		void Render();
 	private:
+		void BeginFrame();
+		void EndFrame();
+	private:
 		// TEMP
 		void LoadTriangle();
 	private:
