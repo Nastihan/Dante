@@ -19,7 +19,6 @@ namespace Dante::Utils
 		UINT StartIndexLocation = 0;
 		INT BaseVertexLocation = 0;
 	};
-
 	struct MeshGeometry
 	{
 		std::string name;

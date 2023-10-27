@@ -41,6 +41,9 @@ Class(Class&&) = delete; \
 Class& operator=(const Class&) = delete; \
 Class& operator=(Class&&) = delete;
 
+
+// DX Macros
+#define NAME_D3D12_OBJECT(obj, name) obj->SetName(name);
 #define ID(pType) __uuidof(**(&pType)), IID_PPV_ARGS_Helper(&pType)
 
 // 

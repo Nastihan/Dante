@@ -76,7 +76,6 @@ namespace Dante::Rendering
 
 		// draw code
 		cmdList->SetGraphicsRootSignature(gfx->GetRootSig("defaultRS"));
-		
 		cmdList->SetGraphicsRoot32BitConstants(0, sizeof(viewProj) / 4, &viewProj, 0);
 
 		cmdList->IASetVertexBuffers(0, 1, &cube->VertexBufferView());
@@ -85,8 +84,6 @@ namespace Dante::Rendering
 		cmdList->DrawIndexedInstanced(cube->DrawArgs["triangle"].IndexCount,
 			1, cube->DrawArgs["triangle"].StartIndexLocation,
 			cube->DrawArgs["triangle"].BaseVertexLocation, 0);
-
-
 
 
 		cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(gfx->CurrentBackBuffer(),
@@ -146,7 +143,6 @@ namespace Dante::Rendering
 			{ { -1.0f, 1.0f,   1.0f }, { 0.0f, 0.0f, 0.0f, 1.0f } }, // Top-left (18)
 			{ {  1.0f, 1.0f,   1.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } }, // Top-right (19)
 		};
-
 		const std::vector<USHORT> indices =
 		{
 				0,2, 1,    2,3,1,
@@ -168,11 +164,8 @@ namespace Dante::Rendering
 		cube->VertexBufferByteSize = (UINT)vertices.size() * sizeof(Vertex);
 		cube->IndexBufferByteSize = (UINT)indices.size() * sizeof(USHORT);
 		
-		cube->DrawArgs["triangle"].IndexCount = indices.size();
+		cube->DrawArgs["triangle"].IndexCount = (UINT)indices.size();
 		cube->DrawArgs["triangle"].StartIndexLocation = 0;
-
-
-
 	}
 
 	

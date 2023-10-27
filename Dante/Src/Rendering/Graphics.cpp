@@ -4,7 +4,7 @@
 
 namespace Dante::Rendering
 {
-	///////////// Initialization
+	///////////////////////// Initialization
 	void Graphics::Init()
 	{
 		InitDirect3D();
@@ -356,7 +356,7 @@ namespace Dante::Rendering
 		Chk(device->CreateGraphicsPipelineState(&psoDesc, ID(pSOs["defaultPSO"])));
 	}
 
-	//////////////////////// Getters
+	/////////////////////////// Getters
 	ID3D12Device* Graphics::GetDevice()
 	{
 		return device.Get();
@@ -397,7 +397,7 @@ namespace Dante::Rendering
 		return rootSignatures[name].Get();
 	}
 
-	//////////////////// Utils
+	/////////////////////////// Utils
 	ID3D12Resource* Graphics::CurrentBackBuffer()
 	{
 		return backBuffers.at(currBackBufferIndex).Get();

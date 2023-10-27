@@ -108,6 +108,7 @@ namespace Dante::Core
 		return {};
 	}
 
+	////////////////////////////////// Getters
 	UINT Window::GetWidth()
 	{
 		return width;
