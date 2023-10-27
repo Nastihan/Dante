@@ -74,6 +74,9 @@
     <ClInclude Include="Inc\Utils\DXUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Inc\Rendering\RHI\UploadBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\ShaderFiles\DefaultVS.hlsl" />
