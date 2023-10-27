@@ -41,5 +41,10 @@ namespace  Dante::Utils
         return { std::move(defaultBuffer),std::move(uploadeBuffer) };
     }
 
+    UINT DXUtil::CalcCBufferByteSize(UINT byteSize)
+    {
+        return (byteSize + 255) & ~255;
+    }
+
 
 }

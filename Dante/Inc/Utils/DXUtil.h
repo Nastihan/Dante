@@ -9,7 +9,7 @@ namespace Dante::Utils
 		static std::pair<ComPtr<ID3D12Resource>, ComPtr<ID3D12Resource>> 
 			CreateDefaultBuffer(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList,
 				const void* data, UINT64 byteSize);
-
+		static UINT CalcCBufferByteSize(UINT byteSize);
 
 	};
 
