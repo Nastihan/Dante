@@ -11,16 +11,19 @@ struct VS_Output
     float4 color : COLOR;
 };
 
-struct ViewProj
+struct PassCB
 {
+    matrix view;
+    matrix proj;
     matrix viewProj;
+    float3 eyePosW;
 };
-ConstantBuffer<ViewProj> vp : register(b0);
+ConstantBuffer<PassCB> passCB : register(b0);
 
 VS_Output main( VS_Input input)
 {
     VS_Output output;
-    output.pos = mul(float4(input.pos, 1.0f), vp.viewProj);
+    output.pos = mul(float4(input.pos, 1.0f), passCB.viewProj);
     output.color = input.color;
 	return output;
 }

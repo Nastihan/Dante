@@ -12,19 +12,17 @@ namespace Dante::Rendering::RHI
 			: isCBuffer(isCBuffer)
 		{
 			elementByteSize = sizeof(T);
+
 			if (isCBuffer)
-			{
 				elementByteSize = Utils::DXUtil::CalcCBufferByteSize(sizeof(T));
-			}
 
 			Chk(device->CreateCommittedResource(
-				&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+				&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
 				D3D12_HEAP_FLAG_NONE,
 				&CD3DX12_RESOURCE_DESC::Buffer(elementByteSize * elementCount),
 				D3D12_RESOURCE_STATE_GENERIC_READ,
 				nullptr,
-				ID(uploadBuffer)
-			));
+				ID(uploadBuffer)));
 
 			Chk(uploadBuffer->Map(0, nullptr, reinterpret_cast<void**>(&mappedData)));
 		}

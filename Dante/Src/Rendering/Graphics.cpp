@@ -298,7 +298,7 @@ namespace Dante::Rendering
 	void Graphics::BuildRootSigs()
 	{
 		CD3DX12_ROOT_PARAMETER1 rootParams[1]{};
-		rootParams[0].InitAsConstants((sizeof(DirectX::XMMATRIX) / 4), 0U, 0U, D3D12_SHADER_VISIBILITY_VERTEX);
+		rootParams[0].InitAsConstantBufferView(0U, 0U, D3D12_ROOT_DESCRIPTOR_FLAG_NONE, D3D12_SHADER_VISIBILITY_VERTEX);
 		
 		CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSigDesc{};
 		rootSigDesc.Init_1_1(1, rootParams, 0, nullptr,

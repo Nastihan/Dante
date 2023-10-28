@@ -32,7 +32,7 @@ namespace Dante::Utils
 			if (!instance)
 			{
 				throw std::runtime_error(std::format("Instance not availabe for {}", typeid(T).name()));
-			}
+			}  
 			return *instance;
 		}
 	private:

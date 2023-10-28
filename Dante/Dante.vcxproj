@@ -166,6 +166,7 @@
     <ClInclude Include="Inc\Rendering\RHI\UploadBuffer.h" />
     <ClInclude Include="Inc\Utils\DXUtil.h" />
     <ClInclude Include="Inc\Utils\Exception.h" />
+    <ClInclude Include="Inc\Utils\NastihanMath.h" />
     <ClInclude Include="Inc\Utils\NastihanUtil.h" />
     <ClInclude Include="Inc\Utils\Singleton.h" />
     <ClInclude Include="Inc\Utils\Timer.h" />
