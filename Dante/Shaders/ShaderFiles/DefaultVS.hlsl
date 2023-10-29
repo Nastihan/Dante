@@ -13,9 +13,9 @@ struct VS_Output
 
 struct PassCB
 {
-    matrix view;
-    matrix proj;
-    matrix viewProj;
+    float4x4 view;
+    float4x4 proj;
+    float4x4 viewProj;
     float3 eyePosW;
 };
 ConstantBuffer<PassCB> passCB : register(b0);

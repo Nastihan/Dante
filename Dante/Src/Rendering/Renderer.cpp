@@ -25,6 +25,10 @@ namespace Dante::Rendering
 		gfx->Load();
 		LoadCube();
 
+		camera = std::make_unique<Scene::Camera>();
+		camera->SetView({ 0.0f, 0.0f, -4.0f }, { 0.0f, 0.0f, 1.0f }, { 0.0f, 1.0f, 0.0f });
+		camera->SetProj(45.0f, Core::Window::Instance().GetAR(), 1.0f, 100.0f);
+
 		// [TODO] implement camera class
 		DirectX::XMFLOAT3 pos{ 0.0, 0.0f, -5.5f };
 		const DirectX::XMVECTOR forwardBaseVector = DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
@@ -40,13 +44,13 @@ namespace Dante::Rendering
 			(DirectX::XMMatrixRotationX(90.0f)) * (DirectX::XMMatrixRotationZ(80.0f)) *
 			view * proj
 			);
-		DirectX::XMStoreFloat4x4(&passConstants.View, view);
-		DirectX::XMStoreFloat4x4(&passConstants.Proj, proj);
-		DirectX::XMStoreFloat4x4(&passConstants.ViewProj, viewProj);
-		DirectX::XMStoreFloat3(&passConstants.EyePosW, camPosition);
+		//DirectX::XMStoreFloat4x4(&passConstants.View, view);
+		//DirectX::XMStoreFloat4x4(&passConstants.Proj, proj);
+		//DirectX::XMStoreFloat4x4(&passConstants.ViewProj, viewProj);
+		//DirectX::XMStoreFloat3(&passConstants.EyePosW, camPosition);
 
 		passCB = std::make_unique<RHI::UploadBuffer<PassConstants>>(gfx->GetDevice(), 1, true);
-		passCB->CopyData(0, passConstants);
+		//passCB->CopyData(0, passConstants);
 
 
 		Chk(cmdList->Close());
@@ -64,7 +68,15 @@ namespace Dante::Rendering
 
 	void Renderer::Update()
 	{
+		camera->Update();
 
+		DirectX::XMStoreFloat4x4(&passConstants.View, camera->GetView());
+		DirectX::XMStoreFloat4x4(&passConstants.Proj, camera->GetProj());
+		DirectX::XMStoreFloat4x4(&passConstants.ViewProj, camera->GetViewProj());
+		DirectX::XMStoreFloat3(&passConstants.EyePosW, camera->GetPos());
+
+		//passCB = std::make_unique<RHI::UploadBuffer<PassConstants>>(gfx->GetDevice(), 1, true);
+		passCB->CopyData(0, passConstants);
 	}
 
 	void Renderer::Render()

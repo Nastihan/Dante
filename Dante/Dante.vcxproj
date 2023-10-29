@@ -145,6 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Inc\Scene\Camera.cpp" />
     <ClCompile Include="Src\Utils\DXUtil.cpp" />
     <ClCompile Include="Src\Rendering\Graphics.cpp" />
     <ClCompile Include="Src\Rendering\Renderer.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="Inc\Rendering\Renderer.h" />
     <ClInclude Include="Inc\Pch.h" />
     <ClInclude Include="Inc\Rendering\RHI\UploadBuffer.h" />
+    <ClInclude Include="Inc\Scene\Camera.h" />
     <ClInclude Include="Inc\Utils\DXUtil.h" />
     <ClInclude Include="Inc\Utils\Exception.h" />
     <ClInclude Include="Inc\Utils\NastihanMath.h" />

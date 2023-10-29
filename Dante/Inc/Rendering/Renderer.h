@@ -4,13 +4,14 @@
 #include "Utils/DXUtil.h"
 #include "Utils/NastihanMath.h"
 #include "Rendering/RHI/UploadBuffer.h"
+#include "Scene/Camera.h"
 
 namespace Dante::Rendering
 {
 	struct PassConstants
 	{
 		DirectX::XMFLOAT4X4 View = Utils::NastihanMath::Identity4x4();
-		DirectX::XMFLOAT4X4 InvView = Utils::NastihanMath::Identity4x4();
+		//DirectX::XMFLOAT4X4 InvView = Utils::NastihanMath::Identity4x4();
 		DirectX::XMFLOAT4X4 Proj = Utils::NastihanMath::Identity4x4();
 		//DirectX::XMFLOAT4X4 InvProj = Utils::NastihanMath::Identity4x4();
 		DirectX::XMFLOAT4X4 ViewProj = Utils::NastihanMath::Identity4x4();
@@ -44,6 +45,7 @@ namespace Dante::Rendering
 	private:
 		std::unique_ptr<Graphics> gfx{};
 		std::unique_ptr<Utils::MeshGeometry> cube;
+		std::unique_ptr<Scene::Camera> camera;
 		DirectX::XMMATRIX viewProj;
 		PassConstants passConstants;
 		std::unique_ptr<RHI::UploadBuffer<PassConstants>> passCB = nullptr;
