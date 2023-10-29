@@ -15,16 +15,23 @@ namespace Dante::Scene
 		DirectX::XMMATRIX GetProj();
 		DirectX::XMMATRIX GetViewProj();
 		DirectX::XMVECTOR GetPos();
+		void Translate(DirectX::XMFLOAT3 translation);
+		void Rotate(float dx, float dy);
+		void HandleInput(float dt);
 		void Update();
+		
 
 	private:
-		DirectX::XMVECTOR pos;
+		DirectX::XMFLOAT3 pos;
 		DirectX::XMVECTOR forward;
 		DirectX::XMVECTOR up;
+		float pitch;
+		float yaw;
 		float fov;
 		float ar;
 		float nearZ;
 		float farZ;
+		
 
 		DirectX::XMMATRIX view;
 		DirectX::XMMATRIX proj;

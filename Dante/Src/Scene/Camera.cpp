@@ -1,12 +1,13 @@
 #include "Pch.h"
-#include "Camera.h"
+#include "Scene/Camera.h"
+#include <Utils/NastihanMath.h>
 
 namespace Dante::Scene
 {
 
 	void Camera::SetView(DirectX::XMVECTOR pos, DirectX::XMVECTOR forward, DirectX::XMVECTOR up)
 	{
-		this->pos = pos;
+		DirectX::XMStoreFloat3(&this->pos, pos);
 		this->forward = forward;
 		this->up = up;
 
@@ -41,10 +42,33 @@ namespace Dante::Scene
 
 	DirectX::XMVECTOR Camera::GetPos()
 	{
-		return pos;
+		
+		return DirectX::XMLoadFloat3(&pos);
 	}
 
+	void Camera::Translate(DirectX::XMFLOAT3 translation)
+	{
+		namespace dx = DirectX;
+		dx::XMStoreFloat3(&translation, dx::XMVector3Transform(
+			dx::XMLoadFloat3(&translation),
+			dx::XMMatrixRotationRollPitchYaw(pitch, yaw, 0.0f)
+		));
+		pos = {
+			pos.x + translation.x,
+			pos.y + translation.y,
+			pos.z + translation.z
+		};
+	}
 
+	void Camera::Rotate(float dx, float dy)
+	{
+		yaw = Utils::NastihanMath::wrap_angle(yaw + dx );
+		pitch = std::clamp(pitch + dy , 0.999f * -Dante::Utils::NastihanMath::PI / 2.0f, 0.999f * Dante::Utils::NastihanMath::PI / 2.0f);
+	}
+
+	void Camera::HandleInput(float dt)
+	{
+	}
 
 	void Camera::Update()
 	{
@@ -52,7 +76,7 @@ namespace Dante::Scene
 
 		if (viewDirty)
 		{
-			XMVECTOR camPos = pos;
+			XMVECTOR camPos = XMLoadFloat3(&pos);
 			XMVECTOR camTarget = XMVectorAdd(camPos, forward);
 			XMVECTOR camUp = up;
 

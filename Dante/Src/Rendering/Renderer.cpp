@@ -29,30 +29,8 @@ namespace Dante::Rendering
 		camera->SetView({ 0.0f, 0.0f, -4.0f }, { 0.0f, 0.0f, 1.0f }, { 0.0f, 1.0f, 0.0f });
 		camera->SetProj(45.0f, Core::Window::Instance().GetAR(), 1.0f, 100.0f);
 
-		// [TODO] implement camera class
-		DirectX::XMFLOAT3 pos{ 0.0, 0.0f, -5.5f };
-		const DirectX::XMVECTOR forwardBaseVector = DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
-		const auto lookVector = DirectX::XMVector3Transform(forwardBaseVector,
-			DirectX::XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f)
-		);
-			
-		const auto camPosition = XMLoadFloat3(&pos);
-		const auto camTarget = DirectX::XMVectorAdd(camPosition, lookVector);
-		DirectX::XMMATRIX view = DirectX::XMMatrixLookAtLH(camPosition, camTarget, DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
-		DirectX::XMMATRIX proj = DirectX::XMMatrixPerspectiveFovLH(45.0f, Core::Window::Instance().GetAR(), 1.0f, 100.0f);
-		viewProj = DirectX::XMMatrixTranspose(
-			(DirectX::XMMatrixRotationX(90.0f)) * (DirectX::XMMatrixRotationZ(80.0f)) *
-			view * proj
-			);
-		//DirectX::XMStoreFloat4x4(&passConstants.View, view);
-		//DirectX::XMStoreFloat4x4(&passConstants.Proj, proj);
-		//DirectX::XMStoreFloat4x4(&passConstants.ViewProj, viewProj);
-		//DirectX::XMStoreFloat3(&passConstants.EyePosW, camPosition);
-
 		passCB = std::make_unique<RHI::UploadBuffer<PassConstants>>(gfx->GetDevice(), 1, true);
-		//passCB->CopyData(0, passConstants);
-
-
+		
 		Chk(cmdList->Close());
 		ID3D12CommandList* cmdLists[] = { cmdList };
 		cmdQueue->ExecuteCommandLists((UINT)std::size(cmdLists), cmdLists);
@@ -66,6 +44,11 @@ namespace Dante::Rendering
 		gfx->OnResize();
 	}
 
+	void Renderer::HandleInput(float dt)
+	{
+		camera->HandleInput(dt);
+	}
+
 	void Renderer::Update()
 	{
 		camera->Update();
@@ -75,7 +58,6 @@ namespace Dante::Rendering
 		DirectX::XMStoreFloat4x4(&passConstants.ViewProj, camera->GetViewProj());
 		DirectX::XMStoreFloat3(&passConstants.EyePosW, camera->GetPos());
 
-		//passCB = std::make_unique<RHI::UploadBuffer<PassConstants>>(gfx->GetDevice(), 1, true);
 		passCB->CopyData(0, passConstants);
 	}
 

@@ -25,6 +25,7 @@ namespace Dante::Core
 			}
 
 			auto dt = Utils::Timer::Instance().Mark();
+			HandleInput(dt);
 			//std::cout << dt << std::endl;
 			Update();
 			Render();
@@ -44,6 +45,11 @@ namespace Dante::Core
 	void Application::Update()
 	{
 		renderer->Update();
+	}
+
+	void Application::HandleInput(float dt)
+	{
+		renderer->HandleInput(dt);
 	}
 
 	bool Application::RendererInitialized()

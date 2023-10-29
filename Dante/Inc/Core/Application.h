@@ -19,6 +19,7 @@ namespace Dante::Core
 	private:
 		void Render();
 		void Update();
+		void HandleInput(float dt);
 	public:
 		bool RendererInitialized();
 
