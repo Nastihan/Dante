@@ -26,7 +26,7 @@ namespace Dante::Rendering
 		LoadCube();
 
 		camera = std::make_unique<Scene::Camera>();
-		camera->SetView({ 0.0f, 0.0f, -4.0f }, { 0.0f, 0.0f, 1.0f }, { 0.0f, 1.0f, 0.0f });
+		camera->SetView({ 0.0f, 0.0f, -6.0f }, { 0.0f, 0.0f, 1.0f }, { 0.0f, 1.0f, 0.0f });
 		camera->SetProj(45.0f, Core::Window::Instance().GetAR(), 1.0f, 100.0f);
 
 		passCB = std::make_unique<RHI::UploadBuffer<PassConstants>>(gfx->GetDevice(), 1, true);

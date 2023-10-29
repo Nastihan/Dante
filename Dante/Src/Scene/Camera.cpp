@@ -58,16 +58,36 @@ namespace Dante::Scene
 			pos.y + translation.y,
 			pos.z + translation.z
 		};
+
+		viewDirty = true;
 	}
 
 	void Camera::Rotate(float dx, float dy)
 	{
-		yaw = Utils::NastihanMath::wrap_angle(yaw + dx );
+		yaw = Utils::NastihanMath::wrap_angle(yaw + dx );	
 		pitch = std::clamp(pitch + dy , 0.999f * -Dante::Utils::NastihanMath::PI / 2.0f, 0.999f * Dante::Utils::NastihanMath::PI / 2.0f);
+		viewDirty = true;
 	}
 
 	void Camera::HandleInput(float dt)
 	{
+		if (GetAsyncKeyState('A') & 0x8000)
+			Translate({ -dt, 0.0f, 0.0f });
+
+		if (GetAsyncKeyState('D') & 0x8000)
+			Translate({ dt, 0.0f, 0.0f });
+
+		if (GetAsyncKeyState('W') & 0x8000)
+			Translate({ 0.0f, 0.0f, dt });
+
+		if (GetAsyncKeyState('S') & 0x8000)
+			Translate({ 0.0f, 0.0f, -dt });
+
+		if (GetAsyncKeyState('R') & 0x8000)
+			Translate({0.0f, dt, 0.0f});
+
+		if (GetAsyncKeyState('F') & 0x8000)
+			Translate({ 0.0f, -dt, 0.0f });
 	}
 
 	void Camera::Update()
@@ -77,7 +97,8 @@ namespace Dante::Scene
 		if (viewDirty)
 		{
 			XMVECTOR camPos = XMLoadFloat3(&pos);
-			XMVECTOR camTarget = XMVectorAdd(camPos, forward);
+
+			XMVECTOR camTarget = XMVectorAdd(camPos, XMVector3Transform(forward, XMMatrixRotationRollPitchYaw(pitch, yaw, 0.0f)));
 			XMVECTOR camUp = up;
 
 			view = XMMatrixLookAtLH(camPos, camTarget, camUp);
