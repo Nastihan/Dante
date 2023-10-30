@@ -34,8 +34,7 @@ namespace Dante::Rendering
 		DISABLE_COPY_AND_MOVE(Renderer)
 		void Init();
 		void OnResize();
-		void HandleInput(float dt);
-		void Update();
+		void Update(float dt);
 		void Render();
 	private:
 		void BeginFrame();

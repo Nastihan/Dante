@@ -44,14 +44,9 @@ namespace Dante::Rendering
 		gfx->OnResize();
 	}
 
-	void Renderer::HandleInput(float dt)
+	void Renderer::Update(float dt)
 	{
-		camera->HandleInput(dt);
-	}
-
-	void Renderer::Update()
-	{
-		camera->Update();
+		camera->Update(dt);
 
 		DirectX::XMStoreFloat4x4(&passConstants.View, camera->GetView());
 		DirectX::XMStoreFloat4x4(&passConstants.Proj, camera->GetProj());

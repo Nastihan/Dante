@@ -17,8 +17,7 @@ namespace Dante::Scene
 		DirectX::XMVECTOR GetPos();
 		void Translate(DirectX::XMFLOAT3 translation);
 		void Rotate(float dx, float dy);
-		void HandleInput(float dt);
-		void Update();
+		void Update(float dt);
 		
 
 	private:

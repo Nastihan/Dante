@@ -69,7 +69,7 @@ namespace Dante::Scene
 		viewDirty = true;
 	}
 
-	void Camera::HandleInput(float dt)
+	void Camera::Update(float dt)
 	{
 		if (GetAsyncKeyState('A') & 0x8000)
 			Translate({ -dt, 0.0f, 0.0f });
@@ -84,18 +84,15 @@ namespace Dante::Scene
 			Translate({ 0.0f, 0.0f, -dt });
 
 		if (GetAsyncKeyState('R') & 0x8000)
-			Translate({0.0f, dt, 0.0f});
+			Translate({ 0.0f, dt, 0.0f });
 
 		if (GetAsyncKeyState('F') & 0x8000)
 			Translate({ 0.0f, -dt, 0.0f });
-	}
-
-	void Camera::Update()
-	{
-		using namespace DirectX;
 
 		if (viewDirty)
 		{
+			using namespace DirectX;
+
 			XMVECTOR camPos = XMLoadFloat3(&pos);
 
 			XMVECTOR camTarget = XMVectorAdd(camPos, XMVector3Transform(forward, XMMatrixRotationRollPitchYaw(pitch, yaw, 0.0f)));
