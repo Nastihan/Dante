@@ -30,12 +30,13 @@ namespace Dante::Scene
 		float ar;
 		float nearZ;
 		float farZ;
-		
 
 		DirectX::XMMATRIX view;
 		DirectX::XMMATRIX proj;
 		DirectX::XMMATRIX viewProj;
 		
+		float speed = 3.0f;
+
 		bool viewDirty;
 
 	};
