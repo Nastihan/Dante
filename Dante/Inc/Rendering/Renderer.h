@@ -4,10 +4,18 @@
 #include "Utils/DXUtil.h"
 #include "Utils/NastihanMath.h"
 #include "Rendering/RHI/UploadBuffer.h"
+#include <Rendering/RHI/VertexBuffer.h>
+#include <Rendering/RHI/IndexBuffer.h>
 #include "Scene/Camera.h"
 
 namespace Dante::Rendering
 {
+	struct Vertex
+	{
+		DirectX::XMFLOAT3 Pos;
+		DirectX::XMFLOAT4 Color;
+	};
+
 	struct PassConstants
 	{
 		DirectX::XMFLOAT4X4 View = Utils::NastihanMath::Identity4x4();
@@ -44,11 +52,14 @@ namespace Dante::Rendering
 		void LoadCube();
 	private:
 		std::unique_ptr<Graphics> gfx{};
-		std::unique_ptr<Utils::MeshGeometry> cube;
 		std::unique_ptr<Scene::Camera> camera;
 		DirectX::XMMATRIX viewProj;
 		PassConstants passConstants;
 		std::unique_ptr<RHI::UploadBuffer<PassConstants>> passCB = nullptr;
+
+		std::unique_ptr<RHI::VertexBuffer<Vertex>> cubeVBuf;
+		std::unique_ptr<RHI::IndexBuffer> cubeIBuf;
+
 
 	};
 }

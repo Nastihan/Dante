@@ -92,7 +92,6 @@ namespace Dante::Scene
 			Translate({ 0.0f, -moveSpeed, 0.0f });
 
 		// [TODO] handle rotation in a better way
-
 		if (GetAsyncKeyState(VK_UP) & 0x8000)
 			Rotate(0.0f, -moveSpeed);
 
