@@ -7,6 +7,7 @@
 #include <Rendering/RHI/VertexBuffer.h>
 #include <Rendering/RHI/IndexBuffer.h>
 #include "Scene/Camera.h"
+#include "Scene/Model.h"
 
 namespace Dante::Rendering
 {
@@ -56,6 +57,7 @@ namespace Dante::Rendering
 		DirectX::XMMATRIX viewProj;
 		PassConstants passConstants;
 		std::unique_ptr<RHI::UploadBuffer<PassConstants>> passCB = nullptr;
+		std::unique_ptr<Scene::Model> model;
 
 		std::unique_ptr<RHI::VertexBuffer<Vertex>> cubeVBuf;
 		std::unique_ptr<RHI::IndexBuffer> cubeIBuf;

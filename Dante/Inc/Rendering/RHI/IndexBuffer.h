@@ -14,6 +14,7 @@ namespace Dante::Rendering::RHI
 		}
 		D3D12_INDEX_BUFFER_VIEW View() const
 		{
+			assert(indexBuffer.first && indexBuffer.second);
 			D3D12_INDEX_BUFFER_VIEW view{};
 			view.BufferLocation = indexBuffer.first->GetGPUVirtualAddress();
 			view.Format = DXGI_FORMAT_R16_UINT;

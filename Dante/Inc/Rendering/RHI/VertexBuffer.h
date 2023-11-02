@@ -16,6 +16,7 @@ namespace Dante::Rendering::RHI
 		}
 		D3D12_VERTEX_BUFFER_VIEW View() const
 		{
+			assert(vertexBuffer.first && vertexBuffer.second);
 			D3D12_VERTEX_BUFFER_VIEW view{};
 			view.BufferLocation = vertexBuffer.first->GetGPUVirtualAddress();
 			view.StrideInBytes = strideInBytes;

@@ -20,12 +20,14 @@ namespace Dante::Rendering
 
 		gfx->Load();
 		LoadCube();
-
+		
 		camera = std::make_unique<Scene::Camera>();
 		camera->SetView({ 0.0f, 0.0f, -6.0f }, { 0.0f, 0.0f, 1.0f }, { 0.0f, 1.0f, 0.0f });
 		camera->SetProj(45.0f, Core::Window::Instance().GetAR(), 1.0f, 100.0f);
 
 		passCB = std::make_unique<RHI::UploadBuffer<PassConstants>>(gfx->GetDevice(), 1, true);
+
+		model = std::make_unique<Scene::Model>("Assests\\Models\\Cube\\Cube.gltf");
 		
 		Chk(cmdList->Close());
 		ID3D12CommandList* cmdLists[] = { cmdList };
