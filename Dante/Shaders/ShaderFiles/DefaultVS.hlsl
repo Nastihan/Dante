@@ -2,13 +2,13 @@
 struct VS_Input
 {
     float3 pos : POSITION;
-    float4 color : COLOR;
+    float3 normal : NORMAL;
 };
 
 struct VS_Output
 {
     float4 pos : SV_Position;
-    float4 color : COLOR;
+    float3 normal : NORMAL;
 };
 
 struct PassCB
@@ -24,6 +24,6 @@ VS_Output main( VS_Input input)
 {
     VS_Output output;
     output.pos = mul(float4(input.pos, 1.0f), passCB.viewProj);
-    output.color = input.color;
+    output.normal = input.normal;
 	return output;
 }

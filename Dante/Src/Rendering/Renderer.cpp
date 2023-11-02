@@ -27,7 +27,7 @@ namespace Dante::Rendering
 
 		passCB = std::make_unique<RHI::UploadBuffer<PassConstants>>(gfx->GetDevice(), 1, true);
 
-		model = std::make_unique<Scene::Model>("Assests\\Models\\Cube\\Cube.gltf");
+		model = std::make_unique<Scene::Model>(gfx->GetDevice(), gfx->GetCmdList(), "Assests\\Models\\Cube\\Cube.gltf");
 		
 		Chk(cmdList->Close());
 		ID3D12CommandList* cmdLists[] = { cmdList };
@@ -76,11 +76,14 @@ namespace Dante::Rendering
 		cmdList->SetGraphicsRootSignature(gfx->GetRootSig("defaultRS"));
 		cmdList->SetGraphicsRootConstantBufferView(0U, passCB->Resource()->GetGPUVirtualAddress());
 
-		cmdList->IASetVertexBuffers(0, 1, &cubeVBuf->View());
-		cmdList->IASetIndexBuffer(&cubeIBuf->View());
 		cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		/*cmdList->IASetVertexBuffers(0, 1, &cubeVBuf->View());
+		cmdList->IASetIndexBuffer(&cubeIBuf->View());
 		cmdList->DrawIndexedInstanced(36,
-			1, 0, 0, 0);
+			1, 0, 0, 0);*/
+
+		model->Draw(gfx->GetCmdList());
 
 
 		cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(gfx->CurrentBackBuffer(),
