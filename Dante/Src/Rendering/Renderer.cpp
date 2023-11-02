@@ -27,7 +27,8 @@ namespace Dante::Rendering
 
 		passCB = std::make_unique<RHI::UploadBuffer<PassConstants>>(gfx->GetDevice(), 1, true);
 
-		model = std::make_unique<Scene::Model>(gfx->GetDevice(), gfx->GetCmdList(), "Assests\\Models\\Cube\\Cube.gltf");
+		model = std::make_unique<Scene::Model>(gfx->GetDevice(), gfx->GetCmdList(),
+			"Assests\\Models\\DamagedHelmet\\DamagedHelmet.gltf");
 		
 		Chk(cmdList->Close());
 		ID3D12CommandList* cmdLists[] = { cmdList };
