@@ -50,8 +50,7 @@ namespace Dante::Rendering
 		void BeginFrame();
 		void EndFrame();
 	private:
-		// TEMP
-		void LoadCube();
+
 	private:
 		std::unique_ptr<Graphics> gfx{};
 		std::unique_ptr<Scene::Camera> camera;
@@ -60,8 +59,6 @@ namespace Dante::Rendering
 		std::unique_ptr<RHI::UploadBuffer<PassConstants>> passCB = nullptr;
 		std::unique_ptr<Scene::Model> model;
 
-		std::unique_ptr<RHI::VertexBuffer<Vertex>> cubeVBuf;
-		std::unique_ptr<RHI::IndexBuffer> cubeIBuf;
 
 
 	};

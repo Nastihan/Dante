@@ -15,7 +15,6 @@ namespace Dante::Rendering
 		Chk(cmdList->Reset(cmdListAlloc, nullptr));
 
 		gfx->Load();
-		LoadCube();
 		
 		camera = std::make_unique<Scene::Camera>();
 		camera->SetView({ 0.0f, 0.0f, -6.0f }, { 0.0f, 0.0f, 1.0f }, { 0.0f, 1.0f, 0.0f });
@@ -75,11 +74,6 @@ namespace Dante::Rendering
 
 		cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-		/*cmdList->IASetVertexBuffers(0, 1, &cubeVBuf->View());
-		cmdList->IASetIndexBuffer(&cubeIBuf->View());
-		cmdList->DrawIndexedInstanced(36,
-			1, 0, 0, 0);*/
-
 		model->Draw(gfx->GetCmdList());
 
 
@@ -102,57 +96,6 @@ namespace Dante::Rendering
 		gfx->GetCmdQueue()->ExecuteCommandLists((UINT)std::size(cmdLists), cmdLists);
 		gfx->Present();
 		gfx->FlushCmdQueue();
-	}
-
-	void Renderer::LoadCube()
-	{
-		const std::vector<Vertex> vertices =
-		{
-			// Front face
-			{ { -1.0f, -1.0f, -1.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } }, // Bottom-left (0)
-			{ {  1.0f, -1.0f, -1.0f }, { 1.0f, 0.0f, 1.0f, 1.0f } }, // Bottom-right (1)
-			{ { -1.0f,  1.0f, -1.0f }, { 0.0f, 1.0f, 1.0f, 1.0f } }, // Top-left (2)
-			{ {  1.0f,  1.0f, -1.0f }, { 1.0f, 0.0f, 1.0f, 1.0f } }, // Top-right (3)
-			// Back face						   , 0.0f, 1.0f
-			{ { -1.0f, -1.0f,  1.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } },  // Bottom-left (4)
-			{ {  1.0f, -1.0f,  1.0f }, { 1.0f, 1.0f, 0.0f, 1.0f } },  // Bottom-right (5)
-			{ { -1.0f,  1.0f,  1.0f }, {01.0f, 0.0f, 1.0f, 1.0f } },  // Top-left (6)
-			{ {  1.0f,  1.0f,  1.0f }, { 0.0f, 0.0f, 0.0f, 1.0f } },  // Top-right (7)
-			// Left face						   , 0.0f, 1.0f
-			{ { -1.0f, -1.0f, -1.0f }, { 1.0f, 1.0f, 0.0f, 1.0f } }, // Bottom-left (8)
-			{ { -1.0f,  1.0f, -1.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } }, // Top-left (9)
-			{ { -1.0f, -1.0f,  1.0f }, { 0.0f, 0.0f, 1.0f, 1.0f } }, // Bottom-right (10)
-			{ { -1.0f,  1.0f,  1.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } }, // Top-right (11)
-			// Right face						   , 0.0f, 1.0f
-			{ { 1.0f, -1.0f,  -1.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } }, // Bottom-left (12)
-			{ { 1.0f,  1.0f,  -1.0f }, { 0.0f, 0.0f, 0.0f, 1.0f } }, // Top-left (13)
-			{ { 1.0f, -1.0f,   1.0f }, { 1.0f, 1.0f, 0.0f, 1.0f } }, // Bottom-right (14)
-			{ { 1.0f,  1.0f,   1.0f }, { 0.0f, 0.0f, 1.0f, 1.0f } }, // Top-right (15)
-
-			// Bottom face						   , 0.0f, 1.0f
-			{ { -1.0f, -1.0f, -1.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } }, // Bottom-left (20)
-			{ {  1.0f, -1.0f, -1.0f }, { 0.0f, 1.0f, 1.0f, 1.0f } }, // Bottom-right (21)
-			{ { -1.0f, -1.0f,  1.0f }, { 1.0f, 0.0f, 1.0f, 1.0f } }, // Top-left (22)
-			{ {  1.0f, -1.0f,  1.0f }, { 1.0f, 1.0f, 0.0f, 1.0f } }, // Top-right (23)
-			// Top face							   , 0.0f, 1.0f
-			{ { -1.0f, 1.0f,  -1.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } }, // Bottom-left (16)
-			{ {  1.0f, 1.0f,  -1.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } }, // Bottom-right (17)
-			{ { -1.0f, 1.0f,   1.0f }, { 0.0f, 0.0f, 1.0f, 1.0f } }, // Top-left (18)
-			{ {  1.0f, 1.0f,   1.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } }, // Top-right (19)
-		};
-		const std::vector<USHORT> indices =
-		{
-				0,2, 1,    2,3,1,
-				4,5, 7,    4,7,6,
-				8,10, 9,  10,11,9,
-				12,13,15, 12,15,14,
-				16,17,18, 18,17,19,
-				20,23,21, 20,22,23
-		};
-		
-		cubeVBuf = std::make_unique<RHI::VertexBuffer<Vertex>>(gfx->GetDevice(), gfx->GetCmdList(), vertices);
-		cubeIBuf = std::make_unique<RHI::IndexBuffer>(gfx->GetDevice(), gfx->GetCmdList(), indices);
-
 	}
 
 	

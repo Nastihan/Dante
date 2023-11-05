@@ -92,7 +92,6 @@ namespace Dante::Scene
 
 		ObjectCB world;
 		DirectX::XMStoreFloat4x4(&world.world, DirectX::XMMatrixTranspose(DirectX::XMMatrixTranslation(1.0f,0.0f, 0.0f)));
-
 		objectCB = std::make_unique<Rendering::RHI::UploadBuffer<ObjectCB>>(device, 1, true);
 		objectCB->CopyData(0, world);
 	}
