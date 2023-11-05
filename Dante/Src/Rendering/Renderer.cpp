@@ -23,7 +23,8 @@ namespace Dante::Rendering
 		passCB = std::make_unique<RHI::UploadBuffer<PassConstants>>(gfx->GetDevice(), 1, true);
 
 		model = std::make_unique<Scene::Model>(gfx->GetDevice(), gfx->GetCmdList(),
-			"Assests\\Models\\DamagedHelmet\\DamagedHelmet.gltf");
+			"Assests\\Models\\DamagedHelmet\\DamagedHelmet.gltf", 
+			gfx->cbvSrvUavHeap->GetCPUDescriptorHandleForHeapStart());
 		
 		Chk(cmdList->Close());
 		ID3D12CommandList* cmdLists[] = { cmdList };
@@ -69,12 +70,15 @@ namespace Dante::Rendering
 		cmdList->OMSetRenderTargets(1, &gfx->CurrentBackBufferView(), true, &gfx->DepthStencilView());
 
 		// draw code
+		ID3D12DescriptorHeap* descHeaps[] = { gfx->cbvSrvUavHeap.Get()};
+		cmdList->SetDescriptorHeaps(1, descHeaps);
+
 		cmdList->SetGraphicsRootSignature(gfx->GetRootSig("defaultRS"));
 		cmdList->SetGraphicsRootConstantBufferView(0U, passCB->Resource()->GetGPUVirtualAddress());
 
 		cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-		model->Draw(gfx->GetCmdList());
+		model->Draw(gfx->GetCmdList(), gfx->cbvSrvUavHeap->GetGPUDescriptorHandleForHeapStart());
 
 
 		cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(gfx->CurrentBackBuffer(),

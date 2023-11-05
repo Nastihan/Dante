@@ -6,7 +6,7 @@
 
 namespace Dante::Rendering::RHI
 {
-	Texture::Texture(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList, std::wstring filePath)
+	Texture::Texture(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList, std::wstring filePath, D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle)
 	{
 		void* texData = nullptr;
 		int width{}, height{}, comp{};
@@ -34,8 +34,8 @@ namespace Dante::Rendering::RHI
 		D3D12_SUBRESOURCE_DATA subResourceData
 		{
 			.pData = texData,
-			.RowPitch = (LONG_PTR)(width * comp),
-			.SlicePitch = (LONG_PTR)(height * comp)
+			.RowPitch = (LONG_PTR)(width * 4 ),
+			.SlicePitch = (LONG_PTR)(height * 4)
 		};
 
 		UpdateSubresources(cmdList, resource.Get(), uploadResource.Get(),
@@ -44,8 +44,14 @@ namespace Dante::Rendering::RHI
 		cmdList->ResourceBarrier(1U, &CD3DX12_RESOURCE_BARRIER::Transition(resource.Get(),
 			D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE));
 
+		D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
+		srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+		srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+		srvDesc.Texture2D.MostDetailedMip = 0;
+		srvDesc.Texture2D.MipLevels = 1;
 
-
+		device->CreateShaderResourceView(resource.Get(), &srvDesc, cpuHandle);
 	}
 
 }

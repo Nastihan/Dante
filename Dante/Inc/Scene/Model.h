@@ -12,23 +12,21 @@ namespace Dante::Scene
 	{
 		DirectX::XMFLOAT3 pos;
 		DirectX::XMFLOAT3 normal;
+		DirectX::XMFLOAT2 tc;
 	};
 
 	struct ObjectCB
 	{
 		DirectX::XMFLOAT4X4 world = Utils::NastihanMath::Identity4x4();
-
 	};
-
 
 	class Model
 	{
 	public:
-		Model(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList, std::string path);
+		Model(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList, std::string path, D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle);
 		D3D12_VERTEX_BUFFER_VIEW VertexBufferView();
 		D3D12_INDEX_BUFFER_VIEW IndexBufferView();
-		void Draw(ID3D12GraphicsCommandList* cmdList);
-
+		void Draw(ID3D12GraphicsCommandList* cmdList, D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle);
 
 	private:
 		std::unique_ptr<Rendering::RHI::UploadBuffer<ObjectCB>> objectCB;

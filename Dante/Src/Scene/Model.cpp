@@ -9,7 +9,7 @@
 
 namespace Dante::Scene
 {
-	Model::Model(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList, std::string path)
+	Model::Model(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList, std::string path, D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle)
 	{
 		std::string warning{};
 		std::string error{};
@@ -57,6 +57,12 @@ namespace Dante::Scene
 				int const normalByteStride = normalAccessor.ByteStride(normalBufferView);
 				uint8_t const* normals = &normalBuffer.data[normalBufferView.byteOffset + normalAccessor.byteOffset];
 
+				tinygltf::Accessor& tcAccessor = model.accessors[primitive.attributes["TEXCOORD_0"]];
+				tinygltf::BufferView& tcBufferView = model.bufferViews[tcAccessor.bufferView];
+				tinygltf::Buffer& tcBuffer = model.buffers[tcBufferView.buffer];
+				int const tcByteStride = tcAccessor.ByteStride(tcBufferView);
+				uint8_t const* texcoords = &tcBuffer.data[tcBufferView.byteOffset + tcAccessor.byteOffset];
+
 				for (size_t i = 0; i < positionAccessor.count; i++)
 				{
 					Vertex vertex{};
@@ -67,6 +73,10 @@ namespace Dante::Scene
 					vertex.normal.x = (reinterpret_cast<float const*>(normals + (i * normalByteStride)))[0];
 					vertex.normal.y = (reinterpret_cast<float const*>(normals + (i * normalByteStride)))[1];
 					vertex.normal.z = (reinterpret_cast<float const*>(normals + (i * normalByteStride)))[2];
+
+					vertex.tc.x = (reinterpret_cast<float const*>(texcoords + (i * tcByteStride)))[0];
+					vertex.tc.y = (reinterpret_cast<float const*>(texcoords + (i * tcByteStride)))[1];
+					//vertex.tc.y = 1.0f - vertex.tc.y;
 
 					vertices.push_back(vertex);
 				}
@@ -90,7 +100,7 @@ namespace Dante::Scene
 		indexBuffer = std::make_unique<Rendering::RHI::IndexBuffer>(device, cmdList, indices);
 
 		albedoTex = std::make_unique<Rendering::RHI::Texture>(device, cmdList,
-			L"Assests\\Models\\DamagedHelmet\\Default_albedo.jpg");
+			L"Assests\\Models\\DamagedHelmet\\Default_albedo.jpg", cpuHandle);
 
 		ObjectCB world;
 		DirectX::XMStoreFloat4x4(&world.world, DirectX::XMMatrixTranspose(DirectX::XMMatrixTranslation(1.0f,0.0f, 0.0f)));
@@ -108,9 +118,10 @@ namespace Dante::Scene
 		return indexBuffer->View();
 	}
 
-	void Model::Draw(ID3D12GraphicsCommandList* cmdList)
+	void Model::Draw(ID3D12GraphicsCommandList* cmdList, D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle)
 	{
 		cmdList->SetGraphicsRootConstantBufferView(1, objectCB->Resource()->GetGPUVirtualAddress());
+		cmdList->SetGraphicsRootDescriptorTable(2, gpuHandle);
 		cmdList->IASetVertexBuffers(0U, 1U, &vertexBuffer->View());
 		cmdList->IASetIndexBuffer(&indexBuffer->View());
 		cmdList->DrawIndexedInstanced(indexCount, 1U, 0U, 0U, 0U);

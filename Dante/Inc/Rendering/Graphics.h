@@ -19,6 +19,7 @@ namespace Dante::Rendering
 		void CreateCommandObjects();
 		void CreateSwapChain();
 		void CreateRtvAndDsvDescriptorHeap();
+		void CreateCbvSrvUavDescriptorHeap();
 	public:
 		void Present();
 		void FlushCmdQueue();
@@ -28,6 +29,7 @@ namespace Dante::Rendering
 		void BuildPSOs();
 		void BuildRootSigs();
 		void BuildShaders();
+		std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6> GetStaticSamplers();
 
 
 	public:
@@ -44,6 +46,9 @@ namespace Dante::Rendering
 		ID3D12Resource* CurrentBackBuffer();
 		D3D12_CPU_DESCRIPTOR_HANDLE CurrentBackBufferView();
 		D3D12_CPU_DESCRIPTOR_HANDLE DepthStencilView();
+
+		Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> cbvSrvUavHeap;
+
 
 
 	private:
@@ -74,6 +79,7 @@ namespace Dante::Rendering
 		// DescriptorHeaps
 		Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvHeap;
 		Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> dsvHeap;
+
 		UINT rtvDescriptorSize{};
 		UINT dsvDescriptorSize{};
 		UINT cbvSrvUavDescriptorSize{};
