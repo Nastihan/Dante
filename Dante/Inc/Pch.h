@@ -28,7 +28,8 @@
 #include <DirectXColors.h>
 #include <d3dcompiler.h>
 
-#include "../ThirdParty/d3dx12.h"
+#include "../ThirdParty/DirectX/d3dx12.h"
+//#include "../ThirdParty/DirectX/DDSTextureLoader.h"
 
 
 #include <Utils/Exception.h>

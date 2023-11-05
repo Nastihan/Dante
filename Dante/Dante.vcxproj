@@ -158,6 +158,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="ThirdParty\DirectX\DDSTextureLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Inc\Core\Application.h" />
@@ -166,6 +167,7 @@
     <ClInclude Include="Inc\Rendering\Renderer.h" />
     <ClInclude Include="Inc\Pch.h" />
     <ClInclude Include="Inc\Rendering\RHI\IndexBuffer.h" />
+    <ClInclude Include="Inc\Rendering\RHI\Texture.h" />
     <ClInclude Include="Inc\Rendering\RHI\VertexBuffer.h" />
     <ClInclude Include="Inc\Rendering\RHI\UploadBuffer.h" />
     <ClInclude Include="Inc\Scene\Camera.h" />
@@ -176,7 +178,8 @@
     <ClInclude Include="Inc\Utils\NastihanUtil.h" />
     <ClInclude Include="Inc\Utils\Singleton.h" />
     <ClInclude Include="Inc\Utils\Timer.h" />
-    <ClInclude Include="ThirdParty\d3dx12.h" />
+    <ClInclude Include="ThirdParty\DirectX\d3dx12.h" />
+    <ClInclude Include="ThirdParty\DirectX\DDSTextureLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\ShaderFiles\DefaultPS.hlsl">

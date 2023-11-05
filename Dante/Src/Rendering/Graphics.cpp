@@ -303,7 +303,7 @@ namespace Dante::Rendering
 
 		
 		CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSigDesc{};
-		rootSigDesc.Init_1_1(std::size(rootParams), rootParams, 0, nullptr,
+		rootSigDesc.Init_1_1((UINT)std::size(rootParams), rootParams, 0, nullptr,
 			D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
 
 		ComPtr<ID3DBlob> serializedRootSig{};
