@@ -89,6 +89,12 @@ namespace Dante::Scene
 
 		vertexBuffer = std::make_unique<Rendering::RHI::VertexBuffer<Vertex>>(device, cmdList, vertices);
 		indexBuffer = std::make_unique<Rendering::RHI::IndexBuffer>(device, cmdList, indices);
+
+		ObjectCB world;
+		DirectX::XMStoreFloat4x4(&world.world, DirectX::XMMatrixTranspose(DirectX::XMMatrixTranslation(1.0f,0.0f, 0.0f)));
+
+		objectCB = std::make_unique<Rendering::RHI::UploadBuffer<ObjectCB>>(device, 1, true);
+		objectCB->CopyData(0, world);
 	}
 
 	D3D12_VERTEX_BUFFER_VIEW Model::VertexBufferView()
@@ -103,6 +109,7 @@ namespace Dante::Scene
 
 	void Model::Draw(ID3D12GraphicsCommandList* cmdList)
 	{
+		cmdList->SetGraphicsRootConstantBufferView(1, objectCB->Resource()->GetGPUVirtualAddress());
 		cmdList->IASetVertexBuffers(0U, 1U, &vertexBuffer->View());
 		cmdList->IASetIndexBuffer(&indexBuffer->View());
 		cmdList->DrawIndexedInstanced(indexCount, 1U, 0U, 0U, 0U);

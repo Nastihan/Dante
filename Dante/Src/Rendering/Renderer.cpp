@@ -3,10 +3,6 @@
 #include "Core/Window.h"
 namespace Dante::Rendering
 {
-
-
-	
-
 	void Renderer::Init()
 	{
 		gfx = std::make_unique<Graphics>();

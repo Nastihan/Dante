@@ -17,6 +17,7 @@ namespace Dante::Rendering
 		DirectX::XMFLOAT4 Color;
 	};
 
+	
 	struct PassConstants
 	{
 		DirectX::XMFLOAT4X4 View = Utils::NastihanMath::Identity4x4();

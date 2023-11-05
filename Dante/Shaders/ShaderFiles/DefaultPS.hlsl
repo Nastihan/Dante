@@ -1,7 +1,7 @@
 
 struct PS_Input
 {
-    float4 pos : SV_Position;
+    float4 posH : SV_Position;
     float3 normal : NORMAL;
 };
 
