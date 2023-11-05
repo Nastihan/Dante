@@ -3,7 +3,6 @@
 
 #define TINYGLTF_IMPLEMENTATION
 #define TINYGLTF_USE_CPP20
-#define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #define STBI_MSC_SECURE_CRT
 #include "../ThirdParty/tinygltf/tiny_gltf.h"
@@ -89,6 +88,9 @@ namespace Dante::Scene
 
 		vertexBuffer = std::make_unique<Rendering::RHI::VertexBuffer<Vertex>>(device, cmdList, vertices);
 		indexBuffer = std::make_unique<Rendering::RHI::IndexBuffer>(device, cmdList, indices);
+
+		albedoTex = std::make_unique<Rendering::RHI::Texture>(device, cmdList,
+			L"Assests\\Models\\DamagedHelmet\\Default_albedo.jpg");
 
 		ObjectCB world;
 		DirectX::XMStoreFloat4x4(&world.world, DirectX::XMMatrixTranspose(DirectX::XMMatrixTranslation(1.0f,0.0f, 0.0f)));

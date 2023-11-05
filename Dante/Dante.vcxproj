@@ -145,6 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Rendering\RHI\Texture.cpp" />
     <ClCompile Include="Src\Scene\Model.cpp" />
     <ClCompile Include="Src\Scene\Camera.cpp" />
     <ClCompile Include="Src\Utils\DXUtil.cpp" />

@@ -12,6 +12,8 @@ int main(int agrc, char* argv[])
 
 	catch (const Dante::Utils::NastihanException& e)
 	{
+		
+		//OutputDebugStringA(Dante::Utils::ToNarrow(e.ToString()).c_str());
 		MessageBox(nullptr, e.ToString().c_str(), L"NastihanException : HR Failed", MB_OK);
 	}
 	catch (std::exception& e)

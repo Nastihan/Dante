@@ -3,6 +3,7 @@
 #include "Rendering/RHI/VertexBuffer.h"
 #include "Rendering/RHI/IndexBuffer.h"
 #include "Rendering/RHI/UploadBuffer.h"
+#include "Rendering/RHI/Texture.h"
 #include "Utils/NastihanMath.h"
 
 namespace Dante::Scene
@@ -30,9 +31,10 @@ namespace Dante::Scene
 
 
 	private:
-		std::unique_ptr < Rendering::RHI::UploadBuffer<ObjectCB>> objectCB;
+		std::unique_ptr<Rendering::RHI::UploadBuffer<ObjectCB>> objectCB;
 		std::unique_ptr<Dante::Rendering::RHI::VertexBuffer<Vertex>> vertexBuffer;
 		std::unique_ptr<Dante::Rendering::RHI::IndexBuffer> indexBuffer;
+		std::unique_ptr<Rendering::RHI::Texture> albedoTex;
 		UINT indexCount;
 	};
 }
