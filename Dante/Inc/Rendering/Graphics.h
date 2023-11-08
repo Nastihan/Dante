@@ -1,5 +1,5 @@
 #pragma once
-
+#include "RHI/DescriptorHeap.h"
 namespace Dante::Rendering
 {
 	class Graphics
@@ -47,7 +47,8 @@ namespace Dante::Rendering
 		D3D12_CPU_DESCRIPTOR_HANDLE CurrentBackBufferView();
 		D3D12_CPU_DESCRIPTOR_HANDLE DepthStencilView();
 
-		Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> cbvSrvUavHeap;
+
+		std::unique_ptr<RHI::DescriptorHeap> cbvHeap;
 
 
 

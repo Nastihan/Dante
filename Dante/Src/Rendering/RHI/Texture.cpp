@@ -6,7 +6,7 @@
 
 namespace Dante::Rendering::RHI
 {
-	Texture::Texture(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList, std::wstring filePath, D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle)
+	Texture::Texture(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList, std::wstring filePath, DescriptorHeap& heap)
 	{
 		void* texData = nullptr;
 		int width{}, height{}, comp{};
@@ -51,7 +51,8 @@ namespace Dante::Rendering::RHI
 		srvDesc.Texture2D.MostDetailedMip = 0;
 		srvDesc.Texture2D.MipLevels = 1;
 
-		device->CreateShaderResourceView(resource.Get(), &srvDesc, cpuHandle);
+		device->CreateShaderResourceView(resource.Get(), &srvDesc, heap.GetCurrHandle().cpuHandle);
+		//heap.OffsetCurrHandle();
 	}
 
 }

@@ -9,7 +9,7 @@
 
 namespace Dante::Scene
 {
-	Model::Model(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList, std::string path, D3D12_CPU_DESCRIPTOR_HANDLE cpuHandle)
+	Model::Model(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList, std::string path, Rendering::RHI::DescriptorHeap& heap)
 	{
 		std::string warning{};
 		std::string error{};
@@ -100,7 +100,7 @@ namespace Dante::Scene
 		indexBuffer = std::make_unique<Rendering::RHI::IndexBuffer>(device, cmdList, indices);
 
 		albedoTex = std::make_unique<Rendering::RHI::Texture>(device, cmdList,
-			L"Assests\\Models\\DamagedHelmet\\Default_albedo.jpg", cpuHandle);
+			L"Assests\\Models\\DamagedHelmet\\Default_albedo.jpg", heap);
 
 		ObjectCB world;
 		DirectX::XMStoreFloat4x4(&world.world, DirectX::XMMatrixTranspose(DirectX::XMMatrixTranslation(1.0f,0.0f, 0.0f)));

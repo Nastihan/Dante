@@ -24,7 +24,7 @@ namespace Dante::Rendering
 
 		model = std::make_unique<Scene::Model>(gfx->GetDevice(), gfx->GetCmdList(),
 			"Assests\\Models\\DamagedHelmet\\DamagedHelmet.gltf", 
-			gfx->cbvSrvUavHeap->GetCPUDescriptorHandleForHeapStart());
+			*gfx->cbvHeap);
 		
 		Chk(cmdList->Close());
 		ID3D12CommandList* cmdLists[] = { cmdList };
@@ -70,7 +70,7 @@ namespace Dante::Rendering
 		cmdList->OMSetRenderTargets(1, &gfx->CurrentBackBufferView(), true, &gfx->DepthStencilView());
 
 		// draw code
-		ID3D12DescriptorHeap* descHeaps[] = { gfx->cbvSrvUavHeap.Get()};
+		ID3D12DescriptorHeap* descHeaps[] = { gfx->cbvHeap->GetHeap()};
 		cmdList->SetDescriptorHeaps(1, descHeaps);
 
 		cmdList->SetGraphicsRootSignature(gfx->GetRootSig("defaultRS"));
@@ -78,7 +78,7 @@ namespace Dante::Rendering
 
 		cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-		model->Draw(gfx->GetCmdList(), gfx->cbvSrvUavHeap->GetGPUDescriptorHandleForHeapStart());
+		model->Draw(gfx->GetCmdList(), gfx->cbvHeap->GetCurrHandle().gpuHandle);
 
 
 		cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(gfx->CurrentBackBuffer(),

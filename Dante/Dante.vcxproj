@@ -145,6 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Rendering\RHI\DescriptorHeap.cpp" />
     <ClCompile Include="Src\Rendering\RHI\Texture.cpp" />
     <ClCompile Include="Src\Scene\Model.cpp" />
     <ClCompile Include="Src\Scene\Camera.cpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="Inc\Rendering\Graphics.h" />
     <ClInclude Include="Inc\Rendering\Renderer.h" />
     <ClInclude Include="Inc\Pch.h" />
+    <ClInclude Include="Inc\Rendering\RHI\DescriptorHeap.h" />
     <ClInclude Include="Inc\Rendering\RHI\IndexBuffer.h" />
     <ClInclude Include="Inc\Rendering\RHI\Texture.h" />
     <ClInclude Include="Inc\Rendering\RHI\VertexBuffer.h" />
