@@ -8,6 +8,22 @@ SamplerState samLinearClamp : register(s3);
 SamplerState samAnisotropicWrap : register(s4);
 SamplerState samAnisotropicClamp : register(s5);
 
+struct ObjectCB
+{
+    float4x4 world;
+    uint albedoMapIndex;
+};
+ConstantBuffer<ObjectCB> objectCB : register(b1);
+
+struct PassCB
+{
+    float4x4 view;
+    float4x4 proj;
+    float4x4 viewProj;
+    float3 eyePosW;
+};
+ConstantBuffer<PassCB> passCB : register(b0);
+
 struct PS_Input
 {
     float4 posH : SV_Position;
@@ -17,6 +33,6 @@ struct PS_Input
 
 float4 main(PS_Input input) : SV_TARGET
 {
-    Texture2D albedoTexture = ResourceDescriptorHeap[0];
+    Texture2D albedoTexture = ResourceDescriptorHeap[objectCB.albedoMapIndex];
     return albedoTexture.Sample(samAnisotropicWrap, input.tc);
 }

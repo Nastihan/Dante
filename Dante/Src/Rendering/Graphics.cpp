@@ -307,8 +307,8 @@ namespace Dante::Rendering
 		CD3DX12_DESCRIPTOR_RANGE1 descRange{ D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1U, 0U };
 
 		CD3DX12_ROOT_PARAMETER1 rootParams[2]{};
-		rootParams[0].InitAsConstantBufferView(0U, 0U, D3D12_ROOT_DESCRIPTOR_FLAG_NONE, D3D12_SHADER_VISIBILITY_VERTEX);
-		rootParams[1].InitAsConstantBufferView(1U, 0U, D3D12_ROOT_DESCRIPTOR_FLAG_NONE, D3D12_SHADER_VISIBILITY_VERTEX);
+		rootParams[0].InitAsConstantBufferView(0U, 0U, D3D12_ROOT_DESCRIPTOR_FLAG_NONE, D3D12_SHADER_VISIBILITY_ALL);
+		rootParams[1].InitAsConstantBufferView(1U, 0U, D3D12_ROOT_DESCRIPTOR_FLAG_NONE, D3D12_SHADER_VISIBILITY_ALL);
 
 		CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSigDesc{};
 		rootSigDesc.Init_1_1((UINT)std::size(rootParams), rootParams, 6U, GetStaticSamplers().data(),

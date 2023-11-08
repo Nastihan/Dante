@@ -99,13 +99,16 @@ namespace Dante::Scene
 		vertexBuffer = std::make_unique<Rendering::RHI::VertexBuffer<Vertex>>(device, cmdList, vertices);
 		indexBuffer = std::make_unique<Rendering::RHI::IndexBuffer>(device, cmdList, indices);
 
+		
+
+		ObjectCB objCB;
+		DirectX::XMStoreFloat4x4(&objCB.world, DirectX::XMMatrixTranspose(DirectX::XMMatrixTranslation(1.0f,0.0f, 0.0f)));
+		objCB.albedoMapIndex = 0U;
+		objectCB = std::make_unique<Rendering::RHI::UploadBuffer<ObjectCB>>(device, 1, true);
+		objectCB->CopyData(0, objCB);
+
 		albedoTex = std::make_unique<Rendering::RHI::Texture>(device, cmdList,
 			L"Assests\\Models\\DamagedHelmet\\Default_albedo.jpg", heap);
-
-		ObjectCB world;
-		DirectX::XMStoreFloat4x4(&world.world, DirectX::XMMatrixTranspose(DirectX::XMMatrixTranslation(1.0f,0.0f, 0.0f)));
-		objectCB = std::make_unique<Rendering::RHI::UploadBuffer<ObjectCB>>(device, 1, true);
-		objectCB->CopyData(0, world);
 	}
 
 	D3D12_VERTEX_BUFFER_VIEW Model::VertexBufferView()

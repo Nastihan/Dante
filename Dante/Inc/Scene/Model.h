@@ -18,6 +18,7 @@ namespace Dante::Scene
 	struct ObjectCB
 	{
 		DirectX::XMFLOAT4X4 world = Utils::NastihanMath::Identity4x4();
+		UINT albedoMapIndex;
 	};
 
 	class Model

@@ -16,6 +16,7 @@ struct VS_Output
 struct ObjectCB
 {
     float4x4 world;
+    uint albedoMapIndex;
 };
 ConstantBuffer<ObjectCB> objectCB : register(b1);
 
