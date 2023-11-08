@@ -78,7 +78,7 @@ namespace Dante::Rendering
 
 		cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-		model->Draw(gfx->GetCmdList(), gfx->cbvHeap->GetCurrHandle().gpuHandle);
+		model->Draw(gfx->GetCmdList());
 
 
 		cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(gfx->CurrentBackBuffer(),

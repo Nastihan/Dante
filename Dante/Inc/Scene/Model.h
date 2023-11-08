@@ -26,7 +26,7 @@ namespace Dante::Scene
 		Model(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList, std::string path, Rendering::RHI::DescriptorHeap& heap);
 		D3D12_VERTEX_BUFFER_VIEW VertexBufferView();
 		D3D12_INDEX_BUFFER_VIEW IndexBufferView();
-		void Draw(ID3D12GraphicsCommandList* cmdList, D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle);
+		void Draw(ID3D12GraphicsCommandList* cmdList);
 
 	private:
 		std::unique_ptr<Rendering::RHI::UploadBuffer<ObjectCB>> objectCB;

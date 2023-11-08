@@ -118,10 +118,9 @@ namespace Dante::Scene
 		return indexBuffer->View();
 	}
 
-	void Model::Draw(ID3D12GraphicsCommandList* cmdList, D3D12_GPU_DESCRIPTOR_HANDLE gpuHandle)
+	void Model::Draw(ID3D12GraphicsCommandList* cmdList)
 	{
 		cmdList->SetGraphicsRootConstantBufferView(1, objectCB->Resource()->GetGPUVirtualAddress());
-		cmdList->SetGraphicsRootDescriptorTable(2, gpuHandle);
 		cmdList->IASetVertexBuffers(0U, 1U, &vertexBuffer->View());
 		cmdList->IASetIndexBuffer(&indexBuffer->View());
 		cmdList->DrawIndexedInstanced(indexCount, 1U, 0U, 0U, 0U);

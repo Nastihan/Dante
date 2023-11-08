@@ -52,7 +52,7 @@ namespace Dante::Rendering::RHI
 		srvDesc.Texture2D.MipLevels = 1;
 
 		device->CreateShaderResourceView(resource.Get(), &srvDesc, heap.GetCurrHandle().cpuHandle);
-		//heap.OffsetCurrHandle();
+		heap.OffsetCurrHandle();
 	}
 
 }
