@@ -1,13 +1,12 @@
 #pragma once
 #include "Pch.h"
-#include "DescriptorHeap.h"
-
+#include "Rendering/Graphics.h"
 namespace Dante::Rendering::RHI
 {
 	class Texture
 	{
 	public:
-		Texture(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList, std::wstring filePath, DescriptorHeap& heap);
+		Texture(Graphics& gfx, std::wstring filePath);
 
 	private:
 		Microsoft::WRL::ComPtr<ID3D12Resource> resource{};

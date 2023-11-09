@@ -9,7 +9,7 @@
 
 namespace Dante::Scene
 {
-	Model::Model(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList, std::string path, Rendering::RHI::DescriptorHeap& heap)
+	Model::Model(Rendering::Graphics& gfx, std::string path)
 	{
 		std::string warning{};
 		std::string error{};
@@ -96,19 +96,19 @@ namespace Dante::Scene
 
 		indexCount = (UINT)indices.size();
 
-		vertexBuffer = std::make_unique<Rendering::RHI::VertexBuffer<Vertex>>(device, cmdList, vertices);
-		indexBuffer = std::make_unique<Rendering::RHI::IndexBuffer>(device, cmdList, indices);
+		vertexBuffer = std::make_unique<Rendering::RHI::VertexBuffer<Vertex>>(gfx.GetDevice(), gfx.GetCmdList(), vertices);
+		indexBuffer = std::make_unique<Rendering::RHI::IndexBuffer>(gfx.GetDevice(), gfx.GetCmdList(), indices);
 
 		
 
 		ObjectCB objCB;
 		DirectX::XMStoreFloat4x4(&objCB.world, DirectX::XMMatrixTranspose(DirectX::XMMatrixTranslation(1.0f,0.0f, 0.0f)));
-		objCB.albedoMapIndex = heap.GetCurrDescriptorIndex();
-		objectCB = std::make_unique<Rendering::RHI::UploadBuffer<ObjectCB>>(device, 1, true);
+		objCB.albedoMapIndex = gfx.CbvSrvHeap().GetCurrDescriptorIndex();
+		objectCB = std::make_unique<Rendering::RHI::UploadBuffer<ObjectCB>>(gfx, 1, true);
 		objectCB->CopyData(0, objCB);
 
-		albedoTex = std::make_unique<Rendering::RHI::Texture>(device, cmdList,
-			L"Assests\\Models\\DamagedHelmet\\Default_albedo.jpg", heap);
+		albedoTex = std::make_unique<Rendering::RHI::Texture>(gfx,
+			L"Assests\\Models\\DamagedHelmet\\Default_albedo.jpg");
 	}
 
 	D3D12_VERTEX_BUFFER_VIEW Model::VertexBufferView()

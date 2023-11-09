@@ -2,11 +2,11 @@
 //Texture2D albedoTex : register(t0);
 
 SamplerState samPointWrap : register(s0);
-SamplerState samPointClamp : register(s1);
-SamplerState samLinearWrap : register(s2);
-SamplerState samLinearClamp : register(s3);
-SamplerState samAnisotropicWrap : register(s4);
-SamplerState samAnisotropicClamp : register(s5);
+//SamplerState samPointClamp : register(s1);
+//SamplerState samLinearWrap : register(s2);
+//SamplerState samLinearClamp : register(s3);
+//SamplerState samAnisotropicWrap : register(s4);
+//SamplerState samAnisotropicClamp : register(s5);
 
 struct ObjectCB
 {
@@ -34,5 +34,5 @@ struct PS_Input
 float4 main(PS_Input input) : SV_TARGET
 {
     Texture2D albedoTexture = ResourceDescriptorHeap[objectCB.albedoMapIndex];
-    return albedoTexture.Sample(samAnisotropicWrap, input.tc);
+    return albedoTexture.Sample(samPointWrap, input.tc);
 }

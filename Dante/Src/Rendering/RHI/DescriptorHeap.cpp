@@ -56,7 +56,7 @@ namespace Dante::Rendering::RHI
 
 	UINT DescriptorHeap::GetDescriptorIndex(const Descriptor& descriptor) const
 	{
-		return (descriptor.cpuHandle.ptr - startDescriptor.cpuHandle.ptr) / descriptorSize;
+		return (UINT)(descriptor.cpuHandle.ptr - startDescriptor.cpuHandle.ptr) / descriptorSize;
 	}
 
 	UINT DescriptorHeap::GetCurrDescriptorIndex() const

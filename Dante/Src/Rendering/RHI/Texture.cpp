@@ -6,14 +6,14 @@
 
 namespace Dante::Rendering::RHI
 {
-	Texture::Texture(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList, std::wstring filePath, DescriptorHeap& heap)
+	Texture::Texture(Graphics& gfx, std::wstring filePath)
 	{
 		void* texData = nullptr;
 		int width{}, height{}, comp{};
 
 		texData = stbi_load(Utils::ToNarrow(filePath).c_str(), &width, &height, &comp, STBI_rgb_alpha);
 
-		Chk(device->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+		Chk(gfx.GetDevice()->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
 			D3D12_HEAP_FLAG_NONE,
 			&CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_R8G8B8A8_UNORM, width, height),
 			D3D12_RESOURCE_STATE_COPY_DEST,
@@ -23,7 +23,7 @@ namespace Dante::Rendering::RHI
 
 		UINT64 uploadBufferSize = GetRequiredIntermediateSize(resource.Get(), 0U, 1U);
 
-		Chk(device->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+		Chk(gfx.GetDevice()->CreateCommittedResource(&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
 			D3D12_HEAP_FLAG_NONE,
 			&CD3DX12_RESOURCE_DESC::Buffer(uploadBufferSize),
 			D3D12_RESOURCE_STATE_GENERIC_READ,
@@ -38,10 +38,10 @@ namespace Dante::Rendering::RHI
 			.SlicePitch = (LONG_PTR)(height * 4)
 		};
 
-		UpdateSubresources(cmdList, resource.Get(), uploadResource.Get(),
+		UpdateSubresources(gfx.GetCmdList(), resource.Get(), uploadResource.Get(),
 			0U, 0U, 1U, &subResourceData);
 
-		cmdList->ResourceBarrier(1U, &CD3DX12_RESOURCE_BARRIER::Transition(resource.Get(),
+		gfx.GetCmdList()->ResourceBarrier(1U, &CD3DX12_RESOURCE_BARRIER::Transition(resource.Get(),
 			D3D12_RESOURCE_STATE_COPY_DEST, D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE));
 
 		D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
@@ -51,8 +51,8 @@ namespace Dante::Rendering::RHI
 		srvDesc.Texture2D.MostDetailedMip = 0;
 		srvDesc.Texture2D.MipLevels = 1;
 
-		device->CreateShaderResourceView(resource.Get(), &srvDesc, heap.GetCurrHandle().cpuHandle);
-		heap.OffsetCurrHandle();
+		gfx.GetDevice()->CreateShaderResourceView(resource.Get(), &srvDesc, gfx.CbvSrvHeap().GetCurrHandle().cpuHandle);
+		gfx.CbvSrvHeap().OffsetCurrHandle();
 	}
 
 }

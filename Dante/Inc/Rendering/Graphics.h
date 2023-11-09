@@ -42,13 +42,14 @@ namespace Dante::Rendering
 		D3D12_RECT GetScissorRect();
 		ID3D12PipelineState* GetPSO(std::string name);
 		ID3D12RootSignature* GetRootSig(std::string name);
+
+		RHI::DescriptorHeap& CbvSrvHeap();
 		// Utils
 		ID3D12Resource* CurrentBackBuffer();
 		D3D12_CPU_DESCRIPTOR_HANDLE CurrentBackBufferView();
 		D3D12_CPU_DESCRIPTOR_HANDLE DepthStencilView();
 
 
-		std::unique_ptr<RHI::DescriptorHeap> cbvHeap;
 
 
 
@@ -80,6 +81,8 @@ namespace Dante::Rendering
 		// DescriptorHeaps
 		Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvHeap;
 		Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> dsvHeap;
+		std::unique_ptr<RHI::DescriptorHeap> cbvHeap;
+
 
 		UINT rtvDescriptorSize{};
 		UINT dsvDescriptorSize{};

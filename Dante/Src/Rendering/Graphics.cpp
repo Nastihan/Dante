@@ -315,11 +315,11 @@ namespace Dante::Rendering
 			D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT |
 			D3D12_ROOT_SIGNATURE_FLAG_CBV_SRV_UAV_HEAP_DIRECTLY_INDEXED);
 
-		ComPtr<ID3DBlob> serializedRootSig{};
-		ComPtr<ID3DBlob> errorBlob{};
+		ComPtr<ID3DBlob> serializedRootSig=nullptr;
+		ComPtr<ID3DBlob> errorBlob = nullptr;
 
 		HRESULT hr = D3D12SerializeVersionedRootSignature(&rootSigDesc, serializedRootSig.GetAddressOf(), errorBlob.GetAddressOf());
-		if (errorBlob != nullptr)
+		if (errorBlob )
 		{
 			::OutputDebugStringA((char*)errorBlob->GetBufferPointer());
 		}
@@ -347,6 +347,8 @@ namespace Dante::Rendering
 			D3D12_TEXTURE_ADDRESS_MODE_WRAP,  // addressU
 			D3D12_TEXTURE_ADDRESS_MODE_WRAP,  // addressV
 			D3D12_TEXTURE_ADDRESS_MODE_WRAP); // addressW
+
+		
 
 		const CD3DX12_STATIC_SAMPLER_DESC pointClamp(
 			1, // shaderRegister
@@ -376,7 +378,7 @@ namespace Dante::Rendering
 			D3D12_TEXTURE_ADDRESS_MODE_WRAP,  // addressV
 			D3D12_TEXTURE_ADDRESS_MODE_WRAP,  // addressW
 			0.0f,                             // mipLODBias
-			8);                               // maxAnisotropy
+			16U);                               // maxAnisotropy
 
 		const CD3DX12_STATIC_SAMPLER_DESC anisotropicClamp(
 			5, // shaderRegister
@@ -385,7 +387,7 @@ namespace Dante::Rendering
 			D3D12_TEXTURE_ADDRESS_MODE_CLAMP,  // addressV
 			D3D12_TEXTURE_ADDRESS_MODE_CLAMP,  // addressW
 			0.0f,                              // mipLODBias
-			8);                                // maxAnisotropy
+			16U);                                // maxAnisotropy
 
 		return {
 			pointWrap, pointClamp,
@@ -462,6 +464,11 @@ namespace Dante::Rendering
 	ID3D12RootSignature* Graphics::GetRootSig(std::string name)
 	{
 		return rootSignatures[name].Get();
+	}
+
+	RHI::DescriptorHeap& Graphics::CbvSrvHeap()
+	{
+		return *cbvHeap;
 	}
 
 	/////////////////////////// Utils

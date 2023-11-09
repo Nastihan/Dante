@@ -46,6 +46,12 @@ namespace Dante::Rendering
 		void OnResize();
 		void Update(float dt);
 		void Render();
+		Graphics& Gfx()
+		{
+			if (!gfx)
+				throw std::runtime_error("No Gfx!");
+			return *gfx;
+		}
 	private:
 		void BeginFrame();
 		void EndFrame();

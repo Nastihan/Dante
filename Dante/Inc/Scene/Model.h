@@ -24,7 +24,7 @@ namespace Dante::Scene
 	class Model
 	{
 	public:
-		Model(ID3D12Device* device, ID3D12GraphicsCommandList* cmdList, std::string path, Rendering::RHI::DescriptorHeap& heap);
+		Model(Rendering::Graphics& gfx, std::string path);
 		D3D12_VERTEX_BUFFER_VIEW VertexBufferView();
 		D3D12_INDEX_BUFFER_VIEW IndexBufferView();
 		void Draw(ID3D12GraphicsCommandList* cmdList);

@@ -20,11 +20,10 @@ namespace Dante::Rendering
 		camera->SetView({ 0.0f, 0.0f, -6.0f }, { 0.0f, 0.0f, 1.0f }, { 0.0f, 1.0f, 0.0f });
 		camera->SetProj(45.0f, Core::Window::Instance().GetAR(), 1.0f, 100.0f);
 
-		passCB = std::make_unique<RHI::UploadBuffer<PassConstants>>(gfx->GetDevice(), 1, true);
+		passCB = std::make_unique<RHI::UploadBuffer<PassConstants>>(Gfx(), 1, true);
 
-		model = std::make_unique<Scene::Model>(gfx->GetDevice(), gfx->GetCmdList(),
-			"Assests\\Models\\DamagedHelmet\\DamagedHelmet.gltf", 
-			*gfx->cbvHeap);
+		model = std::make_unique<Scene::Model>(Gfx(),
+			"Assests\\Models\\DamagedHelmet\\DamagedHelmet.gltf");
 		
 		Chk(cmdList->Close());
 		ID3D12CommandList* cmdLists[] = { cmdList };
@@ -70,7 +69,7 @@ namespace Dante::Rendering
 		cmdList->OMSetRenderTargets(1, &gfx->CurrentBackBufferView(), true, &gfx->DepthStencilView());
 
 		// draw code
-		ID3D12DescriptorHeap* descHeaps[] = { gfx->cbvHeap->GetHeap()};
+		ID3D12DescriptorHeap* descHeaps[] = { Gfx().CbvSrvHeap().GetHeap()};
 		cmdList->SetDescriptorHeaps(1, descHeaps);
 
 		cmdList->SetGraphicsRootSignature(gfx->GetRootSig("defaultRS"));

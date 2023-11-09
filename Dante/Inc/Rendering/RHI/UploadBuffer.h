@@ -1,14 +1,14 @@
 #pragma once
 #include "Pch.h"
 #include "Utils/DXUtil.h"
-
+#include "Rendering/Graphics.h"
 namespace Dante::Rendering::RHI
 {
 	template <typename T>
 	class UploadBuffer
 	{
 	public:
-		UploadBuffer(ID3D12Device* device, UINT elementCount, bool isCBuffer)
+		UploadBuffer(Graphics& gfx, UINT elementCount, bool isCBuffer)
 			: isCBuffer(isCBuffer)
 		{
 			elementByteSize = sizeof(T);
@@ -16,7 +16,7 @@ namespace Dante::Rendering::RHI
 			if (isCBuffer)
 				elementByteSize = Utils::DXUtil::CalcCBufferByteSize(sizeof(T));
 
-			Chk(device->CreateCommittedResource(
+			Chk(gfx.GetDevice()->CreateCommittedResource(
 				&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
 				D3D12_HEAP_FLAG_NONE,
 				&CD3DX12_RESOURCE_DESC::Buffer(elementByteSize * elementCount),
