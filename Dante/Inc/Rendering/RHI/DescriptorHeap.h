@@ -13,7 +13,6 @@ namespace Dante::Rendering::RHI
 	class DescriptorHeap
 	{
 	public:
-		//Desc
 		DescriptorHeap(ID3D12Device* device, D3D12_DESCRIPTOR_HEAP_TYPE type, UINT capacity);
 		DISABLE_COPY_AND_MOVE(DescriptorHeap)
 		~DescriptorHeap();
@@ -21,6 +20,8 @@ namespace Dante::Rendering::RHI
 		Descriptor GetHandle(UINT index);
 		Descriptor GetHandleForStart();
 		Descriptor GetCurrHandle() const;
+		UINT GetDescriptorIndex(const Descriptor& descriptor) const;
+		UINT GetCurrDescriptorIndex() const;
 		void OffsetCurrHandle();
 
 

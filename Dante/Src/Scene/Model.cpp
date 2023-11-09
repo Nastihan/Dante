@@ -103,7 +103,7 @@ namespace Dante::Scene
 
 		ObjectCB objCB;
 		DirectX::XMStoreFloat4x4(&objCB.world, DirectX::XMMatrixTranspose(DirectX::XMMatrixTranslation(1.0f,0.0f, 0.0f)));
-		objCB.albedoMapIndex = 0U;
+		objCB.albedoMapIndex = heap.GetCurrDescriptorIndex();
 		objectCB = std::make_unique<Rendering::RHI::UploadBuffer<ObjectCB>>(device, 1, true);
 		objectCB->CopyData(0, objCB);
 
