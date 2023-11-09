@@ -29,7 +29,7 @@ namespace Dante::Rendering
 		void BuildPSOs();
 		void BuildRootSigs();
 		void BuildShaders();
-		std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6> GetStaticSamplers();
+		void BuildStaticSamplers(std::array<CD3DX12_STATIC_SAMPLER_DESC, 6>& samplers);
 
 
 	public:
@@ -94,6 +94,7 @@ namespace Dante::Rendering
 
 	private:
 		std::unordered_map<std::string, Microsoft::WRL::ComPtr<ID3D12RootSignature>> rootSignatures;
+		std::array<CD3DX12_STATIC_SAMPLER_DESC, 6> samplers;
 		std::unordered_map<std::string, Microsoft::WRL::ComPtr<ID3D12PipelineState>> pSOs;
 		std::unordered_map<std::string, Microsoft::WRL::ComPtr<ID3DBlob>> shaders;
 

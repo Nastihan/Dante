@@ -304,6 +304,8 @@ namespace Dante::Rendering
 
 	void Graphics::BuildRootSigs()
 	{
+		BuildStaticSamplers(samplers);
+
 		CD3DX12_DESCRIPTOR_RANGE1 descRange{ D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1U, 0U };
 
 		CD3DX12_ROOT_PARAMETER1 rootParams[2]{};
@@ -311,7 +313,7 @@ namespace Dante::Rendering
 		rootParams[1].InitAsConstantBufferView(1U, 0U, D3D12_ROOT_DESCRIPTOR_FLAG_NONE, D3D12_SHADER_VISIBILITY_ALL);
 
 		CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSigDesc{};
-		rootSigDesc.Init_1_1((UINT)std::size(rootParams), rootParams, 6U, GetStaticSamplers().data(),
+		rootSigDesc.Init_1_1((UINT)std::size(rootParams), rootParams, (UINT)samplers.size(), samplers.data(),
 			D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT |
 			D3D12_ROOT_SIGNATURE_FLAG_CBV_SRV_UAV_HEAP_DIRECTLY_INDEXED);
 
@@ -339,7 +341,7 @@ namespace Dante::Rendering
 		Chk(D3DReadFileToBlob(L"Shaders\\ShaderBins\\DefaultPS.cso", shaders["defaultPS"].GetAddressOf()));
 	}
 
-	std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6> Graphics::GetStaticSamplers()
+	void Graphics::BuildStaticSamplers(std::array<CD3DX12_STATIC_SAMPLER_DESC, 6>& samplers)
 	{
 		const CD3DX12_STATIC_SAMPLER_DESC pointWrap(
 			0, // shaderRegister
@@ -347,8 +349,6 @@ namespace Dante::Rendering
 			D3D12_TEXTURE_ADDRESS_MODE_WRAP,  // addressU
 			D3D12_TEXTURE_ADDRESS_MODE_WRAP,  // addressV
 			D3D12_TEXTURE_ADDRESS_MODE_WRAP); // addressW
-
-		
 
 		const CD3DX12_STATIC_SAMPLER_DESC pointClamp(
 			1, // shaderRegister
@@ -389,10 +389,13 @@ namespace Dante::Rendering
 			0.0f,                              // mipLODBias
 			16U);                                // maxAnisotropy
 
-		return {
-			pointWrap, pointClamp,
-			linearWrap, linearClamp,
-			anisotropicWrap, anisotropicClamp };
+		samplers[0] = pointWrap;
+		samplers[1] = pointClamp;
+		samplers[2] = linearWrap;
+		samplers[3] = linearClamp;
+		samplers[4] = anisotropicWrap;
+		samplers[5] = anisotropicClamp;
+
 	}
 
 	void Graphics::BuildPSOs()
