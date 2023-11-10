@@ -72,7 +72,6 @@ namespace Dante::Rendering
 		ID3D12DescriptorHeap* descHeaps[] = { Gfx().CbvSrvHeap().GetHeap()};
 		cmdList->SetDescriptorHeaps(1, descHeaps);
 
-
 		cmdList->SetGraphicsRootSignature(gfx->GetRootSig("defaultRS"));
 		cmdList->SetGraphicsRootConstantBufferView(0U, passCB->Resource()->GetGPUVirtualAddress());
 

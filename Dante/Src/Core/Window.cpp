@@ -2,12 +2,6 @@
 #include "Core//Window.h"
 #include "Core/Application.h"
 
-
-LRESULT CALLBACK MainWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-	return Dante::Core::Window::Instance().MsgProc(hWnd, msg, wParam, lParam);
-}
-
 namespace Dante::Core
 {
 	Window::Window( UINT width, UINT height, std::string name)
@@ -55,7 +49,17 @@ namespace Dante::Core
 
 		::ShowWindow(hWnd, SW_SHOW);
 		::UpdateWindow(hWnd);
+	}
 
+	LRESULT Window::MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+	{
+		if (msg == WM_NCCREATE)
+		{
+			const CREATESTRUCTW* const pCreate = reinterpret_cast<CREATESTRUCTW*>(lParam);
+			Window* const pWnd = static_cast<Window*>(pCreate->lpCreateParams);
+			return pWnd->MsgProc(hwnd, msg, wParam, lParam);
+		}
+		return ::DefWindowProc(hwnd, msg, wParam, lParam);
 	}
 
 	LRESULT Window::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
