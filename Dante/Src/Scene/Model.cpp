@@ -99,16 +99,14 @@ namespace Dante::Scene
 		vertexBuffer = std::make_unique<Rendering::RHI::VertexBuffer<Vertex>>(gfx.GetDevice(), gfx.GetCmdList(), vertices);
 		indexBuffer = std::make_unique<Rendering::RHI::IndexBuffer>(gfx.GetDevice(), gfx.GetCmdList(), indices);
 
-		
-
 		ObjectCB objCB;
 		DirectX::XMStoreFloat4x4(&objCB.world, DirectX::XMMatrixTranspose(DirectX::XMMatrixTranslation(1.0f,0.0f, 0.0f)));
 		objCB.albedoMapIndex = gfx.CbvSrvHeap().GetCurrDescriptorIndex();
+		albedoTex = std::make_unique<Rendering::RHI::Texture>(gfx,
+			L"Assests\\Models\\DamagedHelmet\\Default_albedo.jpg");
 		objectCB = std::make_unique<Rendering::RHI::UploadBuffer<ObjectCB>>(gfx, 1, true);
 		objectCB->CopyData(0, objCB);
 
-		albedoTex = std::make_unique<Rendering::RHI::Texture>(gfx,
-			L"Assests\\Models\\DamagedHelmet\\Default_albedo.jpg");
 	}
 
 	D3D12_VERTEX_BUFFER_VIEW Model::VertexBufferView()
