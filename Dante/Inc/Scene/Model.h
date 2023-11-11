@@ -18,6 +18,9 @@ namespace Dante::Scene
 	struct ObjectCB
 	{
 		DirectX::XMFLOAT4X4 world = Utils::NastihanMath::Identity4x4();
+		DirectX::XMFLOAT4 DiffuseAlbedo = { 1.0f, 1.0f, 1.0f, 1.0f, };
+		DirectX::XMFLOAT3 FresnelR0 = { 0.0f, 0.0f, 0.0f };
+		float Shininess = { 0.0f };
 		UINT albedoMapIndex;
 	};
 

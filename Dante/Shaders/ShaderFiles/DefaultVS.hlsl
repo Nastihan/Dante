@@ -1,3 +1,4 @@
+#include "Common.hlsli"
 
 struct VS_Input
 {
@@ -12,22 +13,6 @@ struct VS_Output
     float3 normal : NORMAL;
     float2 tc : TEXCOORD;
 };
-
-struct ObjectCB
-{
-    float4x4 world;
-    uint albedoMapIndex;
-};
-ConstantBuffer<ObjectCB> objectCB : register(b1);
-
-struct PassCB
-{
-    float4x4 view;
-    float4x4 proj;
-    float4x4 viewProj;
-    float3 eyePosW;
-};
-ConstantBuffer<PassCB> passCB : register(b0);
 
 VS_Output main( VS_Input input)
 {

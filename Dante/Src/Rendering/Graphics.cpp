@@ -115,10 +115,9 @@ namespace Dante::Rendering
 	{
 #ifdef _DEBUG
 		ComPtr<ID3D12Debug6> debugController;
-		D3D12GetDebugInterface(IID_PPV_ARGS(&debugController));
+		Chk(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)));
 		debugController->EnableDebugLayer();
 		debugController->SetEnableGPUBasedValidation(true);
-
 #endif
 	}
 
