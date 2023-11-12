@@ -1,3 +1,5 @@
+#include "LightingUtil.hlsli"
+
 
 struct ObjectCB
 {
@@ -15,6 +17,9 @@ struct PassCB
     float4x4 proj;
     float4x4 viewProj;
     float3 eyePosW;
+    float padding;
+    float4 ambientLight;
+    Light lights[16];
 };
 ConstantBuffer<PassCB> passCB : register(b0);
 

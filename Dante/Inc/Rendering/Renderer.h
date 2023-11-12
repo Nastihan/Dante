@@ -17,7 +17,16 @@ namespace Dante::Rendering
 		DirectX::XMFLOAT4 Color;
 	};
 
-	
+	struct Light
+	{
+		DirectX::XMFLOAT3 Strength = { 0.5f, 0.5f, 0.5f };
+		float FalloffStart = 1.0f;                          // point/spot light only
+		DirectX::XMFLOAT3 Direction = { 0.0f, -1.0f, 0.0f };// directional/spot light only
+		float FalloffEnd = 10.0f;                           // point/spot light only
+		DirectX::XMFLOAT3 Position = { 0.0f, 0.0f, 0.0f };  // point/spot light only
+		float SpotPower = 64.0f;                            // spot light only
+	};
+
 	struct PassConstants
 	{
 		DirectX::XMFLOAT4X4 View = Utils::NastihanMath::Identity4x4();
@@ -28,6 +37,11 @@ namespace Dante::Rendering
 		//DirectX::XMFLOAT4X4 InvViewProj = Utils::NastihanMath::Identity4x4();
 		//DirectX::XMFLOAT4X4 ShadowTransform = Utils::NastihanMath::Identity4x4();
 		DirectX::XMFLOAT3 EyePosW = { 0.0f, 0.0f, 0.0f };
+		float padding;
+
+		DirectX::XMFLOAT4 ambientLight = { 0.05f, 0.05f, 0.05f, 1.0f };
+
+		Light lights[16];
 		//float cbPerObjectPad1 = 0.0f;
 		//DirectX::XMFLOAT2 RenderTargetSize = { 0.0f, 0.0f };
 		//DirectX::XMFLOAT2 InvRenderTargetSize = { 0.0f, 0.0f };

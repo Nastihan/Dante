@@ -122,6 +122,7 @@
     <FxCompile Include="Shaders\ShaderFiles\DefaultPS.hlsl" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\ShaderFiles\Common.hlsli" />
+    <None Include="Shaders\ShaderFiles\ShaderIncludes\Common.hlsli" />
+    <None Include="Shaders\ShaderFiles\ShaderIncludes\LightingUtil.hlsli" />
   </ItemGroup>
 </Project>

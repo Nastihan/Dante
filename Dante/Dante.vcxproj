@@ -207,7 +207,8 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\ShaderFiles\Common.hlsli" />
+    <None Include="Shaders\ShaderFiles\ShaderIncludes\Common.hlsli" />
+    <None Include="Shaders\ShaderFiles\ShaderIncludes\LightingUtil.hlsli" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -19,8 +19,8 @@ namespace Dante::Scene
 	{
 		DirectX::XMFLOAT4X4 world = Utils::NastihanMath::Identity4x4();
 		DirectX::XMFLOAT4 DiffuseAlbedo = { 1.0f, 1.0f, 1.0f, 1.0f, };
-		DirectX::XMFLOAT3 FresnelR0 = { 0.0f, 0.0f, 0.0f };
-		float Shininess = { 0.0f };
+		DirectX::XMFLOAT3 FresnelR0 = { 0.2f, 0.2f, 0.2f };
+		float Shininess = { 0.4f };
 		UINT albedoMapIndex;
 	};
 
