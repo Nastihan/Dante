@@ -5,9 +5,11 @@
 #include "Rendering/RHI/UploadBuffer.h"
 #include "Rendering/RHI/Texture.h"
 #include "Utils/NastihanMath.h"
+#include "../../ThirdParty/tinygltf/tiny_gltf.h"
 
 namespace Dante::Scene
 {
+
 	struct Vertex
 	{
 		DirectX::XMFLOAT3 pos;
@@ -24,19 +26,32 @@ namespace Dante::Scene
 		UINT albedoMapIndex;
 	};
 
-	class Model
+	class Mesh
 	{
-	public:
-		Model(Rendering::Graphics& gfx, std::string path);
+	public: 
+		Mesh(Rendering::Graphics& gfx, const tinygltf::Model& model,UINT meshIndex);
 		D3D12_VERTEX_BUFFER_VIEW VertexBufferView();
 		D3D12_INDEX_BUFFER_VIEW IndexBufferView();
 		void Draw(ID3D12GraphicsCommandList* cmdList);
-
 	private:
 		std::unique_ptr<Rendering::RHI::UploadBuffer<ObjectCB>> objectCB;
 		std::unique_ptr<Dante::Rendering::RHI::VertexBuffer<Vertex>> vertexBuffer;
 		std::unique_ptr<Dante::Rendering::RHI::IndexBuffer> indexBuffer;
 		std::unique_ptr<Rendering::RHI::Texture> albedoTex;
 		UINT indexCount;
+	};
+
+	class Model
+	{
+	public:
+		Model(Rendering::Graphics& gfx, std::string path);
+		void Draw(ID3D12GraphicsCommandList* cmdList);
+	private:
+		std::vector<std::unique_ptr<Mesh>> meshes;
+		/*std::unique_ptr<Rendering::RHI::UploadBuffer<ObjectCB>> objectCB;
+		std::unique_ptr<Dante::Rendering::RHI::VertexBuffer<Vertex>> vertexBuffer;
+		std::unique_ptr<Dante::Rendering::RHI::IndexBuffer> indexBuffer;
+		std::unique_ptr<Rendering::RHI::Texture> albedoTex;
+		UINT indexCount;*/
 	};
 }

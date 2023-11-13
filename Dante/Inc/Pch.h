@@ -52,3 +52,23 @@ Class& operator=(Class&&) = delete;
 using Microsoft::WRL::ComPtr;
 
 //
+//#define STB_IMAGE_IMPLEMENTATION
+//#include "../ThirdParty/tinygltf/stb_image.h"
+//
+//#define TINYGLTF_IMPLEMENTATION
+//#define TINYGLTF_USE_CPP20
+//#define STB_IMAGE_WRITE_IMPLEMENTATION
+//#define STBI_MSC_SECURE_CRT
+//#include "../ThirdParty/tinygltf/tiny_gltf.h"
+
+//#ifndef STB_IMAGE_IMPLEMENTATION
+//#define STB_IMAGE_IMPLEMENTATION
+//#endif // !STB_IMAGE_IMPLEMENTATION
+//
+//#include "../ThirdParty/tinygltf/stb_image.h"
+
+
+
+
+
+
