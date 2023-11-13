@@ -32,7 +32,7 @@ float4 main(PS_Input input) : SV_TARGET
     input.normal = normalize(input.normal);
     
     Texture2D albedoTexture = ResourceDescriptorHeap[albedoMapIndex];
-    diffuseAlbedo *= albedoTexture.Sample(samAnisotropicWrap, input.tc);
+    diffuseAlbedo *= albedoTexture.Sample(samLinearWrap, input.tc);
     
     float4 ambient = passCB.ambientLight * diffuseAlbedo;
     

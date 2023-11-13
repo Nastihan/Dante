@@ -73,8 +73,17 @@ namespace Dante::Scene
 		ObjectCB objCB;
 		DirectX::XMStoreFloat4x4(&objCB.world, DirectX::XMMatrixTranspose(DirectX::XMMatrixScaling(0.1f, 0.1f, 0.1f)));
 		objCB.albedoMapIndex = gfx.CbvSrvHeap().GetCurrDescriptorIndex();
-		//albedoTex = std::make_unique<Rendering::RHI::Texture>(gfx,
-		//	L"Assests\\Models\\DamagedHelmet\\Default_albedo.jpg");
+
+		auto& material = model.materials[model.meshes[0].primitives[meshIndex].material];
+		uint32_t albedoTextureIndex = material.pbrMetallicRoughness.baseColorTexture.index;
+		uint32_t albedoImageIndex = model.textures[albedoTextureIndex].source;
+
+		std::string rootPath = "Assests\\Models\\Sponza\\";
+		rootPath += model.images[albedoImageIndex].uri;
+
+		auto temp = Utils::ToWide(rootPath);
+		albedoTex = std::make_unique<Rendering::RHI::Texture>(gfx,
+			temp);
 		objectCB = std::make_unique<Rendering::RHI::UploadBuffer<ObjectCB>>(gfx, 1, true);
 		objectCB->CopyData(0, objCB); 
 	}
@@ -121,7 +130,7 @@ namespace Dante::Scene
 
 		for (UINT i = 0; i < model.meshes[0].primitives.size(); i++)
 		{
-			meshes.push_back(std::make_unique<Mesh>(gfx, model,i));
+			meshes.push_back(std::make_unique<Mesh>(gfx, model, i));
 		}
 
 		/*

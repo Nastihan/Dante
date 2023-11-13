@@ -29,7 +29,7 @@ namespace Dante::Scene
 	class Mesh
 	{
 	public: 
-		Mesh(Rendering::Graphics& gfx, const tinygltf::Model& model,UINT meshIndex);
+		Mesh(Rendering::Graphics& gfx, const tinygltf::Model& model, UINT meshIndex);
 		D3D12_VERTEX_BUFFER_VIEW VertexBufferView();
 		D3D12_INDEX_BUFFER_VIEW IndexBufferView();
 		void Draw(ID3D12GraphicsCommandList* cmdList);

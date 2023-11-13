@@ -69,4 +69,8 @@ namespace Dante::Rendering::RHI
 		gfx.CbvSrvHeap().OffsetCurrHandle();
 	}
 
+	Rendering::RHI::Texture::Texture(Graphics& gfx, const void* data)
+	{
+	}
+
 }

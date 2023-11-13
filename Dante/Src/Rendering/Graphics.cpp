@@ -267,7 +267,7 @@ namespace Dante::Rendering
 
 	void Graphics::CreateCbvSrvUavDescriptorHeap()
 	{
-		cbvHeap = std::make_unique<RHI::DescriptorHeap>(device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 100);
+		cbvHeap = std::make_unique<RHI::DescriptorHeap>(device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 300);
 		
 	}
 
