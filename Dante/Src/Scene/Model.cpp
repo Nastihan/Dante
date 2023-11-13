@@ -71,7 +71,7 @@ namespace Dante::Scene
 		indexBuffer = std::make_unique<Rendering::RHI::IndexBuffer>(gfx.GetDevice(), gfx.GetCmdList(), indices);
 
 		ObjectCB objCB;
-		DirectX::XMStoreFloat4x4(&objCB.world, DirectX::XMMatrixTranspose(DirectX::XMMatrixTranslation(0.0f, 0.0f, 0.0f)));
+		DirectX::XMStoreFloat4x4(&objCB.world, DirectX::XMMatrixTranspose(DirectX::XMMatrixScaling(0.1f, 0.1f, 0.1f)));
 		objCB.albedoMapIndex = gfx.CbvSrvHeap().GetCurrDescriptorIndex();
 		//albedoTex = std::make_unique<Rendering::RHI::Texture>(gfx,
 		//	L"Assests\\Models\\DamagedHelmet\\Default_albedo.jpg");

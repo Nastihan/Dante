@@ -18,12 +18,12 @@ namespace Dante::Rendering
 		
 		camera = std::make_unique<Scene::Camera>();
 		camera->SetView({ 0.0f, 0.0f, -6.0f }, { 0.0f, 0.0f, 1.0f }, { 0.0f, 1.0f, 0.0f });
-		camera->SetProj(45.0f, Core::Window::Instance().GetAR(), 1.0f, 100.0f);
+		camera->SetProj(45.0f, Core::Window::Instance().GetAR(), 1.0f, 300.0f);
 
 		passCB = std::make_unique<RHI::UploadBuffer<PassConstants>>(Gfx(), 1, true);
 
 		model = std::make_unique<Scene::Model>(Gfx(),
-			"Assests\\Models\\DamagedHelmet\\DamagedHelmet.gltf");
+			"Assests\\Models\\Sponza\\Sponza.gltf");
 		
 		Chk(cmdList->Close());
 		ID3D12CommandList* cmdLists[] = { cmdList };
