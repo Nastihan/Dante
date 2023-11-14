@@ -80,7 +80,7 @@ namespace Dante::Rendering
 
 		cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-		model->Draw(gfx->GetCmdList());
+		model->Draw(Gfx());
 
 
 		cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(gfx->CurrentBackBuffer(),

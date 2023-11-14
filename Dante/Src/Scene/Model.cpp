@@ -48,7 +48,6 @@ namespace Dante::Scene
 
 			vertex.tc.x = (reinterpret_cast<float const*>(texcoords + (i * tcByteStride)))[0];
 			vertex.tc.y = (reinterpret_cast<float const*>(texcoords + (i * tcByteStride)))[1];
-			//vertex.tc.y = 1.0f - vertex.tc.y;
 
 			vertices.push_back(vertex);
 		}
@@ -78,6 +77,7 @@ namespace Dante::Scene
 		uint32_t albedoTextureIndex = material.pbrMetallicRoughness.baseColorTexture.index;
 		uint32_t albedoImageIndex = model.textures[albedoTextureIndex].source;
 
+		// [TODO] hanlde filepath in a better way
 		std::string rootPath = "Assests\\Models\\Sponza\\";
 		rootPath += model.images[albedoImageIndex].uri;
 
@@ -98,14 +98,14 @@ namespace Dante::Scene
 		return indexBuffer->View();
 	}
 
-	void Mesh::Draw(ID3D12GraphicsCommandList* cmdList)
+	void Mesh::Draw(Rendering::Graphics& gfx)
 	{
+		ID3D12GraphicsCommandList* cmdList = gfx.GetCmdList();
 		cmdList->SetGraphicsRootConstantBufferView(1, objectCB->Resource()->GetGPUVirtualAddress());
 		cmdList->IASetVertexBuffers(0U, 1U, &vertexBuffer->View());
 		cmdList->IASetIndexBuffer(&indexBuffer->View());
 		cmdList->DrawIndexedInstanced(indexCount, 1U, 0U, 0U, 0U);
 	}
-
 
 	Model::Model(Rendering::Graphics& gfx, std::string path)
 	{
@@ -213,13 +213,11 @@ namespace Dante::Scene
 
 	}
 
-	
-
-	void Model::Draw(ID3D12GraphicsCommandList* cmdList)
+	void Model::Draw(Rendering::Graphics& gfx)
 	{
 		for (auto& mesh : meshes)
 		{
-			mesh->Draw(cmdList);
+			mesh->Draw(gfx);
 		}
 	}
 

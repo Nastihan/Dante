@@ -32,7 +32,7 @@ namespace Dante::Scene
 		Mesh(Rendering::Graphics& gfx, const tinygltf::Model& model, UINT meshIndex);
 		D3D12_VERTEX_BUFFER_VIEW VertexBufferView();
 		D3D12_INDEX_BUFFER_VIEW IndexBufferView();
-		void Draw(ID3D12GraphicsCommandList* cmdList);
+		void Draw(Rendering::Graphics& gfx);
 	private:
 		std::unique_ptr<Rendering::RHI::UploadBuffer<ObjectCB>> objectCB;
 		std::unique_ptr<Dante::Rendering::RHI::VertexBuffer<Vertex>> vertexBuffer;
@@ -45,7 +45,7 @@ namespace Dante::Scene
 	{
 	public:
 		Model(Rendering::Graphics& gfx, std::string path);
-		void Draw(ID3D12GraphicsCommandList* cmdList);
+		void Draw(Rendering::Graphics& gfx);
 	private:
 		std::vector<std::unique_ptr<Mesh>> meshes;
 		/*std::unique_ptr<Rendering::RHI::UploadBuffer<ObjectCB>> objectCB;
