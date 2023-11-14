@@ -17,7 +17,7 @@ namespace Dante::Rendering
 		gfx->Load();
 		
 		camera = std::make_unique<Scene::Camera>();
-		camera->SetView({ 0.0f, 0.0f, -6.0f }, { 0.0f, 0.0f, 1.0f }, { 0.0f, 1.0f, 0.0f });
+		camera->SetView({ 0.0f, 2.0f, -6.0f }, { 0.0f, 0.0f, 1.0f }, { 0.0f, 1.0f, 0.0f });
 		camera->SetProj(45.0f, Core::Window::Instance().GetAR(), 1.0f, 300.0f);
 
 		passCB = std::make_unique<RHI::UploadBuffer<PassConstants>>(Gfx(), 1, true);
@@ -47,7 +47,7 @@ namespace Dante::Rendering
 		DirectX::XMStoreFloat4x4(&passConstants.ViewProj, camera->GetViewProj());
 		DirectX::XMStoreFloat3(&passConstants.EyePosW, camera->GetPos());
 		passConstants.lights[0].Strength = { 0.55f, 0.55f, 0.55f };
-		passConstants.lights[0].Direction = {-0.57735f, -0.57735f, 0.57735f};
+		passConstants.lights[0].Direction = {-0.24f, -0.57735f, 0.57735f};
 
 
 		passCB->CopyData(0, passConstants);
