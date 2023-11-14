@@ -22,7 +22,7 @@ namespace Dante::Scene
 		DirectX::XMFLOAT4X4 world = Utils::NastihanMath::Identity4x4();
 		DirectX::XMFLOAT4 DiffuseAlbedo = { 1.0f, 1.0f, 1.0f, 1.0f, };
 		DirectX::XMFLOAT3 FresnelR0 = { 0.2f, 0.2f, 0.2f };
-		float Shininess = { 0.4f };
+		float Shininess = { 0.1f };
 		UINT albedoMapIndex;
 	};
 
@@ -48,10 +48,5 @@ namespace Dante::Scene
 		void Draw(Rendering::Graphics& gfx);
 	private:
 		std::vector<std::unique_ptr<Mesh>> meshes;
-		/*std::unique_ptr<Rendering::RHI::UploadBuffer<ObjectCB>> objectCB;
-		std::unique_ptr<Dante::Rendering::RHI::VertexBuffer<Vertex>> vertexBuffer;
-		std::unique_ptr<Dante::Rendering::RHI::IndexBuffer> indexBuffer;
-		std::unique_ptr<Rendering::RHI::Texture> albedoTex;
-		UINT indexCount;*/
 	};
 }

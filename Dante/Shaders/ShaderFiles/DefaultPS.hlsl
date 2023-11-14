@@ -1,10 +1,10 @@
 
 #ifndef NUM_DIR_LIGHTS
-    #define NUM_DIR_LIGHTS 1
+    #define NUM_DIR_LIGHTS 0
 #endif
 
 #ifndef NUM_POINT_LIGHTS
-    #define NUM_POINT_LIGHTS 0
+    #define NUM_POINT_LIGHTS 1
 #endif
 
 #ifndef NUM_SPOT_LIGHTS
@@ -49,8 +49,10 @@ float4 main(PS_Input input) : SV_TARGET
     float4 directLight = ComputeLighting(passCB.lights, mat, input.posW, input.normal, toEyeW, float3(1.0f, 1.0f, 1.0f));
     float4 litColor = directLight + ambient;
     float3 r = reflect(-toEyeW, input.normal);
-    float3 fresnelFactor = SchlickFresnel(objectCB.fresnelR0, input.normal, r);
-    litColor.rgb += shininess * fresnelFactor ;
+    float3 fresnelFactor = SchlickFresnel(fresnelR0, input.normal, r);
+    //litColor.rgb += shininess * fresnelFactor ;
+    
+    litColor.a = diffuseAlbedo.a;
     
     return litColor ;
 }
