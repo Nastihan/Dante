@@ -33,12 +33,12 @@ float4 main(PS_Input input) : SV_TARGET
     
     Texture2D albedoTexture = ResourceDescriptorHeap[albedoMapIndex];
     // alpha testing
-    if (albedoTexture.Sample(samAnisotropicWrap, input.tc).a  < 0.1f)
+    if (albedoTexture.Sample(samAnisotropicWrap, input.tc).a < 0.1f)
     {
         clip(-1);
     }
     
-    diffuseAlbedo *= albedoTexture.Sample(samLinearWrap, input.tc);
+    diffuseAlbedo *= albedoTexture.Sample(samAnisotropicWrap, input.tc);
     
     
     
