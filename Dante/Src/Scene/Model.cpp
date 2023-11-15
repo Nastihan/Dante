@@ -35,6 +35,23 @@ namespace Dante::Scene
 		int const tcByteStride = tcAccessor.ByteStride(tcBufferView);
 		uint8_t const* texcoords = &tcBuffer.data[tcBufferView.byteOffset + tcAccessor.byteOffset];
 
+		uint8_t const* tangentss = nullptr; 
+		int tangentByteStridee;
+		bool dirty = false;
+		auto tangentAttrIndex = model.meshes[0].primitives[meshIndex].attributes.find("TANGENT");
+		if (tangentAttrIndex != model.meshes[0].primitives[meshIndex].attributes.end())
+		{
+			dirty = true;
+
+			const tinygltf::Accessor& tangentAccessor = model.accessors[tangentAttrIndex->second];
+			const tinygltf::BufferView& tangentBufferView = model.bufferViews[tangentAccessor.bufferView];
+			const tinygltf::Buffer& tangentBuffer = model.buffers[tangentBufferView.buffer];
+			int const tangentByteStride = tangentAccessor.ByteStride(tangentBufferView);
+			uint8_t const* tangents = &tangentBuffer.data[tangentBufferView.byteOffset + tangentAccessor.byteOffset];
+			tangentss = tangents;
+			tangentByteStridee = tangentByteStride;
+		}
+
 		for (size_t i = 0; i < positionAccessor.count; i++)
 		{
 			Vertex vertex{};
@@ -49,6 +66,12 @@ namespace Dante::Scene
 			vertex.tc.x = (reinterpret_cast<float const*>(texcoords + (i * tcByteStride)))[0];
 			vertex.tc.y = (reinterpret_cast<float const*>(texcoords + (i * tcByteStride)))[1];
 
+			if (dirty)
+			{
+				vertex.tangents.x = (reinterpret_cast<float const*>(tangentss + (i * tangentByteStridee)))[0];
+				vertex.tangents.y = (reinterpret_cast<float const*>(tangentss + (i * tangentByteStridee)))[1];
+				vertex.tangents.z = (reinterpret_cast<float const*>(tangentss + (i * tangentByteStridee)))[2];
+			}
 			vertices.push_back(vertex);
 		}
 
@@ -71,19 +94,35 @@ namespace Dante::Scene
 
 		ObjectCB objCB;
 		DirectX::XMStoreFloat4x4(&objCB.world, DirectX::XMMatrixTranspose(DirectX::XMMatrixScaling(0.1f, 0.1f, 0.1f)));
-		objCB.albedoMapIndex = gfx.CbvSrvHeap().GetCurrDescriptorIndex();
+
 
 		auto& material = model.materials[model.meshes[0].primitives[meshIndex].material];
-		uint32_t albedoTextureIndex = material.pbrMetallicRoughness.baseColorTexture.index;
-		uint32_t albedoImageIndex = model.textures[albedoTextureIndex].source;
+		if (material.pbrMetallicRoughness.baseColorTexture.index > 0)
+		{
+			objCB.albedoMapIndex = gfx.CbvSrvHeap().GetCurrDescriptorIndex();
+			uint32_t albedoTextureIndex = material.pbrMetallicRoughness.baseColorTexture.index;
+			uint32_t albedoImageIndex = model.textures[albedoTextureIndex].source;
+			// [TODO] hanlde filepath in a better way
+			std::string rootPath = "Assests\\Models\\Sponza\\";
+			rootPath += model.images[albedoImageIndex].uri;
 
-		// [TODO] hanlde filepath in a better way
-		std::string rootPath = "Assests\\Models\\Sponza\\";
-		rootPath += model.images[albedoImageIndex].uri;
+			auto temp = Utils::ToWide(rootPath);
+			albedoTex = std::make_unique<Rendering::RHI::Texture>(gfx,
+				temp);
+		}
+		if (material.normalTexture.index > 0)
+		{
+			objCB.normalMapIndex = gfx.CbvSrvHeap().GetCurrDescriptorIndex();
+			uint32_t normalTextureIndex = material.normalTexture.index;
+			uint32_t normalImageIndex = model.textures[normalTextureIndex].source;
+			// [TODO] hanlde filepath in a better way
+			std::string rootPath = "Assests\\Models\\Sponza\\";
+			rootPath += model.images[normalImageIndex].uri;
 
-		auto temp = Utils::ToWide(rootPath);
-		albedoTex = std::make_unique<Rendering::RHI::Texture>(gfx,
-			temp);
+			auto temp = Utils::ToWide(rootPath);
+			normalTex = std::make_unique<Rendering::RHI::Texture>(gfx,
+				temp);
+		}
 		objectCB = std::make_unique<Rendering::RHI::UploadBuffer<ObjectCB>>(gfx, 1, true);
 		objectCB->CopyData(0, objCB); 
 	}

@@ -5,6 +5,7 @@ struct VS_Input
     float3 pos : POSITION;
     float3 normal : NORMAL;
     float2 tc : TEXCOORD;
+    float3 tangent : TANGENT;
 };
 
 struct VS_Output
@@ -14,6 +15,7 @@ struct VS_Output
     float4 posH : SV_Position;
     float3 normal : NORMAL;
     float2 tc : TEXCOORD;
+    float3 tangent : TANGENT;
 };
 
 VS_Output main( VS_Input input)
@@ -25,5 +27,6 @@ VS_Output main( VS_Input input)
     output.posH = mul(posW, passCB.viewProj);
     output.normal = mul(input.normal, (float3x3) objectCB.world);
     output.tc = input.tc;
+    output.tangent = mul(input.tangent, (float3x3) objectCB.world);
 	return output;
 }

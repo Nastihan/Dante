@@ -15,6 +15,7 @@ namespace Dante::Scene
 		DirectX::XMFLOAT3 pos;
 		DirectX::XMFLOAT3 normal;
 		DirectX::XMFLOAT2 tc;
+		DirectX::XMFLOAT3 tangents;
 	};
 
 	struct ObjectCB
@@ -23,7 +24,8 @@ namespace Dante::Scene
 		DirectX::XMFLOAT4 DiffuseAlbedo = { 1.0f, 1.0f, 1.0f, 1.0f, };
 		DirectX::XMFLOAT3 FresnelR0 = { 0.2f, 0.2f, 0.2f };
 		float Shininess = { 0.1f };
-		UINT albedoMapIndex;
+		UINT albedoMapIndex = -1;
+		UINT normalMapIndex = -1;
 	};
 
 	class Mesh
@@ -38,6 +40,7 @@ namespace Dante::Scene
 		std::unique_ptr<Dante::Rendering::RHI::VertexBuffer<Vertex>> vertexBuffer;
 		std::unique_ptr<Dante::Rendering::RHI::IndexBuffer> indexBuffer;
 		std::unique_ptr<Rendering::RHI::Texture> albedoTex;
+		std::unique_ptr<Rendering::RHI::Texture> normalTex;
 		UINT indexCount;
 	};
 

@@ -47,7 +47,7 @@ namespace Dante::Rendering
 		DirectX::XMStoreFloat4x4(&passConstants.ViewProj, camera->GetViewProj());
 		DirectX::XMStoreFloat3(&passConstants.EyePosW, camera->GetPos());
 		passConstants.lights[0].Strength = { 0.95f, 0.95f, 0.95f };
-		passConstants.lights[0].Position = { 0.0f, 4.0f, 0.0f };
+		passConstants.lights[0].Position = { 0.0f, 15.0f, 2.0f };
 		passConstants.lights[0].Direction = {-0.24f, -0.57735f, 0.57735f};
 
 

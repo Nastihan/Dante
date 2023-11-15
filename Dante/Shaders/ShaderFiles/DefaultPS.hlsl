@@ -20,6 +20,7 @@ struct PS_Input
     float4 posH : SV_Position;
     float3 normal : NORMAL;
     float2 tc : TEXCOORD;
+    float3 tangent : TANGENT;
 };
 
 float4 main(PS_Input input) : SV_TARGET
@@ -28,8 +29,16 @@ float4 main(PS_Input input) : SV_TARGET
     float3 fresnelR0 = objectCB.fresnelR0;
     float shininess = objectCB.shininess;
     uint albedoMapIndex = objectCB.albedoMapIndex;
+    uint normalMapIndex = objectCB.normalMapIndex;
     // renormalize
     input.normal = normalize(input.normal);
+    if (normalMapIndex != -1)
+    {
+        Texture2D normalTexture = ResourceDescriptorHeap[normalMapIndex];
+        float4 normalSample = normalTexture.Sample(samAnisotropicWrap, input.tc);
+        float3 normal = NormalSampleToWorldSpace(normalSample, input.normal, input.tangent);
+        input.normal = normal;
+    }
     
     Texture2D albedoTexture = ResourceDescriptorHeap[albedoMapIndex];
     // alpha testing
@@ -37,9 +46,10 @@ float4 main(PS_Input input) : SV_TARGET
     {
         clip(-1);
     }
-    
-    diffuseAlbedo *= albedoTexture.Sample(samAnisotropicWrap, input.tc);
-    
+    if (albedoMapIndex!= -1)
+    {
+        diffuseAlbedo *= albedoTexture.Sample(samAnisotropicWrap, input.tc);
+    }
     
     
     float3 toEyeW = normalize(passCB.eyePosW -input.posW);
