@@ -430,6 +430,7 @@ namespace Dante::Rendering
 		Chk(device->CreateGraphicsPipelineState(&opaquePsoDesc, ID(pSOs["defaultPSO"])));
 
 		D3D12_GRAPHICS_PIPELINE_STATE_DESC cubeMapPsoDesc = opaquePsoDesc;
+		cubeMapPsoDesc.pRootSignature = rootSignatures["defaultRS"].Get();
 		cubeMapPsoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
 		cubeMapPsoDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
 		cubeMapPsoDesc.VS = CD3DX12_SHADER_BYTECODE(shaders["cubeMapVS"].Get());

@@ -88,7 +88,7 @@ namespace Dante::Rendering
 
 		// Draw CubeMap
 		cmdList->SetPipelineState(gfx->GetPSO("cubeMapPSO"));
-		
+		skySphere->Draw(Gfx());
 
 
 

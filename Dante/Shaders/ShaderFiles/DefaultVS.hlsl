@@ -18,6 +18,18 @@ struct VS_Output
     float3 tangent : TANGENT;
 };
 
+
+struct ObjectCB
+{
+    float4x4 world;
+    float4 diffuseAlbedo;
+    float3 fresnelR0;
+    float shininess;
+    uint albedoMapIndex;
+    uint normalMapIndex;
+};
+ConstantBuffer<ObjectCB> objectCB : register(b1);
+
 VS_Output main( VS_Input input)
 {
     VS_Output output;

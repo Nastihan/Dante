@@ -23,6 +23,18 @@ struct PS_Input
     float3 tangent : TANGENT;
 };
 
+
+struct ObjectCB
+{
+    float4x4 world;
+    float4 diffuseAlbedo;
+    float3 fresnelR0;
+    float shininess;
+    uint albedoMapIndex;
+    uint normalMapIndex;
+};
+ConstantBuffer<ObjectCB> objectCB : register(b1);
+
 float4 main(PS_Input input) : SV_TARGET
 {
     float4 diffuseAlbedo = objectCB.diffuseAlbedo;

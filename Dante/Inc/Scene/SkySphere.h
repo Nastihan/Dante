@@ -62,7 +62,7 @@ namespace Dante::Scene
 
 		void Draw(Rendering::Graphics& gfx)
 		{
-			gfx.GetCmdList()->SetComputeRootConstantBufferView(1U, objectCB->Resource()->GetGPUVirtualAddress());
+			gfx.GetCmdList()->SetGraphicsRootConstantBufferView(1U, objectCB->Resource()->GetGPUVirtualAddress());
 			gfx.GetCmdList()->IASetVertexBuffers(0, 1, &vertexBuffer->View());
 			gfx.GetCmdList()->IASetIndexBuffer(&indexBuffer->View());
 			gfx.GetCmdList()->DrawIndexedInstanced(indexCount, 1U, 0U, 0U, 0U);

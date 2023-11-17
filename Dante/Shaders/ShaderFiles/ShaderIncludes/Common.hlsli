@@ -1,16 +1,6 @@
 #include "LightingUtil.hlsli"
 
 
-struct ObjectCB
-{
-    float4x4 world;
-    float4 diffuseAlbedo;
-    float3 fresnelR0;
-    float shininess;
-    uint albedoMapIndex;
-    uint normalMapIndex;
-};
-ConstantBuffer<ObjectCB> objectCB : register(b1);
 
 struct PassCB
 {
