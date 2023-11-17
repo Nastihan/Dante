@@ -338,6 +338,8 @@ namespace Dante::Rendering
 	{
 		Chk(D3DReadFileToBlob(L"Shaders\\ShaderBins\\DefaultVS.cso", shaders["defaultVS"].GetAddressOf()));
 		Chk(D3DReadFileToBlob(L"Shaders\\ShaderBins\\DefaultPS.cso", shaders["defaultPS"].GetAddressOf()));
+		Chk(D3DReadFileToBlob(L"Shaders\\ShaderBins\\CubeMapVS.cso", shaders["cubeMapVS"].GetAddressOf()));
+		Chk(D3DReadFileToBlob(L"Shaders\\ShaderBins\\CubeMapPS.cso", shaders["cubeMapPS"].GetAddressOf()));
 	}
 
 	void Graphics::BuildStaticSamplers(std::array<CD3DX12_STATIC_SAMPLER_DESC, 6>& samplers)
@@ -408,24 +410,33 @@ namespace Dante::Rendering
 
 		};
 
-		D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc{};
-		psoDesc.InputLayout = { inputLayout.data(), (UINT)inputLayout.size() };
-		psoDesc.pRootSignature = rootSignatures["defaultRS"].Get();
-		psoDesc.VS = CD3DX12_SHADER_BYTECODE(shaders["defaultVS"].Get());
-		psoDesc.PS = CD3DX12_SHADER_BYTECODE(shaders["defaultPS"].Get());
-		psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-		psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-		psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
-		psoDesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
-		psoDesc.SampleMask = UINT_MAX;
-		psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-		psoDesc.NumRenderTargets = 1;
-		psoDesc.RTVFormats[0] = backBufferFormat;
-		psoDesc.SampleDesc.Count = msaaEnabled ? 4 : 1;
-		psoDesc.SampleDesc.Quality = msaaEnabled ? (msaaQuality - 1) : 0;
-		psoDesc.DSVFormat = depthStencilFormat;
+		D3D12_GRAPHICS_PIPELINE_STATE_DESC opaquePsoDesc{};
+		opaquePsoDesc.InputLayout = { inputLayout.data(), (UINT)inputLayout.size() };
+		opaquePsoDesc.pRootSignature = rootSignatures["defaultRS"].Get();
+		opaquePsoDesc.VS = CD3DX12_SHADER_BYTECODE(shaders["defaultVS"].Get());
+		opaquePsoDesc.PS = CD3DX12_SHADER_BYTECODE(shaders["defaultPS"].Get());
+		opaquePsoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+		opaquePsoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+		opaquePsoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
+		opaquePsoDesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+		opaquePsoDesc.SampleMask = UINT_MAX;
+		opaquePsoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+		opaquePsoDesc.NumRenderTargets = 1;
+		opaquePsoDesc.RTVFormats[0] = backBufferFormat;
+		opaquePsoDesc.SampleDesc.Count = msaaEnabled ? 4 : 1;
+		opaquePsoDesc.SampleDesc.Quality = msaaEnabled ? (msaaQuality - 1) : 0;
+		opaquePsoDesc.DSVFormat = depthStencilFormat;
 
-		Chk(device->CreateGraphicsPipelineState(&psoDesc, ID(pSOs["defaultPSO"])));
+		Chk(device->CreateGraphicsPipelineState(&opaquePsoDesc, ID(pSOs["defaultPSO"])));
+
+		D3D12_GRAPHICS_PIPELINE_STATE_DESC cubeMapPsoDesc = opaquePsoDesc;
+		cubeMapPsoDesc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+		cubeMapPsoDesc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
+		cubeMapPsoDesc.VS = CD3DX12_SHADER_BYTECODE(shaders["cubeMapVS"].Get());
+		cubeMapPsoDesc.PS = CD3DX12_SHADER_BYTECODE(shaders["cubeMapPS"].Get());
+
+		Chk(device->CreateGraphicsPipelineState(&cubeMapPsoDesc, ID(pSOs["cubeMapPSO"])));
+
 	}
 
 	/////////////////////////// Getters

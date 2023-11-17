@@ -167,6 +167,7 @@
   <ItemGroup>
     <ClInclude Include="Inc\Core\Application.h" />
     <ClInclude Include="Inc\Core\Window.h" />
+    <ClInclude Include="Inc\Scene\SkySphere.h" />
     <ClInclude Include="Inc\Rendering\Graphics.h" />
     <ClInclude Include="Inc\Rendering\Renderer.h" />
     <ClInclude Include="Inc\Pch.h" />
@@ -237,6 +238,9 @@
   <ItemGroup>
     <None Include="Shaders\ShaderFiles\ShaderIncludes\Common.hlsli" />
     <None Include="Shaders\ShaderFiles\ShaderIncludes\LightingUtil.hlsli" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assests\Textures\snowcube1024.dds" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

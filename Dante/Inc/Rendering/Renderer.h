@@ -8,6 +8,7 @@
 #include <Rendering/RHI/IndexBuffer.h>
 #include "Scene/Camera.h"
 #include "Scene/Model.h"
+#include "Scene/SkySphere.h"
 
 namespace Dante::Rendering
 {
@@ -30,25 +31,13 @@ namespace Dante::Rendering
 	struct PassConstants
 	{
 		DirectX::XMFLOAT4X4 View = Utils::NastihanMath::Identity4x4();
-		//DirectX::XMFLOAT4X4 InvView = Utils::NastihanMath::Identity4x4();
 		DirectX::XMFLOAT4X4 Proj = Utils::NastihanMath::Identity4x4();
-		//DirectX::XMFLOAT4X4 InvProj = Utils::NastihanMath::Identity4x4();
 		DirectX::XMFLOAT4X4 ViewProj = Utils::NastihanMath::Identity4x4();
-		//DirectX::XMFLOAT4X4 InvViewProj = Utils::NastihanMath::Identity4x4();
-		//DirectX::XMFLOAT4X4 ShadowTransform = Utils::NastihanMath::Identity4x4();
 		DirectX::XMFLOAT3 EyePosW = { 0.0f, 0.0f, 0.0f };
 		float padding;
-
 		DirectX::XMFLOAT4 ambientLight = { 0.10f, 0.10f, 0.10f, 1.0f };
-
 		Light lights[16];
-		//float cbPerObjectPad1 = 0.0f;
-		//DirectX::XMFLOAT2 RenderTargetSize = { 0.0f, 0.0f };
-		//DirectX::XMFLOAT2 InvRenderTargetSize = { 0.0f, 0.0f };
-		//float NearZ = 0.0f;
-		//float FarZ = 0.0f;
-		//float TotalTime = 0.0f;
-		//float DeltaTime = 0.0f;
+		
 	};
 	
 	class Renderer
@@ -74,10 +63,13 @@ namespace Dante::Rendering
 	private:
 		std::unique_ptr<Graphics> gfx{};
 		std::unique_ptr<Scene::Camera> camera;
-		DirectX::XMMATRIX viewProj;
 		PassConstants passConstants;
 		std::unique_ptr<RHI::UploadBuffer<PassConstants>> passCB = nullptr;
+
 		std::unique_ptr<Scene::Model> model;
+		std::unique_ptr<Scene::SkySphere> skySphere;
+		
+
 
 
 

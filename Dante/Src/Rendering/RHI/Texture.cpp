@@ -70,9 +70,5 @@ namespace Dante::Rendering::RHI
 
 			gfx.GetDevice()->CreateShaderResourceView(resource.Get(), &srvDesc, gfx.CbvSrvHeap().GetCurrHandle().cpuHandle);
 			gfx.CbvSrvHeap().OffsetCurrHandle();
-		
-		
-			
-		
 	}
 }
