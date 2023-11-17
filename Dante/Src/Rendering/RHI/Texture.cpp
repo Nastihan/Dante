@@ -20,10 +20,9 @@
 
 namespace Dante::Rendering::RHI
 {
-	Texture::Texture(Graphics& gfx, std::wstring filePath, bool isCubeMap)
+	Texture::Texture(Graphics& gfx, std::wstring filePath)
 	{
-		if (!isCubeMap)
-		{
+		
 			void* texData = nullptr;
 			int width{}, height{}, comp{};
 
@@ -71,11 +70,9 @@ namespace Dante::Rendering::RHI
 
 			gfx.GetDevice()->CreateShaderResourceView(resource.Get(), &srvDesc, gfx.CbvSrvHeap().GetCurrHandle().cpuHandle);
 			gfx.CbvSrvHeap().OffsetCurrHandle();
-		}
-
-
-
+		
+		
+			
+		
 	}
-
-
 }
