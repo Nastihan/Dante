@@ -1,8 +1,8 @@
 //***************************************************************************************
 // GeometryGenerator.cpp by Frank Luna (C) 2011 All Rights Reserved.
 //***************************************************************************************
-
-#include "GeometryGenerator.h"
+#include "Pch.h"
+#include "Utils/GeometryGenerator.h"
 #include <algorithm>
 
 using namespace DirectX;

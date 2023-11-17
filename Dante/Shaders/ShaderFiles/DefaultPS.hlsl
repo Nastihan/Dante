@@ -36,7 +36,7 @@ float4 main(PS_Input input) : SV_TARGET
     {
         Texture2D normalTexture = ResourceDescriptorHeap[normalMapIndex];
         float4 normalSample = normalTexture.Sample(samAnisotropicWrap, input.tc);
-        float3 normal = NormalSampleToWorldSpace(normalSample, input.normal, input.tangent);
+        float3 normal = NormalSampleToWorldSpace(normalSample.rgb, input.normal, input.tangent);
         input.normal = normal;
     }
     

@@ -145,16 +145,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Utils\GeometryGenerator.cpp" />
+    <ClCompile Include="Src\Utils\DDSTextureLoader.cpp" />
     <ClCompile Include="Src\Rendering\RHI\DescriptorHeap.cpp" />
     <ClCompile Include="Src\Rendering\RHI\Texture.cpp" />
     <ClCompile Include="Src\Scene\Model.cpp" />
     <ClCompile Include="Src\Scene\Camera.cpp" />
-    <ClCompile Include="Src\Utils\DDSTextureLoader.cpp" />
     <ClCompile Include="Src\Utils\DXUtil.cpp" />
     <ClCompile Include="Src\Rendering\Graphics.cpp" />
     <ClCompile Include="Src\Rendering\Renderer.cpp" />
     <ClCompile Include="Src\Core\Window.cpp" />
-    <ClCompile Include="Src\Utils\GeometryGenerator.cpp" />
     <ClCompile Include="Src\Utils\Timer.cpp" />
     <ClCompile Include="Src\Core\Application.cpp" />
     <ClCompile Include="Src\Main.cpp" />
@@ -162,7 +162,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="ThirdParty\DirectX\DDSTextureLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Inc\Core\Application.h" />
@@ -186,7 +185,6 @@
     <ClInclude Include="Inc\Utils\Singleton.h" />
     <ClInclude Include="Inc\Utils\Timer.h" />
     <ClInclude Include="ThirdParty\DirectX\d3dx12.h" />
-    <ClInclude Include="ThirdParty\DirectX\DDSTextureLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\ShaderFiles\DefaultPS.hlsl">
