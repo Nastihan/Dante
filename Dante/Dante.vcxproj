@@ -149,10 +149,12 @@
     <ClCompile Include="Src\Rendering\RHI\Texture.cpp" />
     <ClCompile Include="Src\Scene\Model.cpp" />
     <ClCompile Include="Src\Scene\Camera.cpp" />
+    <ClCompile Include="Src\Utils\DDSTextureLoader.cpp" />
     <ClCompile Include="Src\Utils\DXUtil.cpp" />
     <ClCompile Include="Src\Rendering\Graphics.cpp" />
     <ClCompile Include="Src\Rendering\Renderer.cpp" />
     <ClCompile Include="Src\Core\Window.cpp" />
+    <ClCompile Include="Src\Utils\GeometryGenerator.cpp" />
     <ClCompile Include="Src\Utils\Timer.cpp" />
     <ClCompile Include="Src\Core\Application.cpp" />
     <ClCompile Include="Src\Main.cpp" />
@@ -175,8 +177,10 @@
     <ClInclude Include="Inc\Rendering\RHI\UploadBuffer.h" />
     <ClInclude Include="Inc\Scene\Camera.h" />
     <ClInclude Include="Inc\Scene\Model.h" />
+    <ClInclude Include="Inc\Utils\DDSTextureLoader.h" />
     <ClInclude Include="Inc\Utils\DXUtil.h" />
     <ClInclude Include="Inc\Utils\Exception.h" />
+    <ClInclude Include="Inc\Utils\GeometryGenerator.h" />
     <ClInclude Include="Inc\Utils\NastihanMath.h" />
     <ClInclude Include="Inc\Utils\NastihanUtil.h" />
     <ClInclude Include="Inc\Utils\Singleton.h" />

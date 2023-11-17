@@ -6,8 +6,7 @@ namespace Dante::Rendering::RHI
 	class Texture
 	{
 	public:
-		Texture(Graphics& gfx, std::wstring filePath);
-		Texture(Graphics& gfx, const void* data);
+		Texture(Graphics& gfx, std::wstring filePath, bool isCubeMap = false);
 
 	private:
 		Microsoft::WRL::ComPtr<ID3D12Resource> resource{};
