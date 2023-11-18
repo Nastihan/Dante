@@ -37,7 +37,6 @@ namespace Dante::Rendering
 		float padding;
 		DirectX::XMFLOAT4 ambientLight = { 0.10f, 0.10f, 0.10f, 1.0f };
 		Light lights[16];
-		
 	};
 	
 	class Renderer
