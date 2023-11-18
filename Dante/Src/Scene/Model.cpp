@@ -5,7 +5,7 @@
 
 namespace Dante::Scene
 {
-	Mesh::Mesh(Rendering::Graphics& gfx, const tinygltf::Model& model, UINT meshIndex)
+	Mesh::Mesh(Rendering::Graphics& gfx, const tinygltf::Model& model, UINT meshIndex, std::string path)
 	{
 
 		std::vector<Vertex> vertices;
@@ -102,26 +102,22 @@ namespace Dante::Scene
 			objCB.albedoMapIndex = gfx.CbvSrvHeap().GetCurrDescriptorIndex();
 			uint32_t albedoTextureIndex = material.pbrMetallicRoughness.baseColorTexture.index;
 			uint32_t albedoImageIndex = model.textures[albedoTextureIndex].source;
-			// [TODO] hanlde filepath in a better way
-			std::string rootPath = "Assests\\Models\\Sponza\\";
-			rootPath += model.images[albedoImageIndex].uri;
 
-			auto temp = Utils::ToWide(rootPath);
+			auto imagePath = Utils::FolderFromFilePath(path) + "\\" + model.images[albedoImageIndex].uri;
+
 			albedoTex = std::make_unique<Rendering::RHI::Texture>(gfx,
-				temp);
+				Utils::ToWide(imagePath));
 		}
 		if (material.normalTexture.index > 0)
 		{
 			objCB.normalMapIndex = gfx.CbvSrvHeap().GetCurrDescriptorIndex();
 			uint32_t normalTextureIndex = material.normalTexture.index;
 			uint32_t normalImageIndex = model.textures[normalTextureIndex].source;
-			// [TODO] hanlde filepath in a better way
-			std::string rootPath = "Assests\\Models\\Sponza\\";
-			rootPath += model.images[normalImageIndex].uri;
+			
+			auto imagePath = Utils::FolderFromFilePath(path) + "\\" + model.images[normalImageIndex].uri;
 
-			auto temp = Utils::ToWide(rootPath);
 			normalTex = std::make_unique<Rendering::RHI::Texture>(gfx,
-				temp);
+				Utils::ToWide(imagePath));
 		}
 		objectCB = std::make_unique<Rendering::RHI::UploadBuffer<ObjectCB>>(gfx, 1, true);
 		objectCB->CopyData(0, objCB); 
@@ -169,7 +165,7 @@ namespace Dante::Scene
 
 		for (UINT i = 0; i < model.meshes[0].primitives.size(); i++)
 		{
-			meshes.push_back(std::make_unique<Mesh>(gfx, model, i));
+			meshes.push_back(std::make_unique<Mesh>(gfx, model, i, path));
 		}
 
 		/*

@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <filesystem>
 
 
 namespace Dante::Utils
@@ -23,5 +24,19 @@ namespace Dante::Utils
 		WCHAR buffer[512];
 		MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, buffer, 512);
 		return std::wstring(buffer);
+	}
+
+	inline std::string FolderFromFilePath(std::string& filePath)
+	{
+		std::filesystem::path fullPath(filePath);
+
+		if (!std::filesystem::exists(fullPath))
+		{
+			throw std::runtime_error("File not found: " + filePath);
+		}
+
+		std::filesystem::path folderPath = fullPath.parent_path();
+
+		return folderPath.string();
 	}
 }

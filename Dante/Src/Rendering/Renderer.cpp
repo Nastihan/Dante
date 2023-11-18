@@ -18,7 +18,7 @@ namespace Dante::Rendering
 		
 		camera = std::make_unique<Scene::Camera>();
 		camera->SetView({ 0.0f, 8.0f, -6.0f }, { 0.0f, 0.0f, 1.0f }, { 0.0f, 1.0f, 0.0f });
-		camera->SetProj(45.0f, Core::Window::Instance().GetAR(), 1.0f, 300.0f);
+		camera->SetProj(45.0f, Core::Window::Instance().GetAR(), 1.0f, 400.0f);
 
 		passCB = std::make_unique<RHI::UploadBuffer<PassConstants>>(Gfx(), 1, true);
 
