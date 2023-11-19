@@ -22,8 +22,11 @@ namespace Dante::Rendering
 
 		passCB = std::make_unique<RHI::UploadBuffer<PassConstants>>(Gfx(), 1, true);
 
-		model = std::make_unique<Scene::Model>(Gfx(),
-			"Assests\\Models\\Sponza\\Sponza.gltf");
+		sponza = std::make_unique<Scene::Model>(Gfx(),
+			"Assests\\Models\\SponzaOld\\Sponza.gltf");
+
+		//aBeautifulGame = std::make_unique<Scene::Model>(Gfx(),
+			//"Assests\\Models\\ABeautifulGame\\ABeautifulGame.gltf");
 
 		skySphere = std::make_unique<Scene::SkySphere>(Gfx());
 
@@ -84,7 +87,9 @@ namespace Dante::Rendering
 		cmdList->SetGraphicsRootConstantBufferView(0U, passCB->Resource()->GetGPUVirtualAddress());
 
 		// Draw Opaque
-		model->Draw(Gfx());
+		sponza->Draw(Gfx());
+
+		//aBeautifulGame->Draw(Gfx());
 
 		// Draw CubeMap
 		cmdList->SetPipelineState(gfx->GetPSO("cubeMapPSO"));

@@ -65,7 +65,8 @@ namespace Dante::Rendering
 		PassConstants passConstants;
 		std::unique_ptr<RHI::UploadBuffer<PassConstants>> passCB = nullptr;
 
-		std::unique_ptr<Scene::Model> model;
+		std::unique_ptr<Scene::Model> sponza;
+		std::unique_ptr<Scene::Model> aBeautifulGame;
 		std::unique_ptr<Scene::SkySphere> skySphere;
 		
 
