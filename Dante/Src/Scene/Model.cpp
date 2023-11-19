@@ -150,16 +150,34 @@ namespace Dante::Scene
 		tinygltf::TinyGLTF context;
 		tinygltf::Model model;
 
-		if (!context.LoadASCIIFromFile(&model, &error, &warning, path))
+		if (path.find(".glb") != std::string::npos)
 		{
-			if (!error.empty())
+			if (!context.LoadBinaryFromFile(&model, &error, &warning, path))
 			{
-				OutputDebugStringA(error.c_str());
-			}
+				if (!error.empty())
+				{
+					OutputDebugStringA(error.c_str());
+				}
 
-			if (!warning.empty())
+				if (!warning.empty())
+				{
+					OutputDebugStringA(warning.c_str());
+				}
+			}
+		}
+		else
+		{
+			if (!context.LoadASCIIFromFile(&model, &error, &warning, path))
 			{
-				OutputDebugStringA(warning.c_str());
+				if (!error.empty())
+				{
+					OutputDebugStringA(error.c_str());
+				}
+
+				if (!warning.empty())
+				{
+					OutputDebugStringA(warning.c_str());
+				}
 			}
 		}
 

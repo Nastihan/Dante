@@ -23,7 +23,7 @@ namespace Dante::Rendering
 		passCB = std::make_unique<RHI::UploadBuffer<PassConstants>>(Gfx(), 1, true);
 
 		sponza = std::make_unique<Scene::Model>(Gfx(),
-			"Assests\\Models\\SponzaOld\\Sponza.gltf");
+			"Assests\\Models\\Sponza\\Sponza.glb");
 
 		//aBeautifulGame = std::make_unique<Scene::Model>(Gfx(),
 			//"Assests\\Models\\ABeautifulGame\\ABeautifulGame.gltf");
