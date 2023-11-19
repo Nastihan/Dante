@@ -32,8 +32,6 @@ namespace Dante::Rendering
 		ID3D12CommandList* cmdLists[] = { cmdList };
 		cmdQueue->ExecuteCommandLists((UINT)std::size(cmdLists), cmdLists);
 		gfx->FlushCmdQueue();
-
-
 	}
 
 	void Renderer::OnResize()
