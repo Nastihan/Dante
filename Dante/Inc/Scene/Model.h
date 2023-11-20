@@ -31,7 +31,7 @@ namespace Dante::Scene
 	class Mesh
 	{
 	public: 
-		Mesh(Rendering::Graphics& gfx, const tinygltf::Model& model, UINT meshIndex, std::string path);
+		Mesh(Rendering::Graphics& gfx, const tinygltf::Model& model, const tinygltf::Mesh& mesh, const tinygltf::Primitive& prim,std::string path, float scale);
 		D3D12_VERTEX_BUFFER_VIEW VertexBufferView();
 		D3D12_INDEX_BUFFER_VIEW IndexBufferView();
 		void Draw(Rendering::Graphics& gfx);
@@ -47,7 +47,7 @@ namespace Dante::Scene
 	class Model
 	{
 	public:
-		Model(Rendering::Graphics& gfx, std::string path);
+		Model(Rendering::Graphics& gfx, std::string path, float scale = 1.0f);
 		void Draw(Rendering::Graphics& gfx);
 	private:
 		std::vector<std::unique_ptr<Mesh>> meshes;

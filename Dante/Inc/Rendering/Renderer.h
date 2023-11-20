@@ -66,6 +66,7 @@ namespace Dante::Rendering
 		std::unique_ptr<RHI::UploadBuffer<PassConstants>> passCB = nullptr;
 
 		std::unique_ptr<Scene::Model> sponza;
+		std::unique_ptr<Scene::Model> helmet;
 		std::unique_ptr<Scene::Model> aBeautifulGame;
 		std::unique_ptr<Scene::SkySphere> skySphere;
 		

@@ -5,41 +5,42 @@
 
 namespace Dante::Scene
 {
-	Mesh::Mesh(Rendering::Graphics& gfx, const tinygltf::Model& model, UINT meshIndex, std::string path)
+	Mesh::Mesh(Rendering::Graphics& gfx, const tinygltf::Model& model, 
+		const tinygltf::Mesh& mesh, const tinygltf::Primitive& prim, std::string path, float scale)
 	{
-
+		
 		std::vector<Vertex> vertices;
 		std::vector<USHORT> indices;
-		
-		uint32_t indiciesIndex = model.meshes[0].primitives[meshIndex].indices;
+
+		uint32_t indiciesIndex = prim.indices;
 		const tinygltf::Accessor& indexAccessor = model.accessors[indiciesIndex];
 
-		auto positionAttrIndex = model.meshes[0].primitives[meshIndex].attributes.find("POSITION");
+		auto positionAttrIndex = prim.attributes.find("POSITION");
 		const tinygltf::Accessor& positionAccessor = model.accessors[positionAttrIndex->second];
 		const tinygltf::BufferView& positionBufferView = model.bufferViews[positionAccessor.bufferView];
 		const tinygltf::Buffer& positionBuffer = model.buffers[positionBufferView.buffer];
 		int const positionByteStride = positionAccessor.ByteStride(positionBufferView);
 		uint8_t const* positions = &positionBuffer.data[positionBufferView.byteOffset + positionAccessor.byteOffset];
 
-		auto normalAttrIndex = model.meshes[0].primitives[meshIndex].attributes.find("NORMAL");
+		auto normalAttrIndex = prim.attributes.find("NORMAL");
 		const tinygltf::Accessor& normalAccessor = model.accessors[normalAttrIndex->second];
 		const tinygltf::BufferView& normalBufferView = model.bufferViews[normalAccessor.bufferView];
 		const tinygltf::Buffer& normalBuffer = model.buffers[normalBufferView.buffer];
 		int const normalByteStride = normalAccessor.ByteStride(normalBufferView);
 		uint8_t const* normals = &normalBuffer.data[normalBufferView.byteOffset + normalAccessor.byteOffset];
 
-		auto tcAttrIndex = model.meshes[0].primitives[meshIndex].attributes.find("TEXCOORD_0");
+		auto tcAttrIndex = prim.attributes.find("TEXCOORD_0");
 		const tinygltf::Accessor& tcAccessor = model.accessors[tcAttrIndex->second];
 		const tinygltf::BufferView& tcBufferView = model.bufferViews[tcAccessor.bufferView];
 		const tinygltf::Buffer& tcBuffer = model.buffers[tcBufferView.buffer];
 		int const tcByteStride = tcAccessor.ByteStride(tcBufferView);
 		uint8_t const* texcoords = &tcBuffer.data[tcBufferView.byteOffset + tcAccessor.byteOffset];
 
-		uint8_t const* tangentss = nullptr; 
+		uint8_t const* tangentss = nullptr;
 		int tangentByteStridee;
 		bool dirty = false;
-		auto tangentAttrIndex = model.meshes[0].primitives[meshIndex].attributes.find("TANGENT");
-		if (tangentAttrIndex != model.meshes[0].primitives[meshIndex].attributes.end())
+		auto tangentAttrIndex = prim.attributes.find("TANGENT");
+		if (tangentAttrIndex != prim.attributes.end())
 		{
 			dirty = true;
 
@@ -85,7 +86,7 @@ namespace Dante::Scene
 			USHORT index = (USHORT)(reinterpret_cast<uint16_t const*>(indicesData + (i * indexByteStride)))[0];
 			indices.push_back(index);
 		}
-		
+
 
 		indexCount = (UINT)indices.size();
 
@@ -93,11 +94,11 @@ namespace Dante::Scene
 		indexBuffer = std::make_unique<Rendering::RHI::IndexBuffer>(gfx.GetDevice(), gfx.GetCmdList(), indices);
 
 		ObjectCB objCB;
-		DirectX::XMStoreFloat4x4(&objCB.world, DirectX::XMMatrixTranspose(DirectX::XMMatrixScaling(0.1f, 0.1f, 0.1f)));
+		DirectX::XMStoreFloat4x4(&objCB.world, DirectX::XMMatrixTranspose(DirectX::XMMatrixScaling(scale, scale, scale)));
 
 
-		auto& material = model.materials[model.meshes[0].primitives[meshIndex].material];
-		if (material.pbrMetallicRoughness.baseColorTexture.index > 0)
+		auto& material = model.materials[prim.material];
+		if (material.pbrMetallicRoughness.baseColorTexture.index >= 0)
 		{
 			objCB.albedoMapIndex = gfx.CbvSrvHeap().GetCurrDescriptorIndex();
 			uint32_t albedoTextureIndex = material.pbrMetallicRoughness.baseColorTexture.index;
@@ -108,20 +109,137 @@ namespace Dante::Scene
 			albedoTex = std::make_unique<Rendering::RHI::Texture>(gfx,
 				Utils::ToWide(imagePath));
 		}
-		if (material.normalTexture.index > 0)
+		if (material.normalTexture.index >= 0)
 		{
 			objCB.normalMapIndex = gfx.CbvSrvHeap().GetCurrDescriptorIndex();
 			uint32_t normalTextureIndex = material.normalTexture.index;
 			uint32_t normalImageIndex = model.textures[normalTextureIndex].source;
-			
+
 			auto imagePath = Utils::FolderFromFilePath(path) + "\\" + model.images[normalImageIndex].uri;
 
 			normalTex = std::make_unique<Rendering::RHI::Texture>(gfx,
 				Utils::ToWide(imagePath));
 		}
 		objectCB = std::make_unique<Rendering::RHI::UploadBuffer<ObjectCB>>(gfx, 1, true);
-		objectCB->CopyData(0, objCB); 
-	}
+		objectCB->CopyData(0, objCB);
+		
+
+		{
+			/*std::vector<Vertex> vertices;
+			std::vector<USHORT> indices;
+
+			uint32_t indiciesIndex = model.meshes[meshIndex].primitives[meshIndex].indices;
+			const tinygltf::Accessor& indexAccessor = model.accessors[indiciesIndex];
+
+			auto positionAttrIndex = model.meshes[meshIndex].primitives[meshIndex].attributes.find("POSITION");
+			const tinygltf::Accessor& positionAccessor = model.accessors[positionAttrIndex->second];
+			const tinygltf::BufferView& positionBufferView = model.bufferViews[positionAccessor.bufferView];
+			const tinygltf::Buffer& positionBuffer = model.buffers[positionBufferView.buffer];
+			int const positionByteStride = positionAccessor.ByteStride(positionBufferView);
+			uint8_t const* positions = &positionBuffer.data[positionBufferView.byteOffset + positionAccessor.byteOffset];
+
+			auto normalAttrIndex = model.meshes[meshIndex].primitives[meshIndex].attributes.find("NORMAL");
+			const tinygltf::Accessor& normalAccessor = model.accessors[normalAttrIndex->second];
+			const tinygltf::BufferView& normalBufferView = model.bufferViews[normalAccessor.bufferView];
+			const tinygltf::Buffer& normalBuffer = model.buffers[normalBufferView.buffer];
+			int const normalByteStride = normalAccessor.ByteStride(normalBufferView);
+			uint8_t const* normals = &normalBuffer.data[normalBufferView.byteOffset + normalAccessor.byteOffset];
+
+			auto tcAttrIndex = model.meshes[meshIndex].primitives[meshIndex].attributes.find("TEXCOORD_0");
+			const tinygltf::Accessor& tcAccessor = model.accessors[tcAttrIndex->second];
+			const tinygltf::BufferView& tcBufferView = model.bufferViews[tcAccessor.bufferView];
+			const tinygltf::Buffer& tcBuffer = model.buffers[tcBufferView.buffer];
+			int const tcByteStride = tcAccessor.ByteStride(tcBufferView);
+			uint8_t const* texcoords = &tcBuffer.data[tcBufferView.byteOffset + tcAccessor.byteOffset];
+
+			uint8_t const* tangentss = nullptr;
+			int tangentByteStridee;
+			bool dirty = false;
+			auto tangentAttrIndex = model.meshes[meshIndex].primitives[meshIndex].attributes.find("TANGENT");
+			if (tangentAttrIndex != model.meshes[meshIndex].primitives[meshIndex].attributes.end())
+			{
+				dirty = true;
+
+				const tinygltf::Accessor& tangentAccessor = model.accessors[tangentAttrIndex->second];
+				const tinygltf::BufferView& tangentBufferView = model.bufferViews[tangentAccessor.bufferView];
+				const tinygltf::Buffer& tangentBuffer = model.buffers[tangentBufferView.buffer];
+				int const tangentByteStride = tangentAccessor.ByteStride(tangentBufferView);
+				uint8_t const* tangents = &tangentBuffer.data[tangentBufferView.byteOffset + tangentAccessor.byteOffset];
+				tangentss = tangents;
+				tangentByteStridee = tangentByteStride;
+			}
+
+			for (size_t i = 0; i < positionAccessor.count; i++)
+			{
+				Vertex vertex{};
+				vertex.pos.x = (reinterpret_cast<float const*>(positions + (i * positionByteStride)))[0];
+				vertex.pos.y = (reinterpret_cast<float const*>(positions + (i * positionByteStride)))[1];
+				vertex.pos.z = (reinterpret_cast<float const*>(positions + (i * positionByteStride)))[2];
+
+				vertex.normal.x = (reinterpret_cast<float const*>(normals + (i * normalByteStride)))[0];
+				vertex.normal.y = (reinterpret_cast<float const*>(normals + (i * normalByteStride)))[1];
+				vertex.normal.z = (reinterpret_cast<float const*>(normals + (i * normalByteStride)))[2];
+
+				vertex.tc.x = (reinterpret_cast<float const*>(texcoords + (i * tcByteStride)))[0];
+				vertex.tc.y = (reinterpret_cast<float const*>(texcoords + (i * tcByteStride)))[1];
+
+				if (dirty)
+				{
+					vertex.tangents.x = (reinterpret_cast<float const*>(tangentss + (i * tangentByteStridee)))[0];
+					vertex.tangents.y = (reinterpret_cast<float const*>(tangentss + (i * tangentByteStridee)))[1];
+					vertex.tangents.z = (reinterpret_cast<float const*>(tangentss + (i * tangentByteStridee)))[2];
+				}
+				vertices.push_back(vertex);
+			}
+
+			const tinygltf::BufferView& indexBufferView = model.bufferViews[indexAccessor.bufferView];
+			const tinygltf::Buffer& indexBufferBuffer = model.buffers[indexBufferView.buffer];
+			int const indexByteStride = indexAccessor.ByteStride(indexBufferView);
+			uint8_t const* indicesData = indexBufferBuffer.data.data() + indexBufferView.byteOffset + indexAccessor.byteOffset;
+
+			for (size_t i = 0; i < indexAccessor.count; i++)
+			{
+				USHORT index = (USHORT)(reinterpret_cast<uint16_t const*>(indicesData + (i * indexByteStride)))[0];
+				indices.push_back(index);
+			}
+
+
+			indexCount = (UINT)indices.size();
+
+			vertexBuffer = std::make_unique<Rendering::RHI::VertexBuffer<Vertex>>(gfx.GetDevice(), gfx.GetCmdList(), vertices);
+			indexBuffer = std::make_unique<Rendering::RHI::IndexBuffer>(gfx.GetDevice(), gfx.GetCmdList(), indices);
+
+			ObjectCB objCB;
+			DirectX::XMStoreFloat4x4(&objCB.world, DirectX::XMMatrixTranspose(DirectX::XMMatrixScaling(0.1f, 0.1f, 0.1f)));
+
+
+			auto& material = model.materials[model.meshes[0].primitives[meshIndex].material];
+			if (material.pbrMetallicRoughness.baseColorTexture.index > 0)
+			{
+				objCB.albedoMapIndex = gfx.CbvSrvHeap().GetCurrDescriptorIndex();
+				uint32_t albedoTextureIndex = material.pbrMetallicRoughness.baseColorTexture.index;
+				uint32_t albedoImageIndex = model.textures[albedoTextureIndex].source;
+
+				auto imagePath = Utils::FolderFromFilePath(path) + "\\" + model.images[albedoImageIndex].uri;
+
+				albedoTex = std::make_unique<Rendering::RHI::Texture>(gfx,
+					Utils::ToWide(imagePath));
+			}
+			if (material.normalTexture.index > 0)
+			{
+				objCB.normalMapIndex = gfx.CbvSrvHeap().GetCurrDescriptorIndex();
+				uint32_t normalTextureIndex = material.normalTexture.index;
+				uint32_t normalImageIndex = model.textures[normalTextureIndex].source;
+
+				auto imagePath = Utils::FolderFromFilePath(path) + "\\" + model.images[normalImageIndex].uri;
+
+				normalTex = std::make_unique<Rendering::RHI::Texture>(gfx,
+					Utils::ToWide(imagePath));
+			}
+			objectCB = std::make_unique<Rendering::RHI::UploadBuffer<ObjectCB>>(gfx, 1, true);
+			objectCB->CopyData(0, objCB); */
+		}
+}
 
 	D3D12_VERTEX_BUFFER_VIEW Mesh::VertexBufferView()
 	{
@@ -142,7 +260,7 @@ namespace Dante::Scene
 		cmdList->DrawIndexedInstanced(indexCount, 1U, 0U, 0U, 0U);
 	}
 
-	Model::Model(Rendering::Graphics& gfx, std::string path)
+	Model::Model(Rendering::Graphics& gfx, std::string path, float scale)
 	{
 		std::string warning{};
 		std::string error{};
@@ -181,9 +299,12 @@ namespace Dante::Scene
 			}
 		}
 
-		for (UINT i = 0; i < model.meshes[0].primitives.size(); i++)
+		for (auto& mesh : model.meshes)
 		{
-			meshes.push_back(std::make_unique<Mesh>(gfx, model, i, path));
+			for (auto& prim : mesh.primitives)
+			{
+				meshes.push_back(std::make_unique<Mesh>(gfx, model, mesh, prim, path, scale));
+			}
 		}
 
 		/*

@@ -23,10 +23,11 @@ namespace Dante::Rendering
 		passCB = std::make_unique<RHI::UploadBuffer<PassConstants>>(Gfx(), 1, true);
 
 		sponza = std::make_unique<Scene::Model>(Gfx(),
-			"Assests\\Models\\Sponza\\Sponza.glb");
-
-		//aBeautifulGame = std::make_unique<Scene::Model>(Gfx(),
-			//"Assests\\Models\\ABeautifulGame\\ABeautifulGame.gltf");
+			"Assests\\Models\\Sponza\\Sponza.glb", 0.1f);
+		helmet = std::make_unique<Scene::Model>(Gfx(),
+			"Assests\\Models\\DamagedHelmet\\DamagedHelmet.gltf", 3.0f);
+		/*aBeautifulGame = std::make_unique<Scene::Model>(Gfx(),
+			"Assests\\Models\\ABeautifulGame\\ABeautifulGame.gltf", 15.0f);*/
 
 		skySphere = std::make_unique<Scene::SkySphere>(Gfx());
 
@@ -88,7 +89,7 @@ namespace Dante::Rendering
 
 		// Draw Opaque
 		sponza->Draw(Gfx());
-
+		helmet->Draw(Gfx());
 		//aBeautifulGame->Draw(Gfx());
 
 		// Draw CubeMap
