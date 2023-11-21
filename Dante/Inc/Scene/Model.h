@@ -24,8 +24,8 @@ namespace Dante::Scene
 		DirectX::XMFLOAT4 DiffuseAlbedo = { 1.0f, 1.0f, 1.0f, 1.0f, };
 		DirectX::XMFLOAT3 FresnelR0 = { 0.2f, 0.2f, 0.2f };
 		float Shininess = { 0.1f };
-		UINT albedoMapIndex = -1;
-		UINT normalMapIndex = -1;
+		int albedoMapIndex = { -1};
+		int normalMapIndex = { -1};
 	};
 
 	class Mesh

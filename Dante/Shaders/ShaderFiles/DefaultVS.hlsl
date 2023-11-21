@@ -25,8 +25,8 @@ struct ObjectCB
     float4 diffuseAlbedo;
     float3 fresnelR0;
     float shininess;
-    uint albedoMapIndex;
-    uint normalMapIndex;
+    int albedoMapIndex;
+    int normalMapIndex;
 };
 ConstantBuffer<ObjectCB> objectCB : register(b1);
 

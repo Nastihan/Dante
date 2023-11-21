@@ -38,11 +38,11 @@ namespace Dante::Scene
 
 		uint8_t const* tangentss = nullptr;
 		int tangentByteStridee;
-		bool dirty = false;
+		bool tangentDirty = false;
 		auto tangentAttrIndex = prim.attributes.find("TANGENT");
 		if (tangentAttrIndex != prim.attributes.end())
 		{
-			dirty = true;
+			tangentDirty = true;
 
 			const tinygltf::Accessor& tangentAccessor = model.accessors[tangentAttrIndex->second];
 			const tinygltf::BufferView& tangentBufferView = model.bufferViews[tangentAccessor.bufferView];
@@ -67,7 +67,7 @@ namespace Dante::Scene
 			vertex.tc.x = (reinterpret_cast<float const*>(texcoords + (i * tcByteStride)))[0];
 			vertex.tc.y = (reinterpret_cast<float const*>(texcoords + (i * tcByteStride)))[1];
 
-			if (dirty)
+			if (tangentDirty)
 			{
 				vertex.tangents.x = (reinterpret_cast<float const*>(tangentss + (i * tangentByteStridee)))[0];
 				vertex.tangents.y = (reinterpret_cast<float const*>(tangentss + (i * tangentByteStridee)))[1];
@@ -93,7 +93,7 @@ namespace Dante::Scene
 		vertexBuffer = std::make_unique<Rendering::RHI::VertexBuffer<Vertex>>(gfx.GetDevice(), gfx.GetCmdList(), vertices);
 		indexBuffer = std::make_unique<Rendering::RHI::IndexBuffer>(gfx.GetDevice(), gfx.GetCmdList(), indices);
 
-		ObjectCB objCB;
+		ObjectCB objCB{};
 		DirectX::XMStoreFloat4x4(&objCB.world, DirectX::XMMatrixTranspose(DirectX::XMMatrixScaling(scale, scale, scale)));
 
 
@@ -109,7 +109,7 @@ namespace Dante::Scene
 			albedoTex = std::make_unique<Rendering::RHI::Texture>(gfx,
 				Utils::ToWide(imagePath));
 		}
-		if (material.normalTexture.index >= 0)
+		if (material.normalTexture.index >= 0 && tangentDirty)
 		{
 			objCB.normalMapIndex = gfx.CbvSrvHeap().GetCurrDescriptorIndex();
 			uint32_t normalTextureIndex = material.normalTexture.index;
