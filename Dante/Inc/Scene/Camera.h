@@ -35,7 +35,8 @@ namespace Dante::Scene
 		DirectX::XMMATRIX proj;
 		DirectX::XMMATRIX viewProj;
 		
-		float speed = 14.0f;
+		float movementSpeed = 20.0f;
+		float rotationSpeed = 9.0f;
 
 		bool viewDirty;
 

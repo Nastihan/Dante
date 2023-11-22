@@ -71,7 +71,8 @@ namespace Dante::Scene
 
 	void Camera::Update(float dt)
 	{
-		float moveSpeed = dt * speed;
+		float moveSpeed = dt * movementSpeed;
+		float rotSpeed = dt * rotationSpeed;
 
 		if (GetAsyncKeyState('A') & 0x8000)
 			Translate({ -moveSpeed, 0.0f, 0.0f });
@@ -93,16 +94,16 @@ namespace Dante::Scene
 
 		// [TODO] handle rotation in a better way
 		if (GetAsyncKeyState(VK_UP) & 0x8000)
-			Rotate(0.0f, -moveSpeed);
+			Rotate(0.0f, -rotSpeed);
 
 		if (GetAsyncKeyState(VK_DOWN) & 0x8000)
-			Rotate(0.0f, moveSpeed);
+			Rotate(0.0f, rotSpeed);
 		
 		if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
-			Rotate(moveSpeed, 0.0f);
+			Rotate(rotSpeed, 0.0f);
 
 		if (GetAsyncKeyState(VK_LEFT) & 0x8000)
-			Rotate(-moveSpeed, 0.0f);
+			Rotate(-rotSpeed, 0.0f);
 
 		if (viewDirty)
 		{
