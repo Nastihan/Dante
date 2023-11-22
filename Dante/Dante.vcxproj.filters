@@ -45,13 +45,19 @@
     <ClCompile Include="Src\Scene\Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ThirdParty\DirectX\DDSTextureLoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Rendering\RHI\Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Src\Rendering\RHI\DescriptorHeap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Rendering\RHI\CubeMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Utils\GeometryGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Utils\DDSTextureLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -110,19 +116,33 @@
     <ClInclude Include="Inc\Rendering\RHI\Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ThirdParty\DirectX\DDSTextureLoader.h">
+    <ClInclude Include="Inc\Rendering\RHI\DescriptorHeap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Inc\Rendering\RHI\DescriptorHeap.h">
+    <ClInclude Include="Inc\Scene\SkySphere.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\Rendering\RHI\CubeMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\Utils\DDSTextureLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Inc\Utils\GeometryGenerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\ShaderFiles\DefaultVS.hlsl" />
     <FxCompile Include="Shaders\ShaderFiles\DefaultPS.hlsl" />
+    <FxCompile Include="Shaders\ShaderFiles\CubeMapPS.hlsl" />
+    <FxCompile Include="Shaders\ShaderFiles\CubeMapVS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\ShaderFiles\ShaderIncludes\Common.hlsli" />
     <None Include="Shaders\ShaderFiles\ShaderIncludes\LightingUtil.hlsli" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assests\Textures\snowcube1024.dds" />
   </ItemGroup>
 </Project>
