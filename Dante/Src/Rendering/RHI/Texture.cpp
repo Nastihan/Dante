@@ -2,23 +2,6 @@
 #include "Rendering/RHI/Texture.h"
 #include <../ThirdParty/DirectX/DxTex/include/DirectXTex.h>
 
-#ifndef TINYGLTF_IMPLEMENTATION
-#define TINYGLTF_IMPLEMENTATION
-#endif // !TINYGLTF_IMPLEMENTATION
-#ifndef TINYGLTF_USE_CPP20
-#define TINYGLTF_USE_CPP20
-#endif // !TINYGLTF_USE_CPP20
-#ifndef STB_IMAGE_IMPLEMENTATION
-#define STB_IMAGE_IMPLEMENTATION
-#endif // !STB_IMAGE_IMPLEMENTATION
-#ifndef STB_IMAGE_WRITE_IMPLEMENTATION
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#endif // !STB_IMAGE_WRITE_IMPLEMENTATION
-#ifndef STBI_MSC_SECURE_CRT
-#define STBI_MSC_SECURE_CRT
-#endif // !STBI_MSC_SECURE_CRT
-#include "../ThirdParty/tinygltf/tiny_gltf.h"
-
 namespace Dante::Rendering::RHI
 {
 	Texture::Texture(Graphics& gfx, std::wstring filePath)

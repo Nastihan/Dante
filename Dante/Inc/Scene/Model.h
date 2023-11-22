@@ -5,7 +5,8 @@
 #include "Rendering/RHI/UploadBuffer.h"
 #include "Rendering/RHI/Texture.h"
 #include "Utils/NastihanMath.h"
-#include "../../ThirdParty/tinygltf/tiny_gltf.h"
+#include "../ThirdParty/tinygltf/tiny_gltf.h"
+
 
 namespace Dante::Scene
 {
