@@ -1,14 +1,14 @@
 #include "Pch.h"
 #include "Core/Application.h"
 
-
+#include "../ThirdParty/imgui/imgui.h"
 namespace Dante::Core
 {
 	void Application::Init()
 	{
 		timer = std::make_unique<Utils::Timer>();
 
-		window = std::make_unique<Core::Window>(1376, 774, "My Window");
+		window = std::make_unique<Core::Window>(1376, 774, "Dante");
 		window->Init();
 
 		renderer = std::make_unique<Rendering::Renderer>();
