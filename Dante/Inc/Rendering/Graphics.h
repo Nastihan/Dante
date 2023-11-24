@@ -7,7 +7,7 @@ namespace Dante::Rendering
 	public:
 		Graphics() = default;
 		DISABLE_COPY_AND_MOVE(Graphics)
-		~Graphics() { if(device) FlushCmdQueue(); };
+		~Graphics();
 		void Init();
 		void OnResize();
 	private:
@@ -20,6 +20,7 @@ namespace Dante::Rendering
 		void CreateSwapChain();
 		void CreateRtvAndDsvDescriptorHeap();
 		void CreateCbvSrvUavDescriptorHeap();
+		void InitImgui();
 	public:
 		void Present();
 		void FlushCmdQueue();
@@ -50,6 +51,7 @@ namespace Dante::Rendering
 		D3D12_CPU_DESCRIPTOR_HANDLE DepthStencilView();
 
 
+		Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> imguiHeap;
 
 
 

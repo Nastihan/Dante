@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Src\ImguiManager.cpp" />
     <ClCompile Include="Src\Rendering\RHI\CubeMap.cpp" />
     <ClCompile Include="Src\Utils\GeometryGenerator.cpp" />
     <ClCompile Include="Src\Utils\DDSTextureLoader.cpp" />
@@ -165,10 +166,18 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="ThirdParty\imgui\imgui.cpp" />
+    <ClCompile Include="ThirdParty\imgui\imgui_demo.cpp" />
+    <ClCompile Include="ThirdParty\imgui\imgui_draw.cpp" />
+    <ClCompile Include="ThirdParty\imgui\imgui_impl_dx12.cpp" />
+    <ClCompile Include="ThirdParty\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="ThirdParty\imgui\imgui_tables.cpp" />
+    <ClCompile Include="ThirdParty\imgui\imgui_widgets.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Inc\Core\Application.h" />
     <ClInclude Include="Inc\Core\Window.h" />
+    <ClInclude Include="Inc\ImguiManager.h" />
     <ClInclude Include="Inc\Scene\SkySphere.h" />
     <ClInclude Include="Inc\Rendering\Graphics.h" />
     <ClInclude Include="Inc\Rendering\Renderer.h" />
@@ -190,6 +199,14 @@
     <ClInclude Include="Inc\Utils\Singleton.h" />
     <ClInclude Include="Inc\Utils\Timer.h" />
     <ClInclude Include="ThirdParty\DirectX\d3dx12.h" />
+    <ClInclude Include="ThirdParty\imgui\imconfig.h" />
+    <ClInclude Include="ThirdParty\imgui\imgui.h" />
+    <ClInclude Include="ThirdParty\imgui\imgui_impl_dx12.h" />
+    <ClInclude Include="ThirdParty\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="ThirdParty\imgui\imgui_internal.h" />
+    <ClInclude Include="ThirdParty\imgui\imstb_rectpack.h" />
+    <ClInclude Include="ThirdParty\imgui\imstb_textedit.h" />
+    <ClInclude Include="ThirdParty\imgui\imstb_truetype.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\ShaderFiles\CubeMapPS.hlsl">

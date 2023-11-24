@@ -6,6 +6,7 @@ namespace Dante::Core
 	{
 	public:
 		Window(UINT width, UINT height, std::string name);
+		~Window();
 		void Init();
 		static LRESULT MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 		LRESULT MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -14,6 +15,8 @@ namespace Dante::Core
 		UINT GetHeight();
 		float GetAR();
 		HWND GetHWnd();
+	private:
+		void InitImgui();
 	private:
 		HWND hWnd;
 

@@ -1,9 +1,15 @@
 #include "Pch.h"
 #include "Rendering\Graphics.h"
 #include "Core/Window.h"
+#include "../ThirdParty/imgui/imgui_impl_dx12.h"
 
 namespace Dante::Rendering
 {
+	Graphics::~Graphics()
+	{
+		if (device) FlushCmdQueue();
+		ImGui_ImplDX12_Shutdown();
+	}
 	///////////////////////// Initialization
 	void Graphics::Init()
 	{
@@ -109,6 +115,7 @@ namespace Dante::Rendering
 		CreateRtvAndDsvDescriptorHeap();
 		CreateCbvSrvUavDescriptorHeap();
 		OnResize();
+		InitImgui();
 	}
 
 	void Graphics::SetupDebugLayer()
@@ -269,6 +276,19 @@ namespace Dante::Rendering
 	{
 		cbvHeap = std::make_unique<RHI::DescriptorHeap>(device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 1000);
 		
+	}
+
+	void Graphics::InitImgui()
+	{
+		const D3D12_DESCRIPTOR_HEAP_DESC desc =
+		{
+			.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
+			.NumDescriptors = 1,
+			.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE
+		};
+		Chk(device->CreateDescriptorHeap(&desc, ID(imguiHeap)));
+		ImGui_ImplDX12_Init(device.Get(), BACK_BUFFER_COUNT, backBufferFormat, imguiHeap.Get(),
+			imguiHeap->GetCPUDescriptorHandleForHeapStart(), imguiHeap->GetGPUDescriptorHandleForHeapStart());
 	}
 
 	void Graphics::Present()

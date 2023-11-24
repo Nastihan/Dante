@@ -3,6 +3,7 @@
 #include "Utils/Timer.h"
 #include "Core/Window.h"
 #include "Rendering/Renderer.h"
+#include "ImguiManager.h"
 
 namespace Dante::Core
 {
@@ -23,8 +24,10 @@ namespace Dante::Core
 		bool RendererInitialized();
 
 	private:
+		ImguiManager imgui;
 		std::unique_ptr<Window> window;
 		std::unique_ptr<Rendering::Renderer> renderer;
 		std::unique_ptr<Utils::Timer> timer;
+
 	};
 }

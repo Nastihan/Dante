@@ -1,6 +1,10 @@
 #include "Pch.h"
 #include "Rendering/Renderer.h"
 #include "Core/Window.h"
+#include "../ThirdParty/imgui/imgui_impl_dx12.h"
+#include"../ThirdParty/imgui/imgui_impl_win32.h"
+#include "../ThirdParty/imgui/imgui.h"
+
 namespace Dante::Rendering
 {
 	void Renderer::Init()
@@ -65,6 +69,11 @@ namespace Dante::Rendering
 	{
 		BeginFrame();
 
+		ImGui_ImplDX12_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();
+		
+
 		auto cmdList = gfx->GetCmdList();
 
 		cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(gfx->CurrentBackBuffer(),
@@ -96,6 +105,16 @@ namespace Dante::Rendering
 		cmdList->SetPipelineState(gfx->GetPSO("cubeMapPSO"));
 		skySphere->Draw(Gfx());
 
+		ImGui::ShowDemoWindow();
+		
+
+		
+
+		ImGui::Render();
+		ID3D12DescriptorHeap* heaps[] = { Gfx().imguiHeap.Get() };
+		cmdList->SetDescriptorHeaps(1, heaps);
+		ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), cmdList);
+
 		cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(gfx->CurrentBackBuffer(),
 			D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT ));
 
@@ -106,6 +125,8 @@ namespace Dante::Rendering
 	{
 		Chk(gfx->GetCmdAllocator()->Reset());
 		Chk(gfx->GetCmdList()->Reset(gfx->GetCmdAllocator(), gfx->GetPSO("defaultPSO")));
+
+		
 	}
 
 	void Renderer::EndFrame()

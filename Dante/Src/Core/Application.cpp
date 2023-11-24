@@ -1,7 +1,6 @@
 #include "Pch.h"
 #include "Core/Application.h"
 
-#include "../ThirdParty/imgui/imgui.h"
 namespace Dante::Core
 {
 	void Application::Init()
@@ -45,7 +44,6 @@ namespace Dante::Core
 	{
 		renderer->Update(dt);
 	}
-
 
 	bool Application::RendererInitialized()
 	{

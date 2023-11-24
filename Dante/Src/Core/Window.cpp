@@ -1,12 +1,20 @@
 #include "Pch.h"
 #include "Core//Window.h"
 #include "Core/Application.h"
+#include "../ThirdParty/imgui/imgui_impl_win32.h"
+
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 namespace Dante::Core
 {
 	Window::Window( UINT width, UINT height, std::string name)
 		:width(width) , height(height), name(name)
 	{
+	}
+
+	Window::~Window()
+	{
+		ImGui_ImplWin32_Shutdown();
 	}
 
 	void Window::Init()
@@ -49,6 +57,8 @@ namespace Dante::Core
 
 		::ShowWindow(hWnd, SW_SHOW);
 		::UpdateWindow(hWnd);
+
+		InitImgui();
 	}
 
 	LRESULT Window::MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -64,9 +74,16 @@ namespace Dante::Core
 
 	LRESULT Window::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
-		static int dirty = 0;
+
+		if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wParam, lParam))
+			return true;
+		//const auto& imio = ImGui::GetIO();
+		
+
+
 		switch (msg)
 		{
+
 			case WM_SIZE:
 			{
 				if (Core::Application::Instance().RendererInitialized())
@@ -132,4 +149,10 @@ namespace Dante::Core
 	{
 		return hWnd;
 	}
+
+	void Window::InitImgui()
+	{
+		ImGui_ImplWin32_Init(hWnd);
+	}
 }
+
