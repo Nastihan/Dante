@@ -74,36 +74,36 @@ namespace Dante::Scene
 		float moveSpeed = dt * movementSpeed;
 		float rotSpeed = dt * rotationSpeed;
 
-		//if (GetAsyncKeyState('A') & 0x8000)
-		//	Translate({ -moveSpeed, 0.0f, 0.0f });
+		if (GetAsyncKeyState('A') & 0x8000)
+			Translate({ -moveSpeed, 0.0f, 0.0f });
 
-		//if (GetAsyncKeyState('D') & 0x8000)
-		//	Translate({ moveSpeed, 0.0f, 0.0f });
+		if (GetAsyncKeyState('D') & 0x8000)
+			Translate({ moveSpeed, 0.0f, 0.0f });
 
-		//if (GetAsyncKeyState('W') & 0x8000)
-		//	Translate({ 0.0f, 0.0f, moveSpeed });
+		if (GetAsyncKeyState('W') & 0x8000)
+			Translate({ 0.0f, 0.0f, moveSpeed });
 
-		//if (GetAsyncKeyState('S') & 0x8000)
-		//	Translate({ 0.0f, 0.0f, -moveSpeed });
+		if (GetAsyncKeyState('S') & 0x8000)
+			Translate({ 0.0f, 0.0f, -moveSpeed });
 
-		//if (GetAsyncKeyState('R') & 0x8000)
-		//	Translate({ 0.0f, moveSpeed, 0.0f });
+		if (GetAsyncKeyState('R') & 0x8000)
+			Translate({ 0.0f, moveSpeed, 0.0f });
 
-		//if (GetAsyncKeyState('F') & 0x8000)
-		//	Translate({ 0.0f, -moveSpeed, 0.0f });
+		if (GetAsyncKeyState('F') & 0x8000)
+			Translate({ 0.0f, -moveSpeed, 0.0f });
 
-		//// [TODO] handle rotation in a better way
-		//if (GetAsyncKeyState(VK_UP) & 0x8000)
-		//	Rotate(0.0f, -rotSpeed);
+		// [TODO] handle rotation in a better way
+		if (GetAsyncKeyState(VK_UP) & 0x8000)
+			Rotate(0.0f, -rotSpeed);
 
-		//if (GetAsyncKeyState(VK_DOWN) & 0x8000)
-		//	Rotate(0.0f, rotSpeed);
-		//
-		//if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
-		//	Rotate(rotSpeed, 0.0f);
+		if (GetAsyncKeyState(VK_DOWN) & 0x8000)
+			Rotate(0.0f, rotSpeed);
+		
+		if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
+			Rotate(rotSpeed, 0.0f);
 
-		//if (GetAsyncKeyState(VK_LEFT) & 0x8000)
-		//	Rotate(-rotSpeed, 0.0f);
+		if (GetAsyncKeyState(VK_LEFT) & 0x8000)
+			Rotate(-rotSpeed, 0.0f);
 
 		if (viewDirty)
 		{

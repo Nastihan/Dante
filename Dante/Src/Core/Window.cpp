@@ -63,13 +63,7 @@ namespace Dante::Core
 
 	LRESULT Window::MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
-		if (msg == WM_NCCREATE)
-		{
-			const CREATESTRUCTW* const pCreate = reinterpret_cast<CREATESTRUCTW*>(lParam);
-			Window* const pWnd = static_cast<Window*>(pCreate->lpCreateParams);
-			return pWnd->MsgProc(hwnd, msg, wParam, lParam);
-		}
-		return ::DefWindowProc(hwnd, msg, wParam, lParam);
+		return Core::Window::Instance().MsgProc(hwnd, msg, wParam, lParam);
 	}
 
 	LRESULT Window::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -77,9 +71,6 @@ namespace Dante::Core
 
 		if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wParam, lParam))
 			return true;
-		//const auto& imio = ImGui::GetIO();
-		
-
 
 		switch (msg)
 		{
