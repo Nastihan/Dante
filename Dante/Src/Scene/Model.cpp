@@ -22,7 +22,7 @@
 namespace Dante::Scene
 {
 	Mesh::Mesh(Rendering::Graphics& gfx, const tinygltf::Model& model, 
-		const tinygltf::Mesh& mesh, const tinygltf::Primitive& prim, std::string path, float scale)
+		const tinygltf::Mesh& mesh, const tinygltf::Primitive& prim, std::string path, DirectX::XMMATRIX worldM)
 	{
 		
 		std::vector<Vertex> vertices;
@@ -110,7 +110,7 @@ namespace Dante::Scene
 		indexBuffer = std::make_unique<Rendering::RHI::IndexBuffer>(gfx.GetDevice(), gfx.GetCmdList(), indices);
 
 		ObjectCB objCB{};
-		DirectX::XMStoreFloat4x4(&objCB.world, DirectX::XMMatrixTranspose(DirectX::XMMatrixScaling(scale, scale, scale)));
+		DirectX::XMStoreFloat4x4(&objCB.world, DirectX::XMMatrixTranspose(worldM));
 
 
 		auto& material = model.materials[prim.material];
@@ -276,7 +276,7 @@ namespace Dante::Scene
 		cmdList->DrawIndexedInstanced(indexCount, 1U, 0U, 0U, 0U);
 	}
 
-	Model::Model(Rendering::Graphics& gfx, std::string path, float scale)
+	Model::Model(Rendering::Graphics& gfx, std::string path, DirectX::XMMATRIX worldM)
 	{
 		std::string warning{};
 		std::string error{};
@@ -319,7 +319,7 @@ namespace Dante::Scene
 		{
 			for (auto& prim : mesh.primitives)
 			{
-				meshes.push_back(std::make_unique<Mesh>(gfx, model, mesh, prim, path, scale));
+				meshes.push_back(std::make_unique<Mesh>(gfx, model, mesh, prim, path, worldM));
 			}
 		}
 

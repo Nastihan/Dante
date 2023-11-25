@@ -27,9 +27,10 @@ namespace Dante::Rendering
 		passCB = std::make_unique<RHI::UploadBuffer<Dante::Utils::PassConstants>>(Gfx(), 1, true);
 
 		sponza = std::make_unique<Scene::Model>(Gfx(),
-			"Assests\\Models\\Sponza\\Sponza.glb", 0.1f);
+			"Assests\\Models\\Sponza\\Sponza.glb", DirectX::XMMatrixScaling(0.1f, 0.1f, 0.1f));
 		helmet = std::make_unique<Scene::Model>(Gfx(),
-			"Assests\\Models\\DamagedHelmet\\DamagedHelmet.gltf", 3.0f);
+			"Assests\\Models\\DamagedHelmet\\DamagedHelmet.gltf",
+			DirectX::XMMatrixTranslation(5.0f, 7.0f, 0.0f) * DirectX::XMMatrixScaling(3.f, 3.0f, 3.0f));
 		/*aBeautifulGame = std::make_unique<Scene::Model>(Gfx(),
 			"Assests\\Models\\ABeautifulGame\\ABeautifulGame.gltf", 15.0f);*/
 

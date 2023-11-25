@@ -32,7 +32,8 @@ namespace Dante::Scene
 	class Mesh
 	{
 	public: 
-		Mesh(Rendering::Graphics& gfx, const tinygltf::Model& model, const tinygltf::Mesh& mesh, const tinygltf::Primitive& prim,std::string path, float scale);
+		Mesh(Rendering::Graphics& gfx, const tinygltf::Model& model, const tinygltf::Mesh& mesh,
+			const tinygltf::Primitive& prim,std::string path, DirectX::XMMATRIX worldM);
 		D3D12_VERTEX_BUFFER_VIEW VertexBufferView();
 		D3D12_INDEX_BUFFER_VIEW IndexBufferView();
 		void Draw(Rendering::Graphics& gfx);
@@ -48,7 +49,7 @@ namespace Dante::Scene
 	class Model
 	{
 	public:
-		Model(Rendering::Graphics& gfx, std::string path, float scale = 1.0f);
+		Model(Rendering::Graphics& gfx, std::string path, DirectX::XMMATRIX worldM = DirectX::XMMatrixIdentity());
 		void Draw(Rendering::Graphics& gfx);
 	private:
 		std::vector<std::unique_ptr<Mesh>> meshes;
