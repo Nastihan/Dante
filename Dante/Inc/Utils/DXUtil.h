@@ -1,5 +1,6 @@
 #pragma once
 #include "Pch.h"
+#include "Utils/NastihanMath.h"
 
 namespace Dante::Utils
 {
@@ -53,6 +54,27 @@ namespace Dante::Utils
 
 			return ibv;
 		}
+	};
+
+	struct Light
+	{
+		DirectX::XMFLOAT3 Strength = { 0.5f, 0.5f, 0.5f };
+		float FalloffStart = 10.0f;                          // point/spot light only
+		DirectX::XMFLOAT3 Direction = { 0.0f, -1.0f, 0.0f };// directional/spot light only
+		float FalloffEnd = 70.0f;                           // point/spot light only
+		DirectX::XMFLOAT3 Position = { 0.0f, 0.0f, 0.0f };  // point/spot light only
+		float SpotPower = 64.0f;                            // spot light only
+	};
+
+	struct PassConstants
+	{
+		DirectX::XMFLOAT4X4 View = Utils::NastihanMath::Identity4x4();
+		DirectX::XMFLOAT4X4 Proj = Utils::NastihanMath::Identity4x4();
+		DirectX::XMFLOAT4X4 ViewProj = Utils::NastihanMath::Identity4x4();
+		DirectX::XMFLOAT3 EyePosW = { 0.0f, 0.0f, 0.0f };
+		float padding;
+		DirectX::XMFLOAT4 ambientLight = { 0.10f, 0.10f, 0.10f, 1.0f };
+		Light lights[16];
 	};
 
 }

@@ -178,6 +178,7 @@
     <ClInclude Include="Inc\Core\Application.h" />
     <ClInclude Include="Inc\Core\Window.h" />
     <ClInclude Include="Inc\ImguiManager.h" />
+    <ClInclude Include="Inc\Scene\PointLight.h" />
     <ClInclude Include="Inc\Scene\SkySphere.h" />
     <ClInclude Include="Inc\Rendering\Graphics.h" />
     <ClInclude Include="Inc\Rendering\Renderer.h" />
