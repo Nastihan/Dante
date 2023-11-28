@@ -122,8 +122,8 @@ namespace Dante::Scene
 
 			auto imagePath = Utils::FolderFromFilePath(path) + "\\" + model.images[albedoImageIndex].uri;
 
-			albedoTex = std::make_unique<Rendering::RHI::Texture>(gfx,
-				Utils::ToWide(imagePath));
+			albedoTex = std::make_unique<Rendering::RHI::Texture>();
+			albedoTex->Create2D(gfx, Utils::ToWide(imagePath));
 		}
 		if (material.normalTexture.index >= 0 && tangentDirty)
 		{
@@ -133,7 +133,8 @@ namespace Dante::Scene
 
 			auto imagePath = Utils::FolderFromFilePath(path) + "\\" + model.images[normalImageIndex].uri;
 
-			normalTex = std::make_unique<Rendering::RHI::Texture>(gfx,
+			normalTex = std::make_unique<Rendering::RHI::Texture>();
+			normalTex->Create2D(gfx,
 				Utils::ToWide(imagePath));
 		}
 		objectCB = std::make_unique<Rendering::RHI::UploadBuffer<ObjectCB>>(gfx, 1, true);

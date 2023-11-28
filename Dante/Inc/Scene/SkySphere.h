@@ -3,7 +3,6 @@
 #include "Rendering/RHI/VertexBuffer.h"
 #include "Rendering/RHI/IndexBuffer.h"
 #include "Rendering/RHI/UploadBuffer.h"
-#include "Rendering/RHI/CubeMap.h"
 #include "Utils/NastihanMath.h"
 #include "Utils/GeometryGenerator.h"
 
@@ -55,7 +54,8 @@ namespace Dante::Scene
 
 			SkySphere::ObjectCB objConstants;
 			objConstants.cubeMapTexIndex = gfx.CbvSrvHeap().GetCurrDescriptorIndex();
-			cubeMapTex = std::make_unique<Rendering::RHI::CubeMap>(gfx, L"Assests/Textures/snowcube1024.dds");
+			cubeMapTex = std::make_unique<Rendering::RHI::Texture>();
+			cubeMapTex->CreateCubeDDS(gfx, L"Assests/Textures/snowcube1024.dds");
 			objectCB = std::make_unique<Rendering::RHI::UploadBuffer<SkySphere::ObjectCB>>(gfx, 1, true);
 			objectCB->CopyData(0, objConstants);
 		}
@@ -72,7 +72,7 @@ namespace Dante::Scene
 		std::unique_ptr<Dante::Rendering::RHI::VertexBuffer<SkySphere::Vertex>> vertexBuffer;
 		std::unique_ptr<Dante::Rendering::RHI::IndexBuffer> indexBuffer;
 		UINT indexCount;
-		std::unique_ptr<Dante::Rendering::RHI::CubeMap> cubeMapTex;
+		std::unique_ptr<Dante::Rendering::RHI::Texture> cubeMapTex;
 	};
 
 }

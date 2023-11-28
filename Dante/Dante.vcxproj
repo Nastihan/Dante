@@ -148,7 +148,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Src\ImguiManager.cpp" />
-    <ClCompile Include="Src\Rendering\RHI\CubeMap.cpp" />
     <ClCompile Include="Src\Utils\GeometryGenerator.cpp" />
     <ClCompile Include="Src\Utils\DDSTextureLoader.cpp" />
     <ClCompile Include="Src\Rendering\RHI\DescriptorHeap.cpp" />
@@ -182,7 +181,6 @@
     <ClInclude Include="Inc\Rendering\Graphics.h" />
     <ClInclude Include="Inc\Rendering\Renderer.h" />
     <ClInclude Include="Inc\Pch.h" />
-    <ClInclude Include="Inc\Rendering\RHI\CubeMap.h" />
     <ClInclude Include="Inc\Rendering\RHI\DescriptorHeap.h" />
     <ClInclude Include="Inc\Rendering\RHI\IndexBuffer.h" />
     <ClInclude Include="Inc\Rendering\RHI\Texture.h" />
