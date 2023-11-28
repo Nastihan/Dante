@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Scene\SkySphere.cpp" />
     <ClCompile Include="Src\ImguiManager.cpp" />
     <ClCompile Include="Src\Utils\GeometryGenerator.cpp" />
     <ClCompile Include="Src\Utils\DDSTextureLoader.cpp" />
