@@ -106,7 +106,8 @@ namespace Dante::Rendering
 		cmdList->SetPipelineState(gfx->GetPSO("cubeMapPSO"));
 		skySphere->Draw(Gfx());
 
-		ImGui::ShowDemoWindow();
+		// GUI
+		ShowFpsWindow();
 		
 
 		
@@ -120,6 +121,13 @@ namespace Dante::Rendering
 			D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT ));
 
 		EndFrame();
+	}
+
+	void Renderer::ShowFpsWindow()
+	{
+		ImGui::Begin("FPS");
+		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		ImGui::End();
 	}
 
 	void Renderer::BeginFrame()

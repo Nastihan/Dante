@@ -24,6 +24,7 @@ namespace Dante::Rendering
 		void OnResize();
 		void Update(float dt);
 		void Render();
+		void ShowFpsWindow();
 		Graphics& Gfx()
 		{
 			if (!gfx)
