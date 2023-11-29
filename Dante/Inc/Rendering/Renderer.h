@@ -12,9 +12,6 @@
 
 namespace Dante::Rendering
 {
-
-	
-	
 	class Renderer
 	{
 	public:
@@ -46,10 +43,17 @@ namespace Dante::Rendering
 		std::unique_ptr<Scene::Model> helmet;
 		std::unique_ptr<Scene::Model> aBeautifulGame;
 		std::unique_ptr<Scene::SkySphere> skySphere;
-		
-
-
-
 
 	};
 }
+
+#define IMGUI_BEGIN_FRAME \
+ImGui_ImplDX12_NewFrame(); \
+ImGui_ImplWin32_NewFrame(); \
+ImGui::NewFrame(); 
+
+#define IMGUI_END_FRAME \
+ImGui::Render(); \
+ID3D12DescriptorHeap* heaps[] = { Gfx().ImguiHeap().GetHeap() }; \
+cmdList->SetDescriptorHeaps(1, heaps); \
+ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), cmdList); 

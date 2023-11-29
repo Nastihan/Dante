@@ -287,9 +287,10 @@ namespace Dante::Rendering
 			.NumDescriptors = 1,
 			.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE
 		};
-		Chk(device->CreateDescriptorHeap(&desc, ID(imguiHeap)));
-		ImGui_ImplDX12_Init(device.Get(), BACK_BUFFER_COUNT, backBufferFormat, imguiHeap.Get(),
-			imguiHeap->GetCPUDescriptorHandleForHeapStart(), imguiHeap->GetGPUDescriptorHandleForHeapStart());
+		//Chk(device->CreateDescriptorHeap(&desc, ID(imguiHeap)));
+		imguiHeap = std::make_unique<RHI::DescriptorHeap>(device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 1);
+		ImGui_ImplDX12_Init(device.Get(), BACK_BUFFER_COUNT, backBufferFormat, imguiHeap->GetHeap(),
+			imguiHeap->GetHandleForStart().cpuHandle, imguiHeap->GetHandleForStart().gpuHandle);
 	}
 
 	void Graphics::Present()
@@ -505,6 +506,11 @@ namespace Dante::Rendering
 	RHI::DescriptorHeap& Graphics::CbvSrvHeap()
 	{
 		return *cbvHeap;
+	}
+
+	RHI::DescriptorHeap& Graphics::ImguiHeap()
+	{
+		return *imguiHeap;
 	}
 
 	/////////////////////////// Utils

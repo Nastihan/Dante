@@ -69,11 +69,8 @@ namespace Dante::Rendering
 	void Renderer::Render()
 	{
 		BeginFrame();
-
-		ImGui_ImplDX12_NewFrame();
-		ImGui_ImplWin32_NewFrame();
-		ImGui::NewFrame();
-		
+		IMGUI_BEGIN_FRAME
+	
 
 		auto cmdList = gfx->GetCmdList();
 
@@ -108,14 +105,8 @@ namespace Dante::Rendering
 
 		// GUI
 		ShowFpsWindow();
-		
+		IMGUI_END_FRAME
 
-		
-
-		ImGui::Render();
-		ID3D12DescriptorHeap* heaps[] = { Gfx().imguiHeap.Get() };
-		cmdList->SetDescriptorHeaps(1, heaps);
-		ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), cmdList);
 
 		cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(gfx->CurrentBackBuffer(),
 			D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT ));

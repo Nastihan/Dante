@@ -45,13 +45,13 @@ namespace Dante::Rendering
 		ID3D12RootSignature* GetRootSig(std::string name);
 
 		RHI::DescriptorHeap& CbvSrvHeap();
+		RHI::DescriptorHeap& ImguiHeap();
 		// Utils
 		ID3D12Resource* CurrentBackBuffer();
 		D3D12_CPU_DESCRIPTOR_HANDLE CurrentBackBufferView();
 		D3D12_CPU_DESCRIPTOR_HANDLE DepthStencilView();
 
 
-		Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> imguiHeap;
 
 
 
@@ -84,6 +84,7 @@ namespace Dante::Rendering
 		std::unique_ptr<RHI::DescriptorHeap> rtvHeap;
 		std::unique_ptr<RHI::DescriptorHeap> dsvHeap;
 		std::unique_ptr<RHI::DescriptorHeap> cbvHeap;
+		std::unique_ptr<RHI::DescriptorHeap> imguiHeap;
 
 
 		UINT rtvDescriptorSize{};
