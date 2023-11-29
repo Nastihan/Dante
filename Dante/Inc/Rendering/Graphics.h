@@ -81,8 +81,8 @@ namespace Dante::Rendering
 		DXGI_FORMAT depthStencilFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 
 		// DescriptorHeaps
-		Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtvHeap;
-		Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> dsvHeap;
+		std::unique_ptr<RHI::DescriptorHeap> rtvHeap;
+		std::unique_ptr<RHI::DescriptorHeap> dsvHeap;
 		std::unique_ptr<RHI::DescriptorHeap> cbvHeap;
 
 

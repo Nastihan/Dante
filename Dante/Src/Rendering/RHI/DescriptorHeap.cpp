@@ -8,7 +8,7 @@ namespace Dante::Rendering::RHI
 	{
 		D3D12_DESCRIPTOR_HEAP_DESC heapDesc{};
 		heapDesc.Type = type;
-		if (type == D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV || D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER)
+		if (type == D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV || type ==  D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER)
 		{
 			heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 		}
@@ -24,7 +24,8 @@ namespace Dante::Rendering::RHI
 		descriptorSize = device->GetDescriptorHandleIncrementSize(type);
 
 		startDescriptor.cpuHandle = heap->GetCPUDescriptorHandleForHeapStart();
-		startDescriptor.gpuHandle = heap->GetGPUDescriptorHandleForHeapStart();
+		if (type == D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV || type == D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER)
+			startDescriptor.gpuHandle = heap->GetGPUDescriptorHandleForHeapStart();
 		startDescriptor.index = 0;
 		currDescriptor = startDescriptor;
 	}

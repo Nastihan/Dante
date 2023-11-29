@@ -47,7 +47,7 @@ namespace Dante::Rendering
 			swapChainDesc.Flags
 		));
 		currBackBufferIndex = 0;
-		CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvHeap->GetCPUDescriptorHandleForHeapStart());
+		CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvHeap->GetHandleForStart().cpuHandle);
 		for (UINT i = 0; i < BACK_BUFFER_COUNT; i++)
 		{
 			Chk(swapChain->GetBuffer(i, ID(backBuffers.at(i))));
@@ -261,7 +261,8 @@ namespace Dante::Rendering
 		rtvHeapDesc.NumDescriptors = BACK_BUFFER_COUNT;
 		rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 
-		Chk(device->CreateDescriptorHeap(&rtvHeapDesc, ID(rtvHeap)));
+		//Chk(device->CreateDescriptorHeap(&rtvHeapDesc, ID(rtvHeap)));
+		rtvHeap = std::make_unique<RHI::DescriptorHeap>(device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_RTV, BACK_BUFFER_COUNT);
 
 		D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc{};
 		dsvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
@@ -269,7 +270,7 @@ namespace Dante::Rendering
 		dsvHeapDesc.NumDescriptors = 1;
 		dsvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 
-		Chk(device->CreateDescriptorHeap(&dsvHeapDesc, ID(dsvHeap)));
+		dsvHeap = std::make_unique<RHI::DescriptorHeap>(device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1);
 	}
 
 	void Graphics::CreateCbvSrvUavDescriptorHeap()
@@ -515,15 +516,15 @@ namespace Dante::Rendering
 	D3D12_CPU_DESCRIPTOR_HANDLE Graphics::CurrentBackBufferView()
 	{
 		return CD3DX12_CPU_DESCRIPTOR_HANDLE{
-			rtvHeap->GetCPUDescriptorHandleForHeapStart(),
-			int(currBackBufferIndex),
-			rtvDescriptorSize
+					rtvHeap->GetHandleForStart().cpuHandle,
+					int(currBackBufferIndex),
+					rtvDescriptorSize
 		};
 	}
 
 	D3D12_CPU_DESCRIPTOR_HANDLE Graphics::DepthStencilView()
 	{
-		return dsvHeap->GetCPUDescriptorHandleForHeapStart();
+		return dsvHeap->GetHandleForStart().cpuHandle;
 	}
 
 	
