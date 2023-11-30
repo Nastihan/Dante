@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Rendering\RHI\ShadowMap.cpp" />
     <ClCompile Include="Src\Scene\SkySphere.cpp" />
     <ClCompile Include="Src\ImguiManager.cpp" />
     <ClCompile Include="Src\Utils\GeometryGenerator.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="Inc\Core\Application.h" />
     <ClInclude Include="Inc\Core\Window.h" />
     <ClInclude Include="Inc\ImguiManager.h" />
+    <ClInclude Include="Inc\Rendering\RHI\ShadowMap.h" />
     <ClInclude Include="Inc\Scene\SkySphere.h" />
     <ClInclude Include="Inc\Rendering\Graphics.h" />
     <ClInclude Include="Inc\Rendering\Renderer.h" />

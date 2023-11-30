@@ -47,6 +47,8 @@ namespace Dante::Rendering
 	};
 }
 
+
+
 #define IMGUI_BEGIN_FRAME \
 ImGui_ImplDX12_NewFrame(); \
 ImGui_ImplWin32_NewFrame(); \

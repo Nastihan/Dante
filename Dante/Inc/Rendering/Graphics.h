@@ -45,6 +45,7 @@ namespace Dante::Rendering
 		ID3D12RootSignature* GetRootSig(std::string name);
 
 		RHI::DescriptorHeap& CbvSrvHeap();
+		RHI::DescriptorHeap& DsvHeap();
 		RHI::DescriptorHeap& ImguiHeap();
 		// Utils
 		ID3D12Resource* CurrentBackBuffer();

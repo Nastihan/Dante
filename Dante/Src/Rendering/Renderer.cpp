@@ -70,10 +70,9 @@ namespace Dante::Rendering
 	{
 		BeginFrame();
 		IMGUI_BEGIN_FRAME
-	
 
 		auto cmdList = gfx->GetCmdList();
-
+		
 		cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(gfx->CurrentBackBuffer(),
 			D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
 
@@ -95,9 +94,9 @@ namespace Dante::Rendering
 		cmdList->SetGraphicsRootConstantBufferView(0U, passCB->Resource()->GetGPUVirtualAddress());
 
 		// Draw Opaque
+		cmdList->SetPipelineState(gfx->GetPSO("defaultPSO"));
 		sponza->Draw(Gfx());
 		helmet->Draw(Gfx());
-		//aBeautifulGame->Draw(Gfx());
 
 		// Draw CubeMap
 		cmdList->SetPipelineState(gfx->GetPSO("cubeMapPSO"));
@@ -107,10 +106,8 @@ namespace Dante::Rendering
 		ShowFpsWindow();
 		IMGUI_END_FRAME
 
-
 		cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(gfx->CurrentBackBuffer(),
 			D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT ));
-
 		EndFrame();
 	}
 
@@ -124,9 +121,7 @@ namespace Dante::Rendering
 	void Renderer::BeginFrame()
 	{
 		Chk(gfx->GetCmdAllocator()->Reset());
-		Chk(gfx->GetCmdList()->Reset(gfx->GetCmdAllocator(), gfx->GetPSO("defaultPSO")));
-
-		
+		Chk(gfx->GetCmdList()->Reset(gfx->GetCmdAllocator(), nullptr));
 	}
 
 	void Renderer::EndFrame()

@@ -51,8 +51,8 @@ namespace Dante::Rendering
 		for (UINT i = 0; i < BACK_BUFFER_COUNT; i++)
 		{
 			Chk(swapChain->GetBuffer(i, ID(backBuffers.at(i))));
-			device->CreateRenderTargetView(backBuffers.at(i).Get(), nullptr, rtvHandle);
-			rtvHandle.Offset(1, rtvDescriptorSize);
+			device->CreateRenderTargetView(backBuffers.at(i).Get(), nullptr, rtvHeap->GetCurrHandle().cpuHandle);
+			rtvHeap->OffsetCurrHandle();
 		}
 
 		// depth stencil stuff
@@ -83,6 +83,7 @@ namespace Dante::Rendering
 		dsvDesc.Format = depthStencilFormat;
 		dsvDesc.Texture2D.MipSlice = 0;
 		device->CreateDepthStencilView(depthStencilBuffer.Get(), &dsvDesc, DepthStencilView());
+		dsvHeap->OffsetCurrHandle();
 	
 		cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(
 			depthStencilBuffer.Get(), D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_DEPTH_WRITE
@@ -255,22 +256,9 @@ namespace Dante::Rendering
 
 	void Graphics::CreateRtvAndDsvDescriptorHeap()
 	{
-		D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc{};
-		rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
-		rtvHeapDesc.NodeMask = 0;
-		rtvHeapDesc.NumDescriptors = BACK_BUFFER_COUNT;
-		rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-
-		//Chk(device->CreateDescriptorHeap(&rtvHeapDesc, ID(rtvHeap)));
 		rtvHeap = std::make_unique<RHI::DescriptorHeap>(device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_RTV, BACK_BUFFER_COUNT);
 
-		D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc{};
-		dsvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
-		dsvHeapDesc.NodeMask = 0;
-		dsvHeapDesc.NumDescriptors = 1;
-		dsvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-
-		dsvHeap = std::make_unique<RHI::DescriptorHeap>(device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1);
+		dsvHeap = std::make_unique<RHI::DescriptorHeap>(device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 4);
 	}
 
 	void Graphics::CreateCbvSrvUavDescriptorHeap()
@@ -281,13 +269,6 @@ namespace Dante::Rendering
 
 	void Graphics::InitImgui()
 	{
-		const D3D12_DESCRIPTOR_HEAP_DESC desc =
-		{
-			.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
-			.NumDescriptors = 1,
-			.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE
-		};
-		//Chk(device->CreateDescriptorHeap(&desc, ID(imguiHeap)));
 		imguiHeap = std::make_unique<RHI::DescriptorHeap>(device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 1);
 		ImGui_ImplDX12_Init(device.Get(), BACK_BUFFER_COUNT, backBufferFormat, imguiHeap->GetHeap(),
 			imguiHeap->GetHandleForStart().cpuHandle, imguiHeap->GetHandleForStart().gpuHandle);
@@ -506,6 +487,11 @@ namespace Dante::Rendering
 	RHI::DescriptorHeap& Graphics::CbvSrvHeap()
 	{
 		return *cbvHeap;
+	}
+
+	RHI::DescriptorHeap& Graphics::DsvHeap()
+	{
+		return *dsvHeap;
 	}
 
 	RHI::DescriptorHeap& Graphics::ImguiHeap()
