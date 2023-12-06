@@ -66,7 +66,7 @@ namespace Dante::Utils
 		float SpotPower = 64.0f;                            // spot light only
 	};
 
-	struct PassConstants
+	struct DefaultPassConstants
 	{
 		DirectX::XMFLOAT4X4 View = Utils::NastihanMath::Identity4x4();
 		DirectX::XMFLOAT4X4 Proj = Utils::NastihanMath::Identity4x4();

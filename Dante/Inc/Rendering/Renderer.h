@@ -9,6 +9,7 @@
 #include "Scene/Camera.h"
 #include "Scene/Model.h"
 #include "Scene/SkySphere.h"
+#include "Rendering/RHI/ShadowMap.h"
 
 namespace Dante::Rendering
 {
@@ -36,13 +37,15 @@ namespace Dante::Rendering
 	private:
 		std::unique_ptr<Graphics> gfx{};
 		std::unique_ptr<Scene::Camera> camera;
-		Dante::Utils::PassConstants passConstants;
-		std::unique_ptr<RHI::UploadBuffer<Dante::Utils::PassConstants>> passCB = nullptr;
+		Dante::Utils::DefaultPassConstants passConstants;
+		std::unique_ptr<RHI::UploadBuffer<Dante::Utils::DefaultPassConstants>> passCB = nullptr;
 
 		std::unique_ptr<Scene::Model> sponza;
 		std::unique_ptr<Scene::Model> helmet;
 		std::unique_ptr<Scene::Model> aBeautifulGame;
 		std::unique_ptr<Scene::SkySphere> skySphere;
+	
+		std::unique_ptr<RHI::ShadowMap> shadowMap;
 
 	};
 }
