@@ -37,8 +37,8 @@ namespace Dante::Rendering
 	private:
 		std::unique_ptr<Graphics> gfx{};
 		std::unique_ptr<Scene::Camera> camera;
-		Dante::Utils::DefaultPassConstants passConstants;
-		std::unique_ptr<RHI::UploadBuffer<Dante::Utils::DefaultPassConstants>> passCB = nullptr;
+		Dante::Utils::DefaultPassConstants defaultPassConstants;
+		std::unique_ptr<RHI::UploadBuffer<Dante::Utils::DefaultPassConstants>> defaultPassCB;
 
 		std::unique_ptr<Scene::Model> sponza;
 		std::unique_ptr<Scene::Model> helmet;
@@ -46,6 +46,10 @@ namespace Dante::Rendering
 		std::unique_ptr<Scene::SkySphere> skySphere;
 	
 		std::unique_ptr<RHI::ShadowMap> shadowMap;
+
+		Dante::Utils::ShadowPassConstants shadowPassConstants;
+		std::unique_ptr<RHI::UploadBuffer<Dante::Utils::ShadowPassConstants>> shadowPassCB;
+
 
 	};
 }

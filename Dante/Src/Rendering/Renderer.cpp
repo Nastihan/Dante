@@ -24,7 +24,8 @@ namespace Dante::Rendering
 		camera->SetView({ 0.0f, 8.0f, -6.0f }, { 0.0f, 0.0f, 1.0f }, { 0.0f, 1.0f, 0.0f });
 		camera->SetProj(45.0f, Core::Window::Instance().GetAR(), 1.0f, 400.0f);
 
-		passCB = std::make_unique<RHI::UploadBuffer<Dante::Utils::DefaultPassConstants>>(Gfx(), 1, true);
+		defaultPassCB = std::make_unique<RHI::UploadBuffer<Dante::Utils::DefaultPassConstants>>(Gfx(), 1, true);
+		shadowPassCB = std::make_unique<RHI::UploadBuffer<Dante::Utils::ShadowPassConstants>>(Gfx(), 1, true);
 
 		sponza = std::make_unique<Scene::Model>(Gfx(),
 			"Assests\\Models\\Sponza\\Sponza.glb", DirectX::XMMatrixScaling(0.1f, 0.1f, 0.1f));
@@ -53,20 +54,37 @@ namespace Dante::Rendering
 
 	void Renderer::Update(float dt)
 	{
+		//auto lightPos = DirectX::XMVECTOR{ 0.0f, 40.f, 0.0f };
+		DirectX::XMFLOAT3 lightDirF = { -0.24f, -0.57735f, 0.57735f };
+
+		DirectX::XMVECTOR lightDir = DirectX::XMLoadFloat3(&lightDirF);
+		auto lightPosition = DirectX::XMVectorScale(lightDir, -2.0f * 50.0f);
+
+
+		auto lightView = DirectX::XMMatrixTranspose(DirectX::XMMatrixLookAtLH(lightPosition, DirectX::XMVectorZero(),
+			DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)));
+		auto lightProj = DirectX::XMMatrixTranspose(
+			DirectX::XMMatrixPerspectiveFovLH(45.0f, Core::Window::Instance().GetAR(), 1.0f, 700.0f));
+
+		DirectX::XMStoreFloat4x4(&shadowPassConstants.LightView, lightView);
+		DirectX::XMStoreFloat4x4(&shadowPassConstants.LightProj, lightProj);
+		DirectX::XMStoreFloat4x4(&shadowPassConstants.LightViewProj, lightView * lightProj);
+		shadowPassCB->CopyData(0, shadowPassConstants);
+
 		camera->Update(dt);
 
-		DirectX::XMStoreFloat4x4(&passConstants.View, camera->GetView());
-		DirectX::XMStoreFloat4x4(&passConstants.Proj, camera->GetProj());
-		DirectX::XMStoreFloat4x4(&passConstants.ViewProj, camera->GetViewProj());
-		DirectX::XMStoreFloat3(&passConstants.EyePosW, camera->GetPos());
+		DirectX::XMStoreFloat4x4(&defaultPassConstants.View, lightView);
+		DirectX::XMStoreFloat4x4(&defaultPassConstants.Proj, lightProj);
+		DirectX::XMStoreFloat4x4(&defaultPassConstants.ViewProj, lightView * lightProj);
+		DirectX::XMStoreFloat3(&defaultPassConstants.EyePosW, lightPosition);
 
-		passConstants.lights[0].Strength = { 0.35f, 0.35f, 0.35f };
-		passConstants.lights[0].Direction = { -0.24f, -0.57735f, 0.57735f };
-		passConstants.lights[1].Strength = { 0.95f, 0.95f, 0.95f };
-		passConstants.lights[1].Position = { 0.0f, 18.0f, 2.0f };
+		defaultPassConstants.lights[0].Strength = { 0.35f, 0.35f, 0.35f };
+		defaultPassConstants.lights[0].Direction = { -0.24f, -0.57735f, 0.57735f };
+		defaultPassConstants.lights[1].Strength = { 0.95f, 0.95f, 0.95f };
+		defaultPassConstants.lights[1].Position = { 0.0f, 18.0f, 2.0f };
+		defaultPassCB->CopyData(0, defaultPassConstants);
 
-
-		passCB->CopyData(0, passConstants);
+		
 	}
 
 	void Renderer::Render()
@@ -94,7 +112,7 @@ namespace Dante::Rendering
 		cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 		// Set PassCB
-		cmdList->SetGraphicsRootConstantBufferView(0U, passCB->Resource()->GetGPUVirtualAddress());
+		cmdList->SetGraphicsRootConstantBufferView(0U, defaultPassCB->Resource()->GetGPUVirtualAddress());
 
 		// Draw Opaque
 		cmdList->SetPipelineState(gfx->GetPSO("defaultPSO"));
@@ -102,8 +120,8 @@ namespace Dante::Rendering
 		helmet->Draw(Gfx());
 
 		// Draw CubeMap
-		cmdList->SetPipelineState(gfx->GetPSO("cubeMapPSO"));
-		skySphere->Draw(Gfx());
+		//cmdList->SetPipelineState(gfx->GetPSO("cubeMapPSO"));
+		//skySphere->Draw(Gfx());
 
 		// GUI
 		ShowFpsWindow();

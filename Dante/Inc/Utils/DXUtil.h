@@ -77,4 +77,10 @@ namespace Dante::Utils
 		Light lights[16];
 	};
 
+	struct ShadowPassConstants
+	{
+		DirectX::XMFLOAT4X4 LightView = Utils::NastihanMath::Identity4x4();
+		DirectX::XMFLOAT4X4 LightProj = Utils::NastihanMath::Identity4x4();
+		DirectX::XMFLOAT4X4 LightViewProj = Utils::NastihanMath::Identity4x4();
+	};
 }
