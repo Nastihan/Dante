@@ -58,13 +58,17 @@ namespace Dante::Rendering
 		DirectX::XMFLOAT3 lightDirF = { -0.24f, -0.57735f, 0.57735f };
 
 		DirectX::XMVECTOR lightDir = DirectX::XMLoadFloat3(&lightDirF);
-		auto lightPosition = DirectX::XMVectorScale(lightDir, -2.0f * 50.0f);
+		auto lightPosition = DirectX::XMVectorScale(lightDir, -2.0f * 170.0f);
+
+		auto forward = DirectX::XMVectorAdd(DirectX::XMVectorSet(0.0f, -1.0f, 0.0f, 0.0f), lightPosition);
 
 
-		auto lightView = DirectX::XMMatrixTranspose(DirectX::XMMatrixLookAtLH(lightPosition, DirectX::XMVectorZero(),
-			DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)));
-		auto lightProj = DirectX::XMMatrixTranspose(
-			DirectX::XMMatrixPerspectiveFovLH(45.0f, Core::Window::Instance().GetAR(), 1.0f, 700.0f));
+		auto lightView = DirectX::XMMatrixLookAtLH(lightPosition, 
+			DirectX::XMVectorSet(0.01f , 0.0f, 0.0f, 0.0f),
+			DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
+
+		auto lightProj = 
+			DirectX::XMMatrixPerspectiveFovLH(45.0f, Core::Window::Instance().GetAR(), 1.0f, 700.0f);
 
 		DirectX::XMStoreFloat4x4(&shadowPassConstants.LightView, lightView);
 		DirectX::XMStoreFloat4x4(&shadowPassConstants.LightProj, lightProj);
@@ -73,9 +77,9 @@ namespace Dante::Rendering
 
 		camera->Update(dt);
 
-		DirectX::XMStoreFloat4x4(&defaultPassConstants.View, lightView);
-		DirectX::XMStoreFloat4x4(&defaultPassConstants.Proj, lightProj);
-		DirectX::XMStoreFloat4x4(&defaultPassConstants.ViewProj, lightView * lightProj);
+		DirectX::XMStoreFloat4x4(&defaultPassConstants.View, DirectX::XMMatrixTranspose(lightView));
+		DirectX::XMStoreFloat4x4(&defaultPassConstants.Proj, DirectX::XMMatrixTranspose(lightProj));
+		DirectX::XMStoreFloat4x4(&defaultPassConstants.ViewProj, DirectX::XMMatrixTranspose(lightView * lightProj));
 		DirectX::XMStoreFloat3(&defaultPassConstants.EyePosW, lightPosition);
 
 		defaultPassConstants.lights[0].Strength = { 0.35f, 0.35f, 0.35f };
@@ -120,8 +124,8 @@ namespace Dante::Rendering
 		helmet->Draw(Gfx());
 
 		// Draw CubeMap
-		//cmdList->SetPipelineState(gfx->GetPSO("cubeMapPSO"));
-		//skySphere->Draw(Gfx());
+		cmdList->SetPipelineState(gfx->GetPSO("cubeMapPSO"));
+		skySphere->Draw(Gfx());
 
 		// GUI
 		ShowFpsWindow();
