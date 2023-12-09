@@ -50,9 +50,10 @@ namespace Dante::Rendering
 		CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(rtvHeap->GetHandleForStart().cpuHandle);
 		for (UINT i = 0; i < BACK_BUFFER_COUNT; i++)
 		{
+			auto cpuHandle = rtvHeap->GetHandleForStart().cpuHandle;
+			cpuHandle.Offset(i, rtvDescriptorSize);
 			Chk(swapChain->GetBuffer(i, ID(backBuffers.at(i))));
-			device->CreateRenderTargetView(backBuffers.at(i).Get(), nullptr, rtvHeap->GetCurrHandle().cpuHandle);
-			rtvHeap->OffsetCurrHandle();
+			device->CreateRenderTargetView(backBuffers.at(i).Get(), nullptr, cpuHandle);
 		}
 
 		// depth stencil stuff
