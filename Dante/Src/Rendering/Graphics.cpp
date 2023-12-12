@@ -344,6 +344,8 @@ namespace Dante::Rendering
 		Chk(D3DReadFileToBlob(L"Shaders\\ShaderBins\\DefaultPS.cso", shaders["defaultPS"].GetAddressOf()));
 		Chk(D3DReadFileToBlob(L"Shaders\\ShaderBins\\CubeMapVS.cso", shaders["cubeMapVS"].GetAddressOf()));
 		Chk(D3DReadFileToBlob(L"Shaders\\ShaderBins\\CubeMapPS.cso", shaders["cubeMapPS"].GetAddressOf()));
+		Chk(D3DReadFileToBlob(L"Shaders\\ShaderBins\\ShadowMapVS.cso", shaders["shadowMapVS"].GetAddressOf()));
+		Chk(D3DReadFileToBlob(L"Shaders\\ShaderBins\\ShadowMapPS.cso", shaders["shadowMapPS"].GetAddressOf()));
 	}
 
 	void Graphics::BuildStaticSamplers(std::array<CD3DX12_STATIC_SAMPLER_DESC, 6>& samplers)
@@ -441,6 +443,16 @@ namespace Dante::Rendering
 		cubeMapPsoDesc.PS = CD3DX12_SHADER_BYTECODE(shaders["cubeMapPS"].Get());
 
 		Chk(device->CreateGraphicsPipelineState(&cubeMapPsoDesc, ID(pSOs["cubeMapPSO"])));
+
+		D3D12_GRAPHICS_PIPELINE_STATE_DESC shadowMapPsoDesc = opaquePsoDesc;
+		shadowMapPsoDesc.RasterizerState.DepthBias = 100000;
+		shadowMapPsoDesc.RasterizerState.DepthBiasClamp = 0.0f;
+		shadowMapPsoDesc.RasterizerState.SlopeScaledDepthBias = 1.0f;
+		shadowMapPsoDesc.RTVFormats[0] = DXGI_FORMAT_UNKNOWN;
+		shadowMapPsoDesc.NumRenderTargets = 0;
+		shadowMapPsoDesc.VS = CD3DX12_SHADER_BYTECODE(shaders["shadowMapVS"].Get());
+		shadowMapPsoDesc.PS = CD3DX12_SHADER_BYTECODE(shaders["shadowMapPS"].Get());
+		Chk(device->CreateGraphicsPipelineState(&shadowMapPsoDesc, ID(pSOs["shadowMapPSO"])));
 
 	}
 

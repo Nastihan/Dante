@@ -70,11 +70,11 @@ namespace Dante::Rendering
 
 		camera->Update(dt);
 
-		DirectX::XMStoreFloat4x4(&defaultPassConstants.View, DirectX::XMMatrixTranspose(lightView));
-		DirectX::XMStoreFloat4x4(&defaultPassConstants.Proj, DirectX::XMMatrixTranspose(lightProj));
-		DirectX::XMStoreFloat4x4(&defaultPassConstants.ViewProj, DirectX::XMMatrixTranspose(lightView * lightProj));
-		DirectX::XMStoreFloat3(&defaultPassConstants.EyePosW, lightPosition);
-		defaultPassConstants.lights[0].Strength = { 0.85f, 0.85f, 0.85f };
+		DirectX::XMStoreFloat4x4(&defaultPassConstants.View, camera->GetView());
+		DirectX::XMStoreFloat4x4(&defaultPassConstants.Proj, camera->GetProj());
+		DirectX::XMStoreFloat4x4(&defaultPassConstants.ViewProj, camera->GetViewProj());
+		DirectX::XMStoreFloat3(&defaultPassConstants.EyePosW, camera->GetPos());
+		defaultPassConstants.lights[0].Strength = { 0.65f, 0.65f, 0.65f };
 		defaultPassConstants.lights[0].Direction = { -0.38f, -0.57735f, 0.077735f };
 		defaultPassConstants.lights[1].Strength = { 0.95f, 0.95f, 0.95f };
 		defaultPassConstants.lights[1].Position = { 0.0f, 18.0f, 2.0f };
@@ -100,12 +100,24 @@ namespace Dante::Rendering
 		cmdList->ClearDepthStencilView(gfx->DepthStencilView(), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL,
 			1.0f, 0U, 0U, nullptr);
 
-		cmdList->OMSetRenderTargets(1, &gfx->CurrentBackBufferView(), true, &gfx->DepthStencilView());
 
 		ID3D12DescriptorHeap* descHeaps[] = { Gfx().CbvSrvHeap().GetHeap() };
 		cmdList->SetDescriptorHeaps(1, descHeaps);
 		cmdList->SetGraphicsRootSignature(gfx->GetRootSig("defaultRS"));
 		cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		// Shadow Pass
+		cmdList->ClearDepthStencilView(shadowMap->DSV(),
+			D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0U, 0U, nullptr);
+		cmdList->OMSetRenderTargets(0U, nullptr, false, &shadowMap->DSV());
+		cmdList->SetPipelineState(gfx->GetPSO("shadowMapPSO"));
+		cmdList->SetGraphicsRootConstantBufferView(0U, shadowPassCB->Resource()->GetGPUVirtualAddress());
+		sponza->Draw(Gfx());
+		helmet->Draw(Gfx());
+
+
+		cmdList->OMSetRenderTargets(1, &gfx->CurrentBackBufferView(), true, &gfx->DepthStencilView());
+
 
 		// Set PassCB
 		cmdList->SetGraphicsRootConstantBufferView(0U, defaultPassCB->Resource()->GetGPUVirtualAddress());

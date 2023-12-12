@@ -43,4 +43,9 @@ namespace Dante::Rendering::RHI
 
 	}
 
+	D3D12_CPU_DESCRIPTOR_HANDLE ShadowMap::DSV() const
+	{
+		return cpuDsvHandle;
+	}
+
 }

@@ -191,6 +191,8 @@
     <FxCompile Include="Shaders\ShaderFiles\DefaultPS.hlsl" />
     <FxCompile Include="Shaders\ShaderFiles\CubeMapPS.hlsl" />
     <FxCompile Include="Shaders\ShaderFiles\CubeMapVS.hlsl" />
+    <FxCompile Include="Shaders\ShaderFiles\ShadowMapVS.hlsl" />
+    <FxCompile Include="Shaders\ShaderFiles\ShadowMapPS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\ShaderFiles\ShaderIncludes\Common.hlsli" />
