@@ -71,8 +71,9 @@ namespace Dante::Utils
 		DirectX::XMFLOAT4X4 View = Utils::NastihanMath::Identity4x4();
 		DirectX::XMFLOAT4X4 Proj = Utils::NastihanMath::Identity4x4();
 		DirectX::XMFLOAT4X4 ViewProj = Utils::NastihanMath::Identity4x4();
+		DirectX::XMFLOAT4X4 lightTransform = Utils::NastihanMath::Identity4x4();
+		int shadowMapIndex = -1;
 		DirectX::XMFLOAT3 EyePosW = { 0.0f, 0.0f, 0.0f };
-		float padding;
 		DirectX::XMFLOAT4 ambientLight = { 0.10f, 0.10f, 0.10f, 1.0f };
 		Light lights[16];
 	};

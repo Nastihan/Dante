@@ -7,8 +7,9 @@ struct PassCB
     float4x4 view;
     float4x4 proj;
     float4x4 viewProj;
+    float4x4 lightTransform;
+    int shadowMapIndex;
     float3 eyePosW;
-    float padding;
     float4 ambientLight;
     Light lights[16];
 };
@@ -21,6 +22,7 @@ SamplerState samLinearWrap : register(s2);
 SamplerState samLinearClamp : register(s3);
 SamplerState samAnisotropicWrap : register(s4);
 SamplerState samAnisotropicClamp : register(s5);
+SamplerComparisonState samShadow : register(s6);
 
 float3 NormalSampleToWorldSpace(float3 normalMapSample, float3 unitNormalW, float3 tangentW)
 {

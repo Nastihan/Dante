@@ -10,6 +10,7 @@ namespace Dante::Rendering::RHI
 		ShadowMap(Rendering::Graphics& gfx, UINT width, UINT height);
 		DISABLE_COPY_AND_MOVE(ShadowMap)
 		D3D12_CPU_DESCRIPTOR_HANDLE DSV() const;
+		int GetShadowMapIndex() const;
 
 	private:
 		D3D12_VIEWPORT viewport;
@@ -21,7 +22,7 @@ namespace Dante::Rendering::RHI
 
 		Microsoft::WRL::ComPtr<ID3D12Resource> shadowMap = nullptr;
 		CD3DX12_CPU_DESCRIPTOR_HANDLE cpuDsvHandle;
-		UINT shadowMapIndex;
+		int shadowMapIndex = -1;
 	};
 
 }

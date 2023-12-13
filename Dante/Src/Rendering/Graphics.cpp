@@ -348,7 +348,7 @@ namespace Dante::Rendering
 		Chk(D3DReadFileToBlob(L"Shaders\\ShaderBins\\ShadowMapPS.cso", shaders["shadowMapPS"].GetAddressOf()));
 	}
 
-	void Graphics::BuildStaticSamplers(std::array<CD3DX12_STATIC_SAMPLER_DESC, 6>& samplers)
+	void Graphics::BuildStaticSamplers(std::array<CD3DX12_STATIC_SAMPLER_DESC, 7>& samplers)
 	{
 		const CD3DX12_STATIC_SAMPLER_DESC pointWrap(
 			0, // shaderRegister
@@ -396,12 +396,24 @@ namespace Dante::Rendering
 			0.0f,                              // mipLODBias
 			16U);                                // maxAnisotropy
 
+		const CD3DX12_STATIC_SAMPLER_DESC shadow(
+			6, // shaderRegister
+			D3D12_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT, // filter
+			D3D12_TEXTURE_ADDRESS_MODE_BORDER,  // addressU
+			D3D12_TEXTURE_ADDRESS_MODE_BORDER,  // addressV
+			D3D12_TEXTURE_ADDRESS_MODE_BORDER,  // addressW
+			0.0f,                               // mipLODBias
+			16,                                 // maxAnisotropy
+			D3D12_COMPARISON_FUNC_LESS_EQUAL,
+			D3D12_STATIC_BORDER_COLOR_OPAQUE_BLACK);
+
 		samplers[0] = pointWrap;
 		samplers[1] = pointClamp;
 		samplers[2] = linearWrap;
 		samplers[3] = linearClamp;
 		samplers[4] = anisotropicWrap;
 		samplers[5] = anisotropicClamp;
+		samplers[6] = shadow;
 
 	}
 

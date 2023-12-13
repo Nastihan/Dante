@@ -54,14 +54,20 @@ namespace Dante::Rendering
 
 	void Renderer::Update(float dt)
 	{
-		DirectX::XMVECTOR lightDir = { -0.38f, -0.57735f, 0.077735f };
-		auto lightPosition = DirectX::XMVectorScale(lightDir, -2.0f * 270.0f);
+		DirectX::XMMATRIX T(
+			0.5f, 0.0f, 0.0f, 0.0f,
+			0.0f, -0.5f, 0.0f, 0.0f,
+			0.0f, 0.0f, 1.0f, 0.0f,
+			0.5f, 0.5f, 0.0f, 1.0f);
+
+		DirectX::XMVECTOR lightDir = { 0.0f, -0.57735f, 0.0f };
+		auto lightPosition = DirectX::XMVectorScale(lightDir, -2.0f * 250.0f);
 		//auto forward = DirectX::XMVectorAdd(DirectX::XMVectorSet(-1.0f, -0.8f, 0.2f, 0.0f), lightPosition);
 		auto lightView = DirectX::XMMatrixLookAtLH(lightPosition, 
 			DirectX::XMVectorSet(0.01f, 0.0f, 0.0f, 0.0f),
 			DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
 		auto lightProj = 
-			DirectX::XMMatrixOrthographicOffCenterLH(-200.0f, 200.0f, -200.0f, 200.0f, 1.0f, 1000.0f);
+			DirectX::XMMatrixOrthographicOffCenterLH(-200.0f, 200.0f, -200.0f, 200.0f, 1.0f, 300.0f);
 
 		DirectX::XMStoreFloat4x4(&shadowPassConstants.LightView, DirectX::XMMatrixTranspose(lightView));
 		DirectX::XMStoreFloat4x4(&shadowPassConstants.LightProj, DirectX::XMMatrixTranspose(lightProj));
@@ -72,10 +78,12 @@ namespace Dante::Rendering
 
 		DirectX::XMStoreFloat4x4(&defaultPassConstants.View, camera->GetView());
 		DirectX::XMStoreFloat4x4(&defaultPassConstants.Proj, camera->GetProj());
-		DirectX::XMStoreFloat4x4(&defaultPassConstants.ViewProj, camera->GetViewProj());
+		DirectX::XMStoreFloat4x4(&defaultPassConstants.ViewProj,camera->GetViewProj());
+		DirectX::XMStoreFloat4x4(&defaultPassConstants.lightTransform, DirectX::XMMatrixTranspose(lightView * lightProj ) );
 		DirectX::XMStoreFloat3(&defaultPassConstants.EyePosW, camera->GetPos());
+		defaultPassConstants.shadowMapIndex = shadowMap->GetShadowMapIndex();
 		defaultPassConstants.lights[0].Strength = { 0.65f, 0.65f, 0.65f };
-		defaultPassConstants.lights[0].Direction = { -0.38f, -0.57735f, 0.077735f };
+		defaultPassConstants.lights[0].Direction = { 0.0f, -0.57735f, 0.0f };
 		defaultPassConstants.lights[1].Strength = { 0.95f, 0.95f, 0.95f };
 		defaultPassConstants.lights[1].Position = { 0.0f, 18.0f, 2.0f };
 		defaultPassCB->CopyData(0, defaultPassConstants);

@@ -48,4 +48,9 @@ namespace Dante::Rendering::RHI
 		return cpuDsvHandle;
 	}
 
+	int ShadowMap::GetShadowMapIndex() const
+	{
+		return shadowMapIndex;
+	}
+
 }
