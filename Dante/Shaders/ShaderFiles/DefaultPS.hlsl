@@ -38,20 +38,13 @@ ConstantBuffer<ObjectCB> objectCB : register(b1);
 
 float4 main(PS_Input input) : SV_TARGET
 {
-    //float3 spos = input.shadowPosH.xyz / input.shadowPosH.w;
-    Texture2D shadowMap = ResourceDescriptorHeap[passCB.shadowMapIndex];
-    //float depth = shadowMap.Sample(samAnisotropicWrap, spos.xy).r;
-    
-    //if (depth < spos.z - 0.0005 )
-    //{
-    //    return float4(1.0f, 0.0f, 0.0f, 1.0f);
-    //}
     
     float4 diffuseAlbedo = objectCB.diffuseAlbedo;
     float3 fresnelR0 = objectCB.fresnelR0;
     float shininess = objectCB.shininess;
     uint albedoMapIndex = objectCB.albedoMapIndex;
     uint normalMapIndex = objectCB.normalMapIndex;
+    Texture2D shadowMap = ResourceDescriptorHeap[passCB.shadowMapIndex];
     // renormalize
     input.normal = normalize(input.normal);
     if (normalMapIndex != -1)
@@ -73,37 +66,11 @@ float4 main(PS_Input input) : SV_TARGET
         diffuseAlbedo *= albedoTexture.Sample(samAnisotropicWrap, input.tc);
     }
     
-    
     float3 toEyeW = normalize(passCB.eyePosW -input.posW);
     
     float shadowFactor = float(1.0f);
-    input.shadowPosH.xyz /= input.shadowPosH.w;
-
-    // Depth in NDC space.
-    float depth = input.shadowPosH.z;
-
-    uint width, height, numMips;
-    shadowMap.GetDimensions(0, width, height, numMips);
-
-    // Texel size.
-    float dx = 1.0f / (float) width;
-
-    float percentLit = 0.0f;
-    const float2 offsets[9] =
-    {
-        float2(-dx, -dx), float2(0.0f, -dx), float2(dx, -dx),
-        float2(-dx, 0.0f), float2(0.0f, 0.0f), float2(dx, 0.0f),
-        float2(-dx, +dx), float2(0.0f, +dx), float2(dx, +dx)
-    };
-
-    [unroll]
-    for (int i = 0; i < 9; ++i)
-    {
-        percentLit += shadowMap.SampleCmpLevelZero(samShadow,
-            input.shadowPosH.xy + offsets[i], depth).r;
-    }
+    shadowFactor = CalcShadow(input.shadowPosH, shadowMap);
     
-    shadowFactor = percentLit / 9.0f;
     
     float4 ambient = passCB.ambientLight * diffuseAlbedo;
     Material mat = { diffuseAlbedo, fresnelR0, shininess };
