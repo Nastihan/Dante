@@ -60,7 +60,7 @@ namespace Dante::Rendering
 			0.0f, 0.0f, 1.0f, 0.0f,
 			0.5f, 0.5f, 0.0f, 1.0f);
 
-		DirectX::XMVECTOR lightDir = { 0.0f, -0.57735f, 0.0f };
+		DirectX::XMVECTOR lightDir = { -0.28f, -0.57735f, 0.077735f };
 		auto lightPosition = DirectX::XMVectorScale(lightDir, -2.0f * 250.0f);
 		//auto forward = DirectX::XMVectorAdd(DirectX::XMVectorSet(-1.0f, -0.8f, 0.2f, 0.0f), lightPosition);
 		auto lightView = DirectX::XMMatrixLookAtLH(lightPosition, 
@@ -83,7 +83,7 @@ namespace Dante::Rendering
 		DirectX::XMStoreFloat3(&defaultPassConstants.EyePosW, camera->GetPos());
 		defaultPassConstants.shadowMapIndex = shadowMap->GetShadowMapIndex();
 		defaultPassConstants.lights[0].Strength = { 0.65f, 0.65f, 0.65f };
-		defaultPassConstants.lights[0].Direction = { 0.0f, -0.57735f, 0.0f };
+		defaultPassConstants.lights[0].Direction = { -0.28f, -0.57735f, 0.077735f };
 		defaultPassConstants.lights[1].Strength = { 0.95f, 0.95f, 0.95f };
 		defaultPassConstants.lights[1].Position = { 0.0f, 18.0f, 2.0f };
 		defaultPassCB->CopyData(0, defaultPassConstants);
