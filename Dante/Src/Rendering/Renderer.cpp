@@ -50,7 +50,6 @@ namespace Dante::Rendering
 	void Renderer::OnResize()
 	{
 		gfx->OnResize();
-		shadowMap->OnResize(Gfx(), Core::Window::Instance().GetWidth(), Core::Window::Instance().GetHeight());
 	}
 
 	void Renderer::Update(float dt)
@@ -112,13 +111,15 @@ namespace Dante::Rendering
 		cmdList->ClearDepthStencilView(gfx->DepthStencilView(), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL,
 			1.0f, 0U, 0U, nullptr);
 
-
 		ID3D12DescriptorHeap* descHeaps[] = { Gfx().CbvSrvHeap().GetHeap() };
 		cmdList->SetDescriptorHeaps(1, descHeaps);
 		cmdList->SetGraphicsRootSignature(gfx->GetRootSig("defaultRS"));
 		cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 		// Shadow Pass
+		cmdList->RSSetViewports(1, &shadowMap->GetViewport());
+		cmdList->RSSetScissorRects(1, &shadowMap->GetScissorRect());
+
 		cmdList->ClearDepthStencilView(shadowMap->DSV(),
 			D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0U, 0U, nullptr);
 		cmdList->OMSetRenderTargets(0U, nullptr, false, &shadowMap->DSV());
@@ -127,9 +128,12 @@ namespace Dante::Rendering
 		sponza->Draw(Gfx());
 		helmet->Draw(Gfx());
 
+		
+
+		cmdList->RSSetViewports(1, &gfx->GetViewport());
+		cmdList->RSSetScissorRects(1, &gfx->GetScissorRect());
 
 		cmdList->OMSetRenderTargets(1, &gfx->CurrentBackBufferView(), true, &gfx->DepthStencilView());
-
 
 		// Set PassCB
 		cmdList->SetGraphicsRootConstantBufferView(0U, defaultPassCB->Resource()->GetGPUVirtualAddress());

@@ -43,7 +43,7 @@ namespace Dante::Rendering::RHI
 
 	}
 
-	void ShadowMap::OnResize(Rendering::Graphics& gfx, UINT width, UINT height)
+	/*void ShadowMap::OnResize(Rendering::Graphics& gfx, UINT width, UINT height)
 	{
 		shadowMap.Reset();
 		viewport = { 0.0f, 0.0f, float(width), float(height), 0.0f, 1.0f };
@@ -79,7 +79,7 @@ namespace Dante::Rendering::RHI
 		gfx.GetDevice()->CreateDepthStencilView(shadowMap.Get(), &dsvDesc, gfx.DsvHeap().GetCurrHandle().cpuHandle);
 		cpuDsvHandle = gfx.DsvHeap().GetCurrHandle().cpuHandle;
 		gfx.DsvHeap().OffsetCurrHandle();
-	}
+	}*/
 
 	D3D12_CPU_DESCRIPTOR_HANDLE ShadowMap::DSV() const
 	{
@@ -89,6 +89,16 @@ namespace Dante::Rendering::RHI
 	int ShadowMap::GetShadowMapIndex() const
 	{
 		return shadowMapIndex;
+	}
+
+	D3D12_VIEWPORT ShadowMap::GetViewport() const
+	{
+		return viewport;
+	}
+
+	D3D12_RECT ShadowMap::GetScissorRect() const
+	{
+		return scissorRect;
 	}
 
 }
