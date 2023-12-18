@@ -50,15 +50,19 @@ namespace Dante::Rendering
 	void Renderer::OnResize()
 	{
 		gfx->OnResize();
+		shadowMap->OnResize(Gfx(), Core::Window::Instance().GetWidth(), Core::Window::Instance().GetHeight());
 	}
 
 	void Renderer::Update(float dt)
 	{
-		DirectX::XMMATRIX T(
+		camera->Update(dt);
+
+		///////////////////////////// SHADOW PASS CB
+		/*DirectX::XMMATRIX T(
 			0.5f, 0.0f, 0.0f, 0.0f,
 			0.0f, -0.5f, 0.0f, 0.0f,
 			0.0f, 0.0f, 1.0f, 0.0f,
-			0.5f, 0.5f, 0.0f, 1.0f);
+			0.5f, 0.5f, 0.0f, 1.0f);*/
 
 		DirectX::XMVECTOR lightDir = { -0.28f, -0.57735f, 0.077735f };
 		auto lightPosition = DirectX::XMVectorScale(lightDir, -2.0f * 250.0f);
@@ -74,8 +78,8 @@ namespace Dante::Rendering
 		DirectX::XMStoreFloat4x4(&shadowPassConstants.LightViewProj, DirectX::XMMatrixTranspose(lightView * lightProj));
 		shadowPassCB->CopyData(0, shadowPassConstants);
 
-		camera->Update(dt);
 
+		///////////////////////////// DEFAULT PASS CB
 		DirectX::XMStoreFloat4x4(&defaultPassConstants.View, camera->GetView());
 		DirectX::XMStoreFloat4x4(&defaultPassConstants.Proj, camera->GetProj());
 		DirectX::XMStoreFloat4x4(&defaultPassConstants.ViewProj,camera->GetViewProj());
