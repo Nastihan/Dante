@@ -28,10 +28,10 @@ namespace Dante::Rendering
 		shadowPassCB = std::make_unique<RHI::UploadBuffer<Dante::Utils::ShadowPassConstants>>(Gfx(), 1, true);
 
 		sponza = std::make_unique<Scene::Model>(Gfx(),
-			"Assests\\Models\\Sponza\\Sponza.glb", DirectX::XMMatrixScaling(0.1f, 0.1f, 0.1f));
+			"Assests\\Models\\Sponza\\Sponza.glb", DirectX::XMMatrixScaling(0.01f, 0.01f, 0.01f));
 		helmet = std::make_unique<Scene::Model>(Gfx(),
 			"Assests\\Models\\DamagedHelmet\\DamagedHelmet.gltf",
-			DirectX::XMMatrixTranslation(5.0f, 7.0f, 0.0f) * DirectX::XMMatrixScaling(3.f, 3.0f, 3.0f));
+			DirectX::XMMatrixTranslation(5.0f, 7.0f, 0.0f) * DirectX::XMMatrixScaling(0.4f, 0.4f, 0.4f));
 		/*aBeautifulGame = std::make_unique<Scene::Model>(Gfx(),
 			"Assests\\Models\\ABeautifulGame\\ABeautifulGame.gltf", 15.0f);*/
 
@@ -63,14 +63,14 @@ namespace Dante::Rendering
 			0.0f, 0.0f, 1.0f, 0.0f,
 			0.5f, 0.5f, 0.0f, 1.0f);*/
 
-		DirectX::XMVECTOR lightDir = { -0.28f, -0.57735f, 0.077735f };
-		auto lightPosition = DirectX::XMVectorScale(lightDir, -2.0f * 250.0f);
+		DirectX::XMVECTOR lightDir = { -0.11f, -0.57735f, 0.07735f };
+		auto lightPosition = DirectX::XMVectorScale(lightDir, -2.0f * 25.0f);
 		//auto forward = DirectX::XMVectorAdd(DirectX::XMVectorSet(-1.0f, -0.8f, 0.2f, 0.0f), lightPosition);
 		auto lightView = DirectX::XMMatrixLookAtLH(lightPosition, 
 			DirectX::XMVectorSet(0.01f, 0.0f, 0.0f, 0.0f),
 			DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
 		auto lightProj = 
-			DirectX::XMMatrixOrthographicOffCenterLH(-200.0f, 200.0f, -200.0f, 200.0f, 1.0f, 300.0f);
+			DirectX::XMMatrixOrthographicOffCenterLH(-20.0f, 20.0f, -20.0f, 20.0f, 6.0f, 50.0f);
 
 		DirectX::XMStoreFloat4x4(&shadowPassConstants.LightView, DirectX::XMMatrixTranspose(lightView));
 		DirectX::XMStoreFloat4x4(&shadowPassConstants.LightProj, DirectX::XMMatrixTranspose(lightProj));
@@ -81,17 +81,15 @@ namespace Dante::Rendering
 		///////////////////////////// DEFAULT PASS CB
 		DirectX::XMStoreFloat4x4(&defaultPassConstants.View, camera->GetView());
 		DirectX::XMStoreFloat4x4(&defaultPassConstants.Proj, camera->GetProj());
-		DirectX::XMStoreFloat4x4(&defaultPassConstants.ViewProj,camera->GetViewProj());
+		DirectX::XMStoreFloat4x4(&defaultPassConstants.ViewProj, camera->GetViewProj());
 		DirectX::XMStoreFloat4x4(&defaultPassConstants.lightTransform, DirectX::XMMatrixTranspose(lightView * lightProj ) );
 		DirectX::XMStoreFloat3(&defaultPassConstants.EyePosW, camera->GetPos());
 		defaultPassConstants.shadowMapIndex = shadowMap->GetShadowMapIndex();
 		defaultPassConstants.lights[0].Strength = { 0.65f, 0.65f, 0.65f };
-		defaultPassConstants.lights[0].Direction = { -0.28f, -0.57735f, 0.077735f };
+		defaultPassConstants.lights[0].Direction = { -0.11f, -0.57735f, 0.07735f };
 		defaultPassConstants.lights[1].Strength = { 0.95f, 0.95f, 0.95f };
 		defaultPassConstants.lights[1].Position = { 0.0f, 18.0f, 2.0f };
 		defaultPassCB->CopyData(0, defaultPassConstants);
-
-		
 	}
 
 	void Renderer::Render()
