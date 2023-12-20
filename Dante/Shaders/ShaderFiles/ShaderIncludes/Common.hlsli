@@ -30,6 +30,11 @@ float CalcShadow(float4 shadowPosH,Texture2D shadowMap)
 
     // Depth in NDC space.
     float depth = shadowPosH.z;
+    
+    if (depth > 1.0f)
+    {
+        return 1.0f;
+    }
 
     uint width, height, numMips;
     shadowMap.GetDimensions(0, width, height, numMips);

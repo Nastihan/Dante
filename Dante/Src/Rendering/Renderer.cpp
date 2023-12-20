@@ -21,7 +21,7 @@ namespace Dante::Rendering
 		gfx->Load();
 		
 		camera = std::make_unique<Scene::Camera>();
-		camera->SetView({ 0.0f, 8.0f, -6.0f }, { 0.0f, 0.0f, 1.0f }, { 0.0f, 1.0f, 0.0f });
+		camera->SetView({ 0.0f, 8.0f, -2.0f }, { 0.0f, 0.0f, 1.0f }, { 0.0f, 1.0f, 0.0f });
 		camera->SetProj(45.0f, Core::Window::Instance().GetAR(), 1.0f, 400.0f);
 
 		defaultPassCB = std::make_unique<RHI::UploadBuffer<Dante::Utils::DefaultPassConstants>>(Gfx(), 1, true);
