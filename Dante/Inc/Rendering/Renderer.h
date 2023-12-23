@@ -43,6 +43,7 @@ namespace Dante::Rendering
 		std::unique_ptr<Scene::Model> sponza;
 		std::unique_ptr<Scene::Model> helmet;
 		std::unique_ptr<Scene::Model> aBeautifulGame;
+		std::unique_ptr<Scene::Model> duck;
 		std::unique_ptr<Scene::SkySphere> skySphere;
 	
 		std::unique_ptr<RHI::ShadowMap> shadowMap;

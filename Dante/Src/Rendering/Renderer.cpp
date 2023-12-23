@@ -31,7 +31,9 @@ namespace Dante::Rendering
 			"Assests\\Models\\Sponza\\Sponza.glb", DirectX::XMMatrixScaling(0.01f, 0.01f, 0.01f));
 		helmet = std::make_unique<Scene::Model>(Gfx(),
 			"Assests\\Models\\DamagedHelmet\\DamagedHelmet.gltf",
-			DirectX::XMMatrixTranslation(5.0f, 7.0f, 0.0f) * DirectX::XMMatrixScaling(0.4f, 0.4f, 0.4f));
+			DirectX::XMMatrixScaling(0.4f, 0.4f, 0.4f) * DirectX::XMMatrixTranslation(2.0f, 4.0f, 0.0f) );
+		duck = std::make_unique<Scene::Model>(Gfx(), "Assests\\Models\\Duck\\Duck.gltf",
+			DirectX::XMMatrixScaling(0.009f, 0.009f, 0.009f) * DirectX::XMMatrixTranslation(0.0f, 8.0f, 0.0f));
 		/*aBeautifulGame = std::make_unique<Scene::Model>(Gfx(),
 			"Assests\\Models\\ABeautifulGame\\ABeautifulGame.gltf", 15.0f);*/
 
@@ -124,6 +126,7 @@ namespace Dante::Rendering
 		cmdList->SetPipelineState(gfx->GetPSO("shadowMapPSO"));
 		cmdList->SetGraphicsRootConstantBufferView(0U, shadowPassCB->Resource()->GetGPUVirtualAddress());
 		sponza->Draw(Gfx());
+		//duck->Draw(Gfx());
 		helmet->Draw(Gfx());
 
 		cmdList->RSSetViewports(1, &gfx->GetViewport());
@@ -137,6 +140,7 @@ namespace Dante::Rendering
 		// Draw Opaque
 		cmdList->SetPipelineState(gfx->GetPSO("defaultPSO"));
 		sponza->Draw(Gfx());
+		//duck->Draw(Gfx());
 		helmet->Draw(Gfx());
 
 		// Draw CubeMap
