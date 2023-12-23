@@ -85,7 +85,7 @@ namespace Dante::Rendering
 		DirectX::XMStoreFloat4x4(&defaultPassConstants.lightTransform, DirectX::XMMatrixTranspose(lightView * lightProj ) );
 		DirectX::XMStoreFloat3(&defaultPassConstants.EyePosW, camera->GetPos());
 		defaultPassConstants.shadowMapIndex = shadowMap->GetShadowMapIndex();
-		defaultPassConstants.lights[0].Strength = { 0.65f, 0.65f, 0.65f };
+		defaultPassConstants.lights[0].Strength = { 0.95f, 0.95f, 0.95f };
 		defaultPassConstants.lights[0].Direction = { -0.11f, -0.57735f, 0.07735f };
 		defaultPassConstants.lights[1].Strength = { 0.95f, 0.95f, 0.95f };
 		defaultPassConstants.lights[1].Position = { 0.0f, 18.0f, 2.0f };
@@ -125,8 +125,6 @@ namespace Dante::Rendering
 		cmdList->SetGraphicsRootConstantBufferView(0U, shadowPassCB->Resource()->GetGPUVirtualAddress());
 		sponza->Draw(Gfx());
 		helmet->Draw(Gfx());
-
-		
 
 		cmdList->RSSetViewports(1, &gfx->GetViewport());
 		cmdList->RSSetScissorRects(1, &gfx->GetScissorRect());
